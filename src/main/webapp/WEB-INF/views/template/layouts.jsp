@@ -23,8 +23,8 @@
 <meta name="keywords" content="버거킹 딜리버리" />
 <link rel="shortcut icon" type="image/x-icon"
 	href="<c:url value='/resources/images/favicon.ico'/>" />
-<link rel="stylesheet" media="all"
-	href="<c:url value='/resources/css/common.css'/>" />
+<link rel="stylesheet" media="all" type="text/css"
+	href="<c:url value='/resources/css/common.css?ver=1'/>" />
 <link rel="stylesheet" media="all"
 	href="<c:url value='/resources/css/contents.css'/>" />
 <!--[if lte IE 8]>

@@ -460,7 +460,7 @@ i.icon{display:inline-block;width:20px;height:20px;vertical-align:middle;backgro
 .ic_txt{display:inline-block;font-size:10px;background:#e2231a;color:#fff;line-height:1.1;padding:3px;font-weight:bold;vertical-align:middle;text-align:center;border-radius:3px;}
 
 /* 탭메뉴 */
-.tabmenu{margin-bottom:30px;border-bottom:2px solid #ad8061;overflow:hidden;}
+.tabmenu{border-bottom:2px solid #ad8061;overflow:hidden}
 .tabmenu > li{float:left;}
 .tabmenu > li > a{display:block;width:180px;line-height:34px;background:#cccccc;color:#333333;text-align:center;font-size:16px;font-weight:600;border-radius:5px 5px 0 0;}
 .tabmenu > li > a:hover,
