@@ -185,7 +185,7 @@
 		<!-- //contents -->
 		<!-- //main -->
 		<!-- footer -->
-		<jsp:include page="/template/Footer.jsp" />
+		<jsp:include page="/" />
 		<!-- //footer -->
 	</div>
 </body>
