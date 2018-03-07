@@ -20,7 +20,7 @@ public class FindPassDAO {
 	private PreparedStatement psmt;
 	
 	//생성자]
-	public FindPassDAO(ServletContext context) {
+	public FindPassDAO() {
 		//커넥션 풀 미 사용-커넥션 객체 메모리에 직접 생성 코드
 		
 		try {

@@ -1,3 +1,6 @@
+<%@page import="com.bgk.delivery.service.FindPassDTO"%>
+<%@page import="java.util.List"%>
+<%@page import="com.bgk.delivery.impl.FindPassDAO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
@@ -93,11 +96,14 @@
 					<li>
 						<div class="inp_wid"><i>*</i>
 							<select class="select" title="비번 찾기 질문 선택" id="quiz">
-								<option value="fastfood">자주 가는 패스트푸드점은?</option>
-								<option value="travel">꼭 가보고 싶은 여행지는?</option>
-								<option value="song">가장 좋아하는 노래는?</option>
-								<option value="island">무인도에 가지고 가고 싶은 것은?</option>
-								<option value="tomb">죽은 뒤에 새기고 싶은 묘비명은?</option>
+<%
+FindPassDAO dao = new FindPassDAO();
+List<FindPassDTO> list = dao.selectList();
+dao.close();
+for(FindPassDTO record:list){
+%>
+								<option><%=record.getFindpass_ask() %></option><%} %>
+								
 							</select>
 						</div>
 					</li>

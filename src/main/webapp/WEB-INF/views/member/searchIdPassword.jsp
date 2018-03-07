@@ -95,7 +95,7 @@
 						<div class="inp_wid mt10">
 							<select class="select" title="비번 찾기 질문 선택" id="quiz">
 <%
-FindPassDAO dao = new FindPassDAO(application);
+FindPassDAO dao = new FindPassDAO();
 List<FindPassDTO> list=dao.selectList();
 dao.close();
 for(FindPassDTO record:list){
