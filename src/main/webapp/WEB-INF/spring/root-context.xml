@@ -17,4 +17,6 @@
 	<bean id="sqlMapper" class="org.mybatis.spring.SqlSessionTemplate">
 		<constructor-arg ref="sqlSessionFactory" />
 	</bean>
+	
+ 	<bean class="com.bgk.delivery.web.MemberController"/>
 </beans>

@@ -5,7 +5,7 @@
 
 <script>
 	$(function(){
-		$("#wrap").attr("class", "main");
+		$("#wrap").addClass("main");
 	});
 </script>
 
