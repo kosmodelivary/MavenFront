@@ -5,7 +5,7 @@ public class StoreDto {
 	private String 	store_no;
 	private String 	store_name;
 	private String 	store_tel;
-	private String 	store_address;
+	private String 	store_addr;
 	private int 	store_weekdayon;
 	private int 	store_weekdayoff;
 	private int 	store_weekendon;
@@ -33,11 +33,11 @@ public class StoreDto {
 	public void setTel(String store_tel) {
 		this.store_tel = store_tel;
 	}
-	public String getAddress() {
-		return store_address;
+	public String getAddr() {
+		return store_addr;
 	}
-	public void setAddress(String store_address) {
-		this.store_address = store_address;
+	public void setAddr(String store_addr) {
+		this.store_addr = store_addr;
 	}
 	public int getWeekdayon() {
 		return store_weekdayon;

@@ -106,7 +106,7 @@
 							<!-- 매장이름 -->
 							<td>${item.name }</td>
 							<!-- 매장주소 -->
-							<td>${item.address }</td>
+							<td>${item.addr }</td>
 							<!-- 최소주문가격 -->
 							<td>${item.minordermoney }</td>
 							<td>

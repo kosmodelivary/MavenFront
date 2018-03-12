@@ -11,7 +11,7 @@
 		<result property="store_no" column="store_no" />
 		<result property="store_name" column="store_name" />
 		<result property="store_tel" column="store_tel" />
-		<result property="store_address" column="store_address" />
+		<result property="store_addr" column="store_addr" />
 		<result property="store_weekdayon" column="store_weekdayon" />
 		<result property="store_weekdayoff" column="store_weekdayoff" />
 		<result property="store_weekendon" column="store_weekendon" />
@@ -20,11 +20,11 @@
 	</resultMap>
  
 	<select id="storeSelectList" resultMap="StoreDtoResult">
-		SELECT * FROM store ORDER BY no DESC
+		SELECT * FROM store ORDER BY store_no DESC
 	</select>
 	
 	<select id="storeSelectOne" parameterType="java.lang.String" resultMap="StoreDtoResult">
-		SELECT * FROM store WHERE no = #{no}
+		SELECT * FROM store WHERE store_no = #{store_no}
 	</select>
 	
 	<!-- <select id="ReplyBBSlogin" parameterType="java.util.Map" resultType="int">
