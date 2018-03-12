@@ -2,71 +2,71 @@ package com.bgk.delivery.service;
 
 public class StoreDto {
 
-	private String 	no;
-	private String 	name;
-	private String 	tel;
-	private String 	address;
-	private int 	weekdayon;
-	private int 	weekdayoff;
-	private int 	weekendon;
-	private int 	weekendoff;
-	private int		minordermoney;
+	private String 	store_no;
+	private String 	store_name;
+	private String 	store_tel;
+	private String 	store_address;
+	private int 	store_weekdayon;
+	private int 	store_weekdayoff;
+	private int 	store_weekendon;
+	private int 	store_weekendoff;
+	private int		store_minordermoney;
 	
 	//---------------------------------------------------
 	// getter / setter
 	//---------------------------------------------------
 	public String getNo() {
-		return no;
+		return store_no;
 	}
-	public void setNo(String no) {
-		this.no = no;
+	public void setNo(String store_no) {
+		this.store_no = store_no;
 	}
 	public String getName() {
-		return name;
+		return store_name;
 	}
-	public void setName(String name) {
-		this.name = name;
+	public void setName(String store_name) {
+		this.store_name = store_name;
 	}
 	public String getTel() {
-		return tel;
+		return store_tel;
 	}
-	public void setTel(String tel) {
-		this.tel = tel;
+	public void setTel(String store_tel) {
+		this.store_tel = store_tel;
 	}
 	public String getAddress() {
-		return address;
+		return store_address;
 	}
-	public void setAddress(String address) {
-		this.address = address;
+	public void setAddress(String store_address) {
+		this.store_address = store_address;
 	}
 	public int getWeekdayon() {
-		return weekdayon;
+		return store_weekdayon;
 	}
-	public void setWeekdayon(int weekdayon) {
-		this.weekdayon = weekdayon;
+	public void setWeekdayon(int store_weekdayon) {
+		this.store_weekdayon = store_weekdayon;
 	}
 	public int getWeekdayoff() {
-		return weekdayoff;
+		return store_weekdayoff;
 	}
-	public void setWeekdayoff(int weekdayoff) {
-		this.weekdayoff = weekdayoff;
+	public void setWeekdayoff(int store_weekdayoff) {
+		this.store_weekdayoff = store_weekdayoff;
 	}
 	public int getWeekendon() {
-		return weekendon;
+		return store_weekendon;
 	}
-	public void setWeekendon(int weekendon) {
-		this.weekendon = weekendon;
+	public void setWeekendon(int store_weekendon) {
+		this.store_weekendon = store_weekendon;
 	}
 	public int getWeekendoff() {
-		return weekendoff;
+		return store_weekendoff;
 	}
-	public void setWeekendoff(int weekendoff) {
-		this.weekendoff = weekendoff;
+	public void setWeekendoff(int store_weekendoff) {
+		this.store_weekendoff = store_weekendoff;
 	}
 	public int getMinordermoney() {
-		return minordermoney;
+		return store_minordermoney;
 	}
-	public void setMinordermoney(int minordermoney) {
-		this.minordermoney = minordermoney;
+	public void setMinordermoney(int store_minordermoney) {
+		this.store_minordermoney = store_minordermoney;
 	}
 } // end StoreDto 

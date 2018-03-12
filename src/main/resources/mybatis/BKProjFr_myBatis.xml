@@ -8,23 +8,23 @@
 <mapper namespace="mybatis.BKProjFr_myBatis">
 	<resultMap id="StoreDtoResult" type="StoreDto">
 		<!-- resultMap사용시 column속성 필수 -->
-		<result property="no" column="no" />
-		<result property="name" column="name" />
-		<result property="tel" column="tel" />
-		<result property="address" column="address" />
-		<result property="weekdayon" column="weekdayon" />
-		<result property="weekdayoff" column="weekdayoff" />
-		<result property="weekendon" column="weekendon" />
-		<result property="weekendoff" column="weekendoff" />
-		<result property="minordermoney" column="minordermoney" />
+		<result property="store_no" column="store_no" />
+		<result property="store_name" column="store_name" />
+		<result property="store_tel" column="store_tel" />
+		<result property="store_address" column="store_address" />
+		<result property="store_weekdayon" column="store_weekdayon" />
+		<result property="store_weekdayoff" column="store_weekdayoff" />
+		<result property="store_weekendon" column="store_weekendon" />
+		<result property="store_weekendoff" column="store_weekendoff" />
+		<result property="store_minordermoney" column="store_minordermoney" />
 	</resultMap>
  
 	<select id="storeSelectList" resultMap="StoreDtoResult">
-		SELECT * FROM bk_store ORDER BY no DESC
+		SELECT * FROM store ORDER BY no DESC
 	</select>
 	
 	<select id="storeSelectOne" parameterType="java.lang.String" resultMap="StoreDtoResult">
-		SELECT * FROM bk_store WHERE no = #{no}
+		SELECT * FROM store WHERE no = #{no}
 	</select>
 	
 	<!-- <select id="ReplyBBSlogin" parameterType="java.util.Map" resultType="int">
