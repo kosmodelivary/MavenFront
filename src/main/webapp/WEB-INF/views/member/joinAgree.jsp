@@ -2,6 +2,18 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
+<style>
+.tooltiptext {
+    text-align: center;
+    border-radius: 5px;
+    /* Position the tooltip */
+    position: absolute;
+    z-index: 1;
+    
+    animation-name: example;
+    animation-duration: 2s;
+}
+</style>
 		<!-- lnb -->
 		<aside id="lnb">
 		<h1><img src="<c:url value='/resources/images/common/tit_members.png'/>" alt="버거킹 회원" /></h1>
@@ -242,8 +254,9 @@
 				</article>
 				<p class="mt10">
 					<label class="checkbox">
-						<input name="checkbox" type="checkbox" id="termsOfUse" />
-						<span class="lbl">이용약관에 동의합니다.</span>							
+						<input name="checkbox" type="checkbox" id="termsOfUse" class="tooltip"/>
+						<span class="lbl">이용약관에 동의합니다.</span><br>
+						<span id="ter" class="tooltiptext" style="color: red;font-weight: bold;" hidden>이용약관에 동의해야합니다</span>
 					</label>
 				</p>
 				
@@ -515,8 +528,9 @@
 				</article>
 				<p class="mt10">
 					<label class="checkbox">
-						<input name="checkbox" type="checkbox" id="privacy" />
-						<span class="lbl">개인정보처리방침에 동의합니다.</span>
+						<input name="checkbox" type="checkbox" id="privacy" class="tooltip"/>
+						<span class="lbl">개인정보처리방침에 동의합니다.</span><br>
+						<span id="pri" class="tooltiptext" style="color: red;font-weight: bold;" hidden>개인정보처리방침에 동의해야합니다</span>
 					</label>
 				</p>
 				<p class="button_area btn2">
@@ -527,53 +541,24 @@
 		</section>
 		<!-- //contents -->
 		<script type="text/javascript">
-			
-			// page parameter
-			var PageParam = {};
-			
-			// page function
-			var PageFunction = (function(pf) {
-				
-				// document ready
-				pf.init = function() {};
-				
-				// 체크박스 컨트롤
-				pf.checkBoxControl = function() {
-					// 이용 약관, 개인정보 취급 방침
-					$('#termsOfUse, #privacy').prop('checked', $(this).is(":checked"));
-				};
-				
-				// 동의(NEXT STEP) 클릭
-				pf.joinAgree = function() {
-					cntt.ajax.post(
-						'/member/joinAgreeValid',
-						{
-							termsOfUse : $('#termsOfUse').is(":checked"),
-							privacy : $('#privacy').is(":checked")
-						},
-						function (response) {
-							cntt.goPage("/member/join");
-						}
-					);
-				};
-				
-				return pf;
-			}(window.pf || {}));
-			
-			// 이벤트
-			(function(){
-				// 개인정보동의, 개인정보 수집 및 이용에 모두 동의 클릭
-				$('#allCheck').click(function(){
-					PageFunction.checkBoxControl.call(this);
-				});
-				
-				// 동의(NEXT STEP) 클릭
-				$('#joinAgree').click(function(){
-					PageFunction.joinAgree();
-				});				
-				
-			}());
-			
+		$('#allCheck').click(function(){
+			$('#termsOfUse, #privacy').prop('checked', $(this).is(":checked")).call(this);
+		});
+		$("#termsOfUse").click(function(){
+			if(!$("#termsOfUse").prop("checked")||!$("#privacy").prop("checked")) $("#allCheck").attr("checked",false);
+			else $("#allCheck").attr("checked",true);
+		})
+		$("#privacy").click(function(){
+			if(!$("#termsOfUse").prop("checked")||!$("#privacy").prop("checked")) $("#allCheck").attr("checked",false);
+			else $("#allCheck").attr("checked",true);
+		})
+		$("#joinAgree").click(function(){
+			if(!$("#allCheck").prop("checked")){
+				if(!$("#termsOfUse").prop("checked")) $("#ter").show("highlight",1000,function(){$(this).hide();})
+				if(!$("#privacy").prop("checked")) $("#pri").show("highlight",1000,function(){$(this).hide();})
+			}
+			else $('#joinAgree').attr("href","<c:url value='/member/join.whpr'/>");
+		})
 		</script>
 <!-- Mirrored from delivery.burgerking.co.kr/member/joinAgree by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 30 Jan 2018 10:07:09 GMT -->
 </html>

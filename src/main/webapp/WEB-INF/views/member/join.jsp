@@ -5,6 +5,8 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.17.0/jquery.validate.js"></script>
 <style>
 .tooltiptext {
     background-color:red;
@@ -15,26 +17,9 @@
     /* Position the tooltip */
     position: absolute;
     z-index: 1;
-    
-    animation-name: example;
-    animation-duration: 2s;
 }
 </style>
-<script type="text/javascript">
-$(function(){
-	$('#joinProcess').click(function(){
-		if($('#emailValid').val().trim()==0||/^[A-Za-z\d]$/.test($('#emailValid').val())){
-			$('#emailErr').show('highlight', function(){$('#emailErr').hide()});
-		}
-		if($('#password').val().trim()==0||/^[A-Za-z\d]$/.test($('#password').val())){
-			$('#passErr').show('highlight', function(){$('#passErr').hide()});
-		}
-		else{
-			$('form').submit();
-		}
-	})
-});
-</script>
+
 		<!-- lnb -->
 		<aside id="lnb">
 		<h1><img src="<c:url value='/resources/images/common/tit_members.png'/>" alt="버거킹 회원" /></h1>
@@ -64,7 +49,7 @@ $(function(){
 				<h2>정보입력</h2>
 				<p><img src="../resources/images/member/step2.gif" alt="01약관동의, 02정보입력(현재위치), 03가입완료" /></p>
 			</div>
-			<form action="#">
+			<form action="/memproc.whpr" id="frm">
 			<input type="hidden" name="eventSms" id="eventSms" value="Y" />
 			<input type="hidden" name="eventEmail" id="eventEmail" value="Y" />
 			<div class="form_list noline">
@@ -83,17 +68,15 @@ $(function(){
 								<option value="gmail.com">지메일</option>
 							</select>
 						</div>
-						<span class="tooltiptext" id="emailErr" hidden>이메일을 올바르게 입력하세요</span>
 					</li>
 					<li>
-						<div class="inp_wid"><i>*</i><input type="password" name="member_password" id="password" autocomplete="off" class="input" placeholder="비밀번호 영문,숫자 8~20자" title="비밀번호 입력" maxlength="20" />
+						<div class="inp_wid"><i>*</i><input type="password" name="member_password" id="pass" autocomplete="off" class="input" placeholder="비밀번호 영문,숫자 8~20자" title="비밀번호 입력" maxlength="20" />
 						</div>
-						<span class="tooltiptext" id="passErr" hidden>비밀번호를 올바르게 입력하세요</span>
 					</li>
 					<li>
-						<div class="inp_wid"><i>*</i><input type="password" name="pass2" id="confirmPassword" autocomplete="off" class="input" placeholder="비밀번호 재입력" title="비밀번호 재입력" maxlength="20" />
-						${passDis }
+						<div class="inp_wid"><i>*</i><input type="password" name="pass2" id="pass2" autocomplete="off" class="input" placeholder="비밀번호 재입력" title="비밀번호 재입력" maxlength="20" />
 						</div>
+						<span class="tooltiptext" id="passDis" hidden>&nbsp; 비밀번호가 일치하지 않습니다 &nbsp;</span>
 					</li>
 				</ul>					
 			</div>
@@ -102,6 +85,7 @@ $(function(){
 				<ul>
 					<li>
 						<div class="inp_wid"><i>*</i><input type="text" autocomplete="off" id="custName" name="member_name" class="input" placeholder="이름 입력" title="이름 입력" maxlength="10" /></div>
+						<span class="tooltiptext" id="name" hidden>&nbsp; 이름을 입력하세요 &nbsp;</span>
 					</li>
 				</ul>		
 			</div>
@@ -164,7 +148,7 @@ for(FindPassDTO record:list){
 				</p>
 			</div>
 			<p class="button_area btn2 mt30">
-				<a href="javascript:void(0)" class="button h40 w200" id="joinProcess">확인</a>
+				<input type="submit" class="button h40 w200" value="확인">
 				<a href="<c:url value='/member/joinAgree.whpr'/>" class="button h40 w200 btn_gray">취소</a>
 			</p>
 			</form>
