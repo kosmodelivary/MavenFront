@@ -19,6 +19,69 @@
     z-index: 1;
 }
 </style>
+<script>
+
+$(function(){
+	$('form').validate({
+		rules:{
+			member_email:{required:true,email:true},
+			member_password:{required:true,minlength:8,maxlength:20},
+			pass2:{required:true,equalTo:"#pass"},
+			member_name:"required",
+			member_tel:{required:true},
+			member_answer:"required"
+		},
+		messages:{
+			member_email:"이메일을 올바르게 입력하세요",
+			member_password:"비밀번호를 올바르게 입력하세요",
+			pass2:{required:"비밀번호를 다시 입력하세요",equalTo:"비밀번호가 일치하지 않습니다"},
+			member_name:"이름을 입력하세요",
+			member_tel:"전화번호를 올바르게 입력하세요",
+			member_answer:"정답을 입력하세요"
+		}
+	});
+	jQuery.validator.addMethod("phoneno", function(phone_number, element) {
+	    phone_number = phone_number.replace(/\s+/g, "");
+	    return this.optional(element) || phone_number.length > 9 && 
+	    phone_number.match(/^((\+[1-9]{1,4}[ \-]*)|(\([0-9]{2,3}\)[ \-]*)|([0-9]{2,4})[ \-]*)*?[0-9]{3,4}?[ \-]*[0-9]{3,4}?$/);
+	}, "<br />Please specify a valid phone number");
+
+    $("#phone").blur(function(){
+    	var num = $("#phone").val();
+    	blur(num);
+    });
+    $("#phone").click(function(){
+    	var num = $("#phone").val();
+    	focus(num);
+    });
+});
+function focus(num) {
+	num = num.replace(/[^0-9]/g, '');
+	$("#phone").val(num);
+}
+function blur(num) {
+	if(num.length==10){
+		num = num.replace(/[^0-9]/g, '');
+		var tmp = '';
+		tmp += num.substr(0, 3);
+		tmp += '-';
+		tmp += num.substr(3, 3);
+		tmp += '-';
+		tmp += num.substr(6);
+		$("#phone").val(tmp);
+	}
+	else if(num.length==11){
+		num = num.replace(/[^0-9]/g, '');
+		var tmp = '';
+		tmp += num.substr(0, 3);
+		tmp += '-';
+		tmp += num.substr(3, 4);
+		tmp += '-';
+		tmp += num.substr(7);
+		$("#phone").val(tmp);
+	}
+}
+</script>
 
 		<!-- lnb -->
 		<aside id="lnb">
@@ -49,7 +112,7 @@
 				<h2>정보입력</h2>
 				<p><img src="../resources/images/member/step2.gif" alt="01약관동의, 02정보입력(현재위치), 03가입완료" /></p>
 			</div>
-			<form action="/memproc.whpr" id="frm">
+			<form action="/memproc.whpr" >
 			<input type="hidden" name="eventSms" id="eventSms" value="Y" />
 			<input type="hidden" name="eventEmail" id="eventEmail" value="Y" />
 			<div class="form_list noline">
@@ -57,17 +120,9 @@
 				<ul>
 					<li>
 						<div class="inp_wid inp_mail"><i>*</i>
-							<input type="text" autocomplete="off" class="input" title="이메일 입력" id="emailValid" maxlength="25" name="member_email" />
-							<span>@</span>
-							<input type="text" autocomplete="off" class="input" title="이메일 입력" id="email2" maxlength="25" name="member_email" />
-							<select class="select" id="emailSelectBox" style="display: inline;">
-								<option value="DIRECT">직접입력</option>
-								<option value="naver.com">네이버</option>
-								<option value="hanmail.net">다음</option>
-								<option value="nate.com">네이트</option>
-								<option value="gmail.com">지메일</option>
-							</select>
+							<input style="width:100%" type="text" autocomplete="off" class="input" id="emailValid" name="member_email" placeholder="이메일 주소 입력 ID@example.com"/>
 						</div>
+						<label class="error" for="emailValid" style="display:none;color:red;font-weight:bold"></label>
 					</li>
 					<li>
 						<div class="inp_wid"><i>*</i><input type="password" name="member_password" id="pass" autocomplete="off" class="input" placeholder="비밀번호 영문,숫자 8~20자" title="비밀번호 입력" maxlength="20" />
@@ -76,7 +131,6 @@
 					<li>
 						<div class="inp_wid"><i>*</i><input type="password" name="pass2" id="pass2" autocomplete="off" class="input" placeholder="비밀번호 재입력" title="비밀번호 재입력" maxlength="20" />
 						</div>
-						<span class="tooltiptext" id="passDis" hidden>&nbsp; 비밀번호가 일치하지 않습니다 &nbsp;</span>
 					</li>
 				</ul>					
 			</div>
@@ -85,7 +139,6 @@
 				<ul>
 					<li>
 						<div class="inp_wid"><i>*</i><input type="text" autocomplete="off" id="custName" name="member_name" class="input" placeholder="이름 입력" title="이름 입력" maxlength="10" /></div>
-						<span class="tooltiptext" id="name" hidden>&nbsp; 이름을 입력하세요 &nbsp;</span>
 					</li>
 				</ul>		
 			</div>
@@ -95,16 +148,9 @@
 					<li>
 						<div class="inp_wid wid3">
 							<i>*</i>
-							<select class="select" title="휴대폰 앞자리" id="phoneValid" name="member_tel">
-								<option value="010">010</option>
-								<option value="011">011</option>
-								<option value="016">016</option>
-								<option value="017">017</option>
-								<option value="018">018</option>
-								<option value="019">019</option>
-							</select>
-							<input type="tel" id="phone2" class="input" title="휴대폰 앞자리" maxlength="4" name="member_tel"/>
-							<input type="tel" id="phone3" class="input" title="휴대폰 뒷자리" maxlength="4" name="member_tel"/>
+							
+							<input style="width:100%" type="tel" id="phone" class="input" title="휴대폰 앞자리" maxlength="13" name="member_tel" placeholder="휴대폰 번호 하이픈(-)제외 숫자만 입력"/>
+							
 						</div>								
 					</li>
 				</ul>	
