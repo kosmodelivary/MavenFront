@@ -7,18 +7,7 @@
 <!DOCTYPE html>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.17.0/jquery.validate.js"></script>
-<style>
-.tooltiptext {
-    background-color:red;
-    font-size: 11px;
-    color: white;
-    text-align: center;
-    border-radius: 5px;
-    /* Position the tooltip */
-    position: absolute;
-    z-index: 1;
-}
-</style>
+
 <script>
 
 $(function(){
