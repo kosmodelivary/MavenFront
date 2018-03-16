@@ -40,12 +40,6 @@ $(function(){
 			member_answer:"정답을 입력하세요"
 		}
 	});
-	jQuery.validator.addMethod("phoneno", function(phone_number, element) {
-	    phone_number = phone_number.replace(/\s+/g, "");
-	    return this.optional(element) || phone_number.length > 9 && 
-	    phone_number.match(/^((\+[1-9]{1,4}[ \-]*)|(\([0-9]{2,3}\)[ \-]*)|([0-9]{2,4})[ \-]*)*?[0-9]{3,4}?[ \-]*[0-9]{3,4}?$/);
-	}, "<br />Please specify a valid phone number");
-
     $("#phone").blur(function(){
     	var num = $("#phone").val();
     	blur(num);
@@ -60,6 +54,16 @@ function focus(num) {
 	$("#phone").val(num);
 }
 function blur(num) {
+	if(num.length==9){
+		num = num.replace(/[^0-9]/g, '');
+		var tmp = '';
+		tmp += num.substr(0, 2);
+		tmp += '-';
+		tmp += num.substr(2, 3);
+		tmp += '-';
+		tmp += num.substr(5);
+		$("#phone").val(tmp);
+	}
 	if(num.length==10){
 		num = num.replace(/[^0-9]/g, '');
 		var tmp = '';
@@ -82,7 +86,6 @@ function blur(num) {
 	}
 }
 </script>
-
 		<!-- lnb -->
 		<aside id="lnb">
 		<h1><img src="<c:url value='/resources/images/common/tit_members.png'/>" alt="버거킹 회원" /></h1>
@@ -120,17 +123,21 @@ function blur(num) {
 				<ul>
 					<li>
 						<div class="inp_wid inp_mail"><i>*</i>
-							<input style="width:100%" type="text" autocomplete="off" class="input" id="emailValid" name="member_email" placeholder="이메일 주소 입력 ID@example.com"/>
+							<input style="width:100%" type="text" autocomplete="off" class="input" id="emailValid" name="member_email" placeholder="이메일 주소 ID@example.com"/>
 						</div>
 						<label class="error" for="emailValid" style="display:none;color:red;font-weight:bold"></label>
 					</li>
 					<li>
-						<div class="inp_wid"><i>*</i><input type="password" name="member_password" id="pass" autocomplete="off" class="input" placeholder="비밀번호 영문,숫자 8~20자" title="비밀번호 입력" maxlength="20" />
+						<div class="inp_wid"><i>*</i>
+							<input type="password" name="member_password" id="pass" autocomplete="off" class="input" placeholder="비밀번호 영문,숫자 8~20자" title="비밀번호 입력" maxlength="20"/>
 						</div>
+						<label class="error" for="pass" style="display:none;color:red;font-weight:bold"></label>
 					</li>
 					<li>
-						<div class="inp_wid"><i>*</i><input type="password" name="pass2" id="pass2" autocomplete="off" class="input" placeholder="비밀번호 재입력" title="비밀번호 재입력" maxlength="20" />
+						<div class="inp_wid"><i>*</i>
+							<input type="password" name="pass2" id="pass2" autocomplete="off" class="input" placeholder="비밀번호 재입력" title="비밀번호 재입력" maxlength="20" />
 						</div>
+						<label class="error" for="pass2" style="display:none;color:red;font-weight:bold"></label>
 					</li>
 				</ul>					
 			</div>
@@ -138,7 +145,10 @@ function blur(num) {
 				<h3 class="cont_tit tit3">이름입력</h3>
 				<ul>
 					<li>
-						<div class="inp_wid"><i>*</i><input type="text" autocomplete="off" id="custName" name="member_name" class="input" placeholder="이름 입력" title="이름 입력" maxlength="10" /></div>
+						<div class="inp_wid"><i>*</i>
+							<input type="text" autocomplete="off" id="custName" name="member_name" class="input" placeholder="이름 입력" title="이름 입력" maxlength="10"/>
+						</div>
+						<label class="error" for="custName" style="display:none;color:red;font-weight:bold"></label>
 					</li>
 				</ul>		
 			</div>
@@ -148,14 +158,12 @@ function blur(num) {
 					<li>
 						<div class="inp_wid wid3">
 							<i>*</i>
-							
 							<input style="width:100%" type="tel" id="phone" class="input" title="휴대폰 앞자리" maxlength="13" name="member_tel" placeholder="휴대폰 번호 하이픈(-)제외 숫자만 입력"/>
-							
+							<label class="error" for="phone" style="display:none;color:red;font-weight:bold"></label>
 						</div>								
 					</li>
 				</ul>	
-			</div>
-			
+			</div>			
 			<div class="form_list">
 				<h3 class="cont_tit tit3">비번 찾기 질문</h3>
 				<ul>
@@ -168,17 +176,17 @@ List<FindPassDTO> list = dao.selectList();
 dao.close();
 for(FindPassDTO record:list){
 %>
-								<option value="<%=record.getFindpass_no()%>"><%=record.getFindpass_ask() %></option><%} %>
-								
+								<option value="<%=record.getFindpass_no()%>"><%=record.getFindpass_ask() %></option><%} %>								
 							</select>
 						</div>
 					</li>
 					<li>
-						<div class="inp_wid"><i>*</i><input type="text" name="member_answer" id="answer" class="input" placeholder="비번 찾기 정답 입력" title="비번 찾기 정답 입력" maxlength="20" /></div>
+						<div class="inp_wid"><i>*</i>
+						<input type="text" name="member_answer" id="answer" class="input" placeholder="비번 찾기 정답 입력" title="비번 찾기 정답 입력" maxlength="20" /></div>
+						<label class="error" for="answer" style="display:none;color:red;font-weight:bold"></label>
 					</li>
 				</ul>
 			</div>
-
 			<div class="form_list">	
 				<h3 class="cont_tit tit3">정보수신여부</h3>
 				<p><label class="checkbox">
