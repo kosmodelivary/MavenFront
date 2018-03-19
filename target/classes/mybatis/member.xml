@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mybatis.member">
+ 
+	<select id="memOne" parameterType="java.lang.String" resultMap="MemberDTO">
+		select * from member where member_id=#{member_id}
+	</select>
+	
+	<insert id="memInsert" parameterType="MemberDTO">
+		insert into member values(seq_member_no.nextval,#{findpass_no},#{member_answer},#{member_email},#{member_password},
+		#{member_name},#{member_tel},#{member_lastorderaddr},#{member_agreesms},#{member_agreeemail})
+	</insert>
+	
+	<update id="memUpdate" parameterType="MemberDTO">
+		update member set findpass_no=#{findpass_no},member_answer=#{member_answer},member_password=#{member_password},member_tel=#{member_tel},
+		member_agreesms=#{member_agreesms},member_agreeemail=#{member_agreeemail} where member_no=#{member_no}
+	</update>
+	
+	<delete id="memDelete" parameterType="MemberDTO">
+		delete member where member_no=#{member_no}
+	</delete>
+</mapper>

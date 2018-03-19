@@ -1,8 +1,8 @@
 package com.bgk.delivery.web;
 
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-
 
 @Controller
 public class MemberController {
@@ -29,5 +29,5 @@ public class MemberController {
 		
 		return "member/join.tile";
 	}
-	
+
 }

@@ -13,7 +13,8 @@
 $(function(){
 	$('form').validate({
 		rules:{
-			member_email:{required:true,email:true},
+			member_email:{required:true,email:true,
+				remote:"/member/idcheck.whpr"},
 			member_password:{required:true,minlength:8,maxlength:20},
 			pass2:{required:true,equalTo:"#pass"},
 			member_name:"required",
@@ -21,7 +22,7 @@ $(function(){
 			member_answer:"required"
 		},
 		messages:{
-			member_email:"이메일을 올바르게 입력하세요",
+			member_email:{required:"이메일주소를 입력하세요",email:"이메일주소를 올바르게 입력하세요",remote:"중복된 이메일주소입니다"},
 			member_password:"비밀번호를 올바르게 입력하세요",
 			pass2:{required:"비밀번호를 다시 입력하세요",equalTo:"비밀번호가 일치하지 않습니다"},
 			member_name:"이름을 입력하세요",
