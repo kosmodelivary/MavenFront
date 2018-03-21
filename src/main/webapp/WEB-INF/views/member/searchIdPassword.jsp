@@ -45,16 +45,7 @@
 					<p class="inp_wid"><input type="text" class="input" size="35" id="idsearchCustName" placeholder="이름" title="이름 입력" maxlength="10" /></p>
 					<div class="mt10">
 						<p class="inp_wid wid3">
-							<select class="select" id="phoneValid">
-								<option value="010">010</option>
-								<option value="011">011</option>
-								<option value="016">016</option>
-								<option value="017">017</option>
-								<option value="018">018</option>
-								<option value="019">019</option>
-							</select>
-							<input type="tel" class="input" maxlength="4" id="phone2" />
-							<input type="tel" class="input" maxlength="4" id="phone3" />
+							<input style="width:100%" type="tel" id="phone" class="input" title="휴대폰 앞자리" maxlength="13" name="member_tel" placeholder="휴대폰 번호 하이픈(-)제외 숫자만 입력"/>
 						</p>
 					</div>
 					
@@ -64,7 +55,7 @@
 				</section>	
 
 				<ul class="comment_list mt50">
-					<li>회원님의 가입 시 입력한 이름과 휴대폰번호로 가입 시 사용한 아이디 정보를 찾을 수 있습니다.</li>
+					<li>회원님의 가입 시 입력한 이름과 휴대폰번호로 가입 시 입력한 아이디 정보를 찾을 수 있습니다.</li>
 					<li>가입 시 입력한 비밀번호 찾기 질문과 답으로 비밀번호를 재설정할 수 있습니다.</li>
 				</ul>
 			</div>
@@ -77,16 +68,7 @@
 						<div class="find_mail">
 							<div class="inp_wid"><input type="text" class="input" size="35" id="custName" placeholder="이름" title="이름 입력" maxlength="10" /></div>
 							<div class="inp_wid inp_mail mt10">
-								<input type="text" class="input" id="emailValid" maxlength="25" />
-								<span>@</span>
-								<input type="text" class="input" id="email2" maxlength="25" />
-								<select class="select" id="emailSelectBox">
-									<option value="DIRECT">직접입력</option>
-									<option value="naver.com">네이버</option>
-									<option value="hanmail.net">다음</option>
-									<option value="nate.com">네이트</option>
-									<option value="gmail.com">지메일</option>
-								</select>
+								<input style="width:100%" type="text" autocomplete="off" class="input" id="emailValid" name="member_email" placeholder="이메일 주소 ID@example.com"/>
 							</div>
 							
 			<div>
@@ -100,8 +82,7 @@ List<FindPassDTO> list=dao.selectList();
 dao.close();
 for(FindPassDTO record:list){
 %>
-								<option><%=record.getFindpass_ask() %></option><%} %>
-								
+								<option value="<%=record.getFindpass_no()%>"><%=record.getFindpass_ask() %></option><%} %>
 							</select>
 						</div>
 					</li>

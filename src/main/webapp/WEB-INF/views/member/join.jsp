@@ -14,7 +14,13 @@ $(function(){
 	$('form').validate({
 		rules:{
 			member_email:{required:true,email:true,
-				remote:"/member/idcheck.whpr"},
+				remote:{
+					url:"<c:url value='/member/idcheck.whpr'/>",
+					type:"post",
+					data:{
+						username:function(){
+							return $("#member_email").val();
+						}}}},
 			member_password:{required:true,minlength:8,maxlength:20},
 			pass2:{required:true,equalTo:"#pass"},
 			member_name:"required",
@@ -23,58 +29,36 @@ $(function(){
 		},
 		messages:{
 			member_email:{required:"이메일주소를 입력하세요",email:"이메일주소를 올바르게 입력하세요",remote:"중복된 이메일주소입니다"},
-			member_password:"비밀번호를 올바르게 입력하세요",
+			member_password:"비밀번호를 8~20자 입력하세요",
 			pass2:{required:"비밀번호를 다시 입력하세요",equalTo:"비밀번호가 일치하지 않습니다"},
 			member_name:"이름을 입력하세요",
 			member_tel:"전화번호를 올바르게 입력하세요",
 			member_answer:"정답을 입력하세요"
 		}
 	});
-    $("#phone").blur(function(){
-    	var num = $("#phone").val();
-    	blur(num);
-    });
-    $("#phone").click(function(){
-    	var num = $("#phone").val();
-    	focus(num);
-    });
+	$("#phone").on("focus",function(){
+		$(this).val($(this).val().replace(/[^0-9]/g,''));
+	});
+	$("#phone").on("blur",function(){
+		var num = $(this).val();
+		num = num.replace(/[^0-9]/g,'');
+		$(this).val(num);
+		tmp = '';
+		if(num.length==9){
+			tmp = num.substr(0,2)+'-'+num.substr(2,3)+'-'+num.substr(5,4);
+			$(this).val(tmp);
+		}
+		else if(num.length==10){
+			tmp = num.substr(0,3)+'-'+num.substr(3,3)+'-'+num.substr(6,4);
+			$(this).val(tmp);
+		}
+		else if(num.length==11){
+			tmp = num.substr(0,3)+'-'+num.substr(3,4)+'-'+num.substr(7,4);
+			$(this).val(tmp);
+		}
+	});
 });
-function focus(num) {
-	num = num.replace(/[^0-9]/g, '');
-	$("#phone").val(num);
-}
-function blur(num) {
-	if(num.length==9){
-		num = num.replace(/[^0-9]/g, '');
-		var tmp = '';
-		tmp += num.substr(0, 2);
-		tmp += '-';
-		tmp += num.substr(2, 3);
-		tmp += '-';
-		tmp += num.substr(5);
-		$("#phone").val(tmp);
-	}
-	if(num.length==10){
-		num = num.replace(/[^0-9]/g, '');
-		var tmp = '';
-		tmp += num.substr(0, 3);
-		tmp += '-';
-		tmp += num.substr(3, 3);
-		tmp += '-';
-		tmp += num.substr(6);
-		$("#phone").val(tmp);
-	}
-	else if(num.length==11){
-		num = num.replace(/[^0-9]/g, '');
-		var tmp = '';
-		tmp += num.substr(0, 3);
-		tmp += '-';
-		tmp += num.substr(3, 4);
-		tmp += '-';
-		tmp += num.substr(7);
-		$("#phone").val(tmp);
-	}
-}
+
 </script>
 		<!-- lnb -->
 		<aside id="lnb">
@@ -105,7 +89,7 @@ function blur(num) {
 				<h2>정보입력</h2>
 				<p><img src="../resources/images/member/step2.gif" alt="01약관동의, 02정보입력(현재위치), 03가입완료" /></p>
 			</div>
-			<form action="/memproc.whpr" >
+			<form action="<c:url value='/member/proc.whpr'/>" >
 			<input type="hidden" name="eventSms" id="eventSms" value="Y" />
 			<input type="hidden" name="eventEmail" id="eventEmail" value="Y" />
 			<div class="form_list noline">

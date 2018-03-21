@@ -542,7 +542,7 @@
 		<!-- //contents -->
 		<script type="text/javascript">
 		$('#allCheck').click(function(){
-			$('#termsOfUse, #privacy').prop('checked', $(this).is(":checked")).call(this);
+			$('#termsOfUse, #privacy').prop('checked', $(this).is(":checked"));
 		});
 		$("#termsOfUse").click(function(){
 			if(!$("#termsOfUse").prop("checked")||!$("#privacy").prop("checked")) $("#allCheck").attr("checked",false);
