@@ -33,5 +33,15 @@ public class MemberDAO implements MemberService{
 	public int memDelete(MemberDTO dto) {
 		return sqlMapper.delete("memDelete", dto);
 	}
+
+	@Override
+	public MemberDTO memSearch(MemberDTO dto) {
+		return sqlMapper.selectOne("memSearch", dto);
+	}
+
+	@Override
+	public int memPass(MemberDTO dto) {
+		return sqlMapper.selectOne("memPass", dto);
+	}
 	
 }

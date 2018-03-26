@@ -11,6 +11,7 @@
 <script>
 
 $(function(){
+	//회원정보 유효성 검사
 	$('form').validate({
 		rules:{
 			member_email:{required:true,email:true,
@@ -36,6 +37,7 @@ $(function(){
 			member_answer:"정답을 입력하세요"
 		}
 	});
+	//전화번호 자동 하이픈 입력
 	$("#phone").on("focus",function(){
 		$(this).val($(this).val().replace(/[^0-9]/g,''));
 	});

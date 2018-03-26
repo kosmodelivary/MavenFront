@@ -22,4 +22,8 @@
 	<delete id="memDelete" parameterType="MemberDTO">
 		delete member where member_no=#{member_no}
 	</delete>
+	
+	<select id="memSearch" parameterType="MemberDTO" resultType="MemberDTO">
+		select * from member where member_name=#{member_name} and member_tel=#{member_tel}
+	</select>
 </mapper>

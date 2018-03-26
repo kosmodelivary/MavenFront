@@ -7,6 +7,7 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
+
 		<!-- lnb -->
 		<aside id="lnb">
 		<h1><img src="<c:url value='/resources/images/common/tit_members.png'/>" alt="버거킹 회원" /></h1>
@@ -41,8 +42,8 @@
 			<div id="tab1" class="tab_cont">
 				<section class="boxStyle search_info">
 					<h2 class="cont_tit tit3">가입시 사용한 핸드폰 번호로 아이디 찾기</h2>
-						
-					<p class="inp_wid"><input type="text" class="input" size="35" id="idsearchCustName" placeholder="이름" title="이름 입력" maxlength="10" /></p>
+					<form id="search" method="post" >
+					<p class="inp_wid"><input type="text" class="input" name="member_name" size="35" id="idsearchCustName" placeholder="이름" title="이름 입력" maxlength="10" /></p>
 					<div class="mt10">
 						<p class="inp_wid wid3">
 							<input style="width:100%" type="tel" id="phone" class="input" title="휴대폰 앞자리" maxlength="13" name="member_tel" placeholder="휴대폰 번호 하이픈(-)제외 숫자만 입력"/>
@@ -50,8 +51,9 @@
 					</div>
 					
 					<p class="button_area pt20">
-						<a href="javascript:void(0);" class="button h50 btn_gray" id="searchId">아이디 찾기</a>
+						<input type="submit" class="button h50 btn_gray" id="searchId" value="아이디 찾기"/>
 					</p>
+					</form>
 				</section>	
 
 				<ul class="comment_list mt50">
@@ -102,116 +104,56 @@ for(FindPassDTO record:list){
 							<li>회원 가입 시 입력한 비밀번호 찾기 질문과 답으로 비밀번호를 재설정합니다.</li>
 						</ul>
 			</div>
+			
+		<!-- 아이디 찾기 결과 팝업창 -->
+	<div id="dialog" class="pop_bg">
+		<article class="opo">
+			<header class="pop_head">
+				<h1>안내</h1>
+			</header>
+			<section class="pop_cont">
+				<div>
+					<div class="pt10 pb10 t_center">
+						<p class="f14" id="alert_msg"></p>
+					</div>
+					<p class="button_area mt10">
+						<a href="#" class="pop_close button btn_org w120">확인</a>
+					</p>
+				</div>
+			</section>
+			<footer class="pop_foot">
+				<a href="#" class="pop_close">팝업 닫기</a>
+			</footer>
+		</article>
+	</div>
 		</section>
-		<!-- //contents -->
-		
-		<script type="text/javascript">
-			
-			// page parameter
-			var PageParam = {};
-			
-			// page function
-			var PageFunction = (function(pf) {
-				
-				// document ready
-				pf.init = function() {};
-				
-				// 아이디 찾기
-				pf.searchId = function() {
-					var phone = $('#phoneValid').val() + $('#phone2').val() + $('#phone3').val();
-					
-					cntt.ajax.post(
-						'/member/searchId',
-						{
-							phoneValid : phone,
-							idsearchCustName : $('#idsearchCustName').val()
-						},
-						function(response) {
-							console.log(response);
-							cntt.goPage(
-								"/member/searchIdSuccess", 
-								{ 
-									email : response.email,
-									regDate : response.regDate
-								}
-							);
-						}
-					);
-				};
-				
-				// 이메일 변경
-				pf.emailSelect = function() {
-					var optionValue = $(this).val();
-					if (optionValue == "DIRECT") {
-						$('#email2').removeAttr('readonly').val("");
-					} else {
-						$('#email2').attr('readonly', 'true').val(optionValue);
+<script>
+	$(function() {
+		//전화번호 자동 하이픈 입력
+		$("#phone").on("focus", function() {
+			$(this).val($(this).val().replace(/[^0-9]/g, ''));
+		});
+		$("#phone").on("blur",function() {
+					var num = $(this).val();
+					num = num.replace(/[^0-9]/g, '');
+					$(this).val(num);
+					tmp = '';
+					if (num.length == 9) {
+						tmp = num.substr(0, 2) + '-' + num.substr(2, 3) + '-'
+								+ num.substr(5, 4);
+						$(this).val(tmp);
+					} else if (num.length == 10) {
+						tmp = num.substr(0, 3) + '-' + num.substr(3, 3) + '-'
+								+ num.substr(6, 4);
+						$(this).val(tmp);
+					} else if (num.length == 11) {
+						tmp = num.substr(0, 3) + '-' + num.substr(3, 4) + '-'
+								+ num.substr(7, 4);
+						$(this).val(tmp);
 					}
-				};
-				
-				// 비밀번호 찾기
-				pf.searchPassword = function() {
-					var email = $('#emailValid').val() + "@" + $('#email2').val();
-					var custName = $('#custName').val();
-					
-					cntt.ajax.post(
-						'/member/searchPassword',
-						{
-							emailValid : email,
-							custName : custName
-						},
-						function(response) {
-							cntt.goPage(
-								'/member/searchPasswordSuccess', 
-								{
-									email : response.email,
-									custName : response.custName
-								}
-							);
-						}
-					);
-				};
-				
-				// 폼 초기화
-				pf.inputTypeClean = function(targetTab) {
-					var selector = '#' + targetTab;
-					$('input', selector).val('');
-					$('select option:eq(0)', selector).attr('selected', 'selected');
-				}
-				
-				return pf;
-			}(window.pf || {}));
-			
-			// 이벤트
-			(function(){
-				
-				// 아이디 찾기 클릭
-				$('#searchId').click(function(){
-					PageFunction.searchId();
 				});
-				
-				// 이메일 셀렉트 박스 변경
-				$('#emailSelectBox').change(function(){
-					PageFunction.emailSelect.call(this);
-				});
-				
-				// 비밀번호 찾기 클릭
-				$('#searchPassword').click(function(){
-					PageFunction.searchPassword();
-				});
-				
-				// 아이디 찾기 탭  클릭 시 폼 초기화
-				$('#idTab').click(function() {
-					PageFunction.inputTypeClean("tab2");
-				});
-				
-				// 패스워드 찾기 탭  클릭 시 폼 초기화
-				$('#passwordTab').click(function() {
-					PageFunction.inputTypeClean("tab1");
-				});
-				
-			}());
-			
-		</script>
+		
+	})
+</script>
 <!-- Mirrored from delivery.burgerking.co.kr/member/searchIdPassword by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 30 Jan 2018 10:07:27 GMT -->
 </html>

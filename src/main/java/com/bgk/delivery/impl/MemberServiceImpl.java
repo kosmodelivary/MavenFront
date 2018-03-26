@@ -32,4 +32,13 @@ public class MemberServiceImpl implements MemberService {
 		return memberdao.memDelete(dto);
 	}
 
+	@Override
+	public MemberDTO memSearch(MemberDTO dto) {
+		return memberdao.memSearch(dto);
+	}
+
+	@Override
+	public int memPass(MemberDTO dto) {
+		return memberdao.memPass(dto);
+	}
 }

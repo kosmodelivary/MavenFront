@@ -5,6 +5,7 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.json.simple.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -64,5 +65,20 @@ public class MemberController {
 	public String joinSuc(MemberDTO dto,Model model) throws Exception{
 		model.addAttribute("dto",dto);
 		return "member/joinSuccess.tile";
+	}
+	//아이디 찾기
+	@ResponseBody
+	@RequestMapping(value="/member/searchID.whpr",produces="text/html; charset=UTF-8")	
+	public String searchID(MemberDTO dto) throws Exception{
+		MemberDTO find= memService.memSearch(dto);
+		JSONObject json = new JSONObject();
+		if(find == null) {
+			json.put("data", "입력 하신 정보로 회원 정보를 조회할 수 없습니다.");
+			return json.toString();
+		}
+		else {
+			json.put("data", find.getMember_email());
+			return json.toString();
+		}
 	}
 }
