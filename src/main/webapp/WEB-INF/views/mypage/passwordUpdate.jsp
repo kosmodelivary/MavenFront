@@ -22,7 +22,7 @@
 			<!-- contents -->
 			<section id="contents">
 				<ul id="location">
-					<li><a class="home" href="/home.whpr">HOME</a></li>
+					<li><a class="home" href="<c:url value='/home.whpr'/>">HOME</a></li>
 					<li><span>마이페이지</span></li>
 					<li><strong>비밀번호 변경</strong></li>
 				</ul>

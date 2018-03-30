@@ -25,7 +25,7 @@
 		<!-- contents -->
 		<section id="contents">
 			<ul id="location">
-				<li><a class="home" href="../index.jsp">HOME</a></li>
+				<li><a class="home" href="<c:url value='/home.whpr'/>">HOME</a></li>
 				<li><span>버거킹 회원</span></li>
 				<li><strong>아이디/비밀번호 찾기</strong></li>
 			</ul>
@@ -51,7 +51,7 @@
 					</div>
 					
 					<p class="button_area pt20">
-						<input type="submit" class="button h50 btn_gray" id="searchId" value="아이디 찾기"/>
+						<input type="button" class="button h50 btn_gray" id="findId" value="아이디 찾기" data-toggle="modal" data-target="#myModal"/>
 					</p>
 					</form>
 				</section>	
@@ -66,9 +66,10 @@
 			<div id="tab2" class="tab_cont">
 				<section class="find_pw boxStyle">
 					<h2 class="cont_tit tit3">비밀번호 찾기 질문으로 비밀번호 재설정</h2>
+					<form id="findpw" method="post">
 					<div id="mail">
 						<div class="find_mail">
-							<div class="inp_wid"><input type="text" class="input" size="35" id="custName" placeholder="이름" title="이름 입력" maxlength="10" /></div>
+							<div class="inp_wid"><input type="text" class="input" size="35" id="custName" name="member_name" placeholder="이름" title="이름 입력" maxlength="10" /></div>
 							<div class="inp_wid inp_mail mt10">
 								<input style="width:100%" type="text" autocomplete="off" class="input" id="emailValid" name="member_email" placeholder="이메일 주소 ID@example.com"/>
 							</div>
@@ -89,43 +90,51 @@ for(FindPassDTO record:list){
 						</div>
 					</li>
 					<li>
-						<div class="inp_wid mt10"><input type="text" name="answer" id="answer" class="input" placeholder="비번 찾기 정답 입력" title="비번 찾기 정답 입력" maxlength="20" /></div>
+						<div class="inp_wid mt10"><input type="text" name="member_answer" id="answer" class="input" placeholder="비번 찾기 정답 입력" title="비번 찾기 정답 입력" maxlength="20" /></div>
 					</li>
 				</ul>
 			</div>
-							
 							<p class="button_area pt20">
-								<a href="javascript:void(0);" class="button h50 btn_gray" id="searchPassword">비밀번호 재설정</a>
+								<input type="button" class="button h50 btn_gray" id="resetpass" value="비밀번호 재설정" data-toggle="modal" data-target="#myModal"/>
 							</p>
 						</div>
-					</div>						
+					</div>
+					</form>
 				</section>
 						<ul class="comment_list mt50">
 							<li>회원 가입 시 입력한 비밀번호 찾기 질문과 답으로 비밀번호를 재설정합니다.</li>
 						</ul>
 			</div>
-			
 		<!-- 아이디 찾기 결과 팝업창 -->
-	<div id="dialog" class="pop_bg">
-		<article class="opo">
-			<header class="pop_head">
-				<h1>안내</h1>
-			</header>
-			<section class="pop_cont">
-				<div>
-					<div class="pt10 pb10 t_center">
-						<p class="f14" id="alert_msg"></p>
-					</div>
-					<p class="button_area mt10">
-						<a href="#" class="pop_close button btn_org w120">확인</a>
-					</p>
-				</div>
-			</section>
-			<footer class="pop_foot">
-				<a href="#" class="pop_close">팝업 닫기</a>
-			</footer>
-		</article>
-	</div>
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+      <span id='find_msg'></span>
+      </div>
+      <div class="modal-footer">
+      </div>
+    </div>
+  </div>
+</div>
+		<!-- 비밀번호 재설정 팝업창 -->
+<div class="modal fade" id="passModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+      <span id='find_pass'></span>
+      </div>
+      <div class="modal-footer">
+      </div>
+    </div>
+  </div>
+</div>
 		</section>
 <script>
 	$(function() {
@@ -152,7 +161,53 @@ for(FindPassDTO record:list){
 						$(this).val(tmp);
 					}
 				});
-		
+		//아이디 찾기
+		$('#findId').click(function() {
+			$.ajax({
+				url : '<c:url value="/member/searchID.whpr"/>',
+				type : 'post',
+				dataType : 'json',
+				data : $('#search').serialize(),
+				success : function(data){
+					if(data!=null){
+						$("#find_msg").html(data['find']);
+						$("#myModal").dialog("open");
+					}
+					else {
+						$("#find_msg").html("입력하신 정보로 회원을 조회할 수 없습니다");
+						$("#myModal").dialog("open");
+					}
+				}
+			});
+		});
+		//비밀번호 찾기
+		$('#resetpass').click(function() {
+			$.ajax({
+				url : '<c:url value="/member/searchPW.whpr"/>',
+				type : 'post',
+				dataType : 'json',
+				data : $('#findpw').serialize(),
+				success : function(data){
+					if(data!=null){
+						$("#passModal").dialog("open");
+					}
+					else {
+						$("#find_pass").html("입력하신 정보로 회원을 조회할 수 없습니다");
+						$("#passModal").dialog("open");
+					}
+				}
+			});
+		});
+	     $("#myModal").dialog({
+	         autoOpen: false,
+	         modal: true,
+	         title: "아이디 찾기"
+	     });
+	     $("#passModal").dialog({
+	         autoOpen: false,
+	         modal: true,
+	         title: "비밀번호 재설정"
+	     });
 	})
 </script>
 <!-- Mirrored from delivery.burgerking.co.kr/member/searchIdPassword by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 30 Jan 2018 10:07:27 GMT -->

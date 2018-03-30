@@ -1,3 +1,4 @@
+<%@page import="com.bgk.delivery.service.MemberDTO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
@@ -6,7 +7,7 @@
 			<!-- lnb -->
 			<aside id="lnb">
 				<h1>
-					<img src="/resources/images/common/tit_mypage.png" alt="마이페이지" />
+					<img src="<c:url value='/resources/images/common/tit_mypage.png'/>" alt="마이페이지" />
 				</h1>
 				<nav>
 					<ul>
@@ -22,7 +23,7 @@
 			<!-- contents -->
 			<section id="contents">
 				<ul id="location">
-					<li><a class="home" href="/home.whpr">HOME</a></li>
+					<li><a class="home" href="<c:url value='/home.whpr'/>">HOME</a></li>
 					<li><span>마이페이지</span></li>
 					<li><strong>내 정보수정</strong></li>
 				</ul>
@@ -37,7 +38,7 @@
 							<div class="inp_wid wid2">
 
 								<input type="text" class="input readonly" id="custName"
-									readonly="readonly" maxlength="10" value="남기웅" />
+									readonly="readonly" maxlength="10" value='${dto.member_name }' />
 
 
 							</div>
@@ -46,8 +47,7 @@
 							<p>
 								배달 시 사용되는 전화번호입니다. (변경 가능합니다.)
 								<!-- <a href="#" class="mypage_tip tooltip" onclick="return false;" title="인증하신 휴대폰 번호입니다. 휴대폰 번호를 변경할 경우 재인증이 필요합니다.">TIP &gt;</a> -->
-								<a href="#" class="mypage_tip tooltip" onclick="return false;"
-									title="인증하신 휴대폰 번호입니다.">TIP &gt;</a>
+								<a href="#" class="mypage_tip tooltip" onclick="return false;" title="인증하신 휴대폰 번호입니다.">TIP &gt;</a>
 							</p>
 							<div class="inp_wid wid4 mt5">
 								<select class="select" id="phoneValid" title="휴대폰 앞자리">
@@ -75,34 +75,31 @@
 							<div class="inp_wid mt5">
 								<input type="text" class="input tooltip readonly" id="email"
 									readonly="readonly" title="고객님의 아이디로 변경이 안됩니다"
-									value="valentine-l@nate.com" />
+									value="${dto.member_email }" />
 							</div>
 						</li>
 					</ul>
 				</div>
 
 				<div class="form_list">
-					<input type="hidden" name="eventSms" id="eventSms" value="Y" /> <input
-						type="hidden" name="eventEmail" id="eventEmail" value="N" />
 					<h3 class="cont_tit tit3">정보수신여부</h3>
 					<p>
-						<label class="checkbox"> <input id="event_sms_checkbox"
-							type="checkbox" data-target="eventSms" checked="checked" /> <span
-							class="lbl">이벤트/주문정보의 SMS 수신을 동의합니다.</span>
+						<label class="checkbox">
+						<input id="event_sms_checkbox" type="checkbox" data-target="eventSms" ${dto.member_agreesms=="true"?"checked":"" } />
+						<span class="lbl">이벤트/주문정보의 SMS 수신을 동의합니다.</span>
 						</label>
 					</p>
 					<p class="mt10">
-						<label class="checkbox"> <input id="event_email_checkbox"
-							type="checkbox" data-target="eventEmail" /> <span class="lbl">이벤트/주문정보의
-								이메일 수신을 동의합니다. 정확한 정보를 입력해주세요.</span>
+						<label class="checkbox">
+						<input id="event_email_checkbox" type="checkbox" data-target="eventEmail" ${dto.member_agreeemail=="true"?"checked":"" }/>
+						<span class="lbl">이벤트/주문정보의 이메일 수신을 동의합니다. 정확한 정보를 입력해주세요.</span>
 						</label>
 					</p>
 				</div>
 
 				<p class="button_area btn2 mt30">
-					<a href="javascript:void(0);" id="memberInfoUpdate"
-						class="button h40 w200">수정</a> <a href="/mypage"
-						class="button h40 w200 btn_gray">취소</a>
+					<a href="javascript:void(0);" id="memberInfoUpdate" class="button h40 w200">수정</a>
+					<a href="/mypage" class="button h40 w200 btn_gray">취소</a>
 				</p>
 			</section>
 			<!-- //contents -->
@@ -159,5 +156,3 @@
 
 				}());
 			</script>
-</body>
-</html>

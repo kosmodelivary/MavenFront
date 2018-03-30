@@ -20,7 +20,7 @@
 		<!-- contents -->
 		<section id="contents">
 			<ul id="location">
-				<li><a class="home" href="../index.jsp">HOME</a></li>
+				<li><a class="home" href="<c:url value='/home.whpr'/>">HOME</a></li>
 				<li><span>버거킹 회원</span></li>
 				<li><strong>로그인</strong></li>
 			</ul>
@@ -30,16 +30,15 @@
 			
 			<div class="login_wrap">
 				<div class="login_left">		
-					<form id="loginForm" name="loginForm">
+					<form id="loginForm" name="loginForm" action="<c:url value='/member/loginProc.whpr'/>" method="post">
 						<input type="hidden" id="loginFlag" name="loginFlag" value="user" />
 						<h2 class="cont_tit tit2">회원로그인</h2>
 						<ul class="login_list">
-							<li><input type="text" id="email" name="email" class="input" placeholder="이메일 주소 입력" title="이메일주소 입력" maxlength="50" /></li>
-							<li><input type="password" id="password" name="password" class="input" placeholder="비밀번호 입력(8~20 영문, 숫자, 특수문자 조합)" title="비밀번호 입력" maxlength="20" /></li>
-							<li><label class="mt10 checkbox"><input type="checkbox" id="emailInfoSave" />
-									<span class="lbl">회원정보 저장</span>
+							<li><input type="text" id="email" name="member_email" class="input" placeholder="이메일 주소 입력" title="이메일주소 입력" maxlength="50" /></li>
+							<li><input type="password" id="password" name="member_password" class="input" placeholder="비밀번호 입력(8~20 영문, 숫자, 특수문자 조합)" title="비밀번호 입력" maxlength="20" /></li>
+							<li><label class="mt10 checkbox"><span>${loginErr }</span>
 								</label>
-								<button type="button" class="button h40 w130 f_right" id="loginProcessButton">로그인</button>
+								<button type="submit" class="button h40 w130 f_right" id="loginProcessButton">로그인</button>
 							</li>
 						</ul>
 						<ul class="login_list2">
@@ -146,33 +145,6 @@
 					}
 				};
 				
-				// 로그인 체크 및 처리
-				pf.loginProcess = function() {
-					cntt.ajax.post(
-						'/member/loginProcess',
-						$('#loginForm').serializeObject(),
-						function (response) {
-							// 로그인 성공
-							if (response) {
-								// 회원 정보 쿠키 저장 혹은 삭제
-								var userEmail = $('#email').val();
-								if ($('#emailInfoSave').is(":checked")) {
-									cntt.cookie.set("userEmail", userEmail, 7);	
-								} else {
-									if (cntt.cookie.get("userEmail")) {
-										cntt.cookie.del("userEmail");
-									}
-								}
-								
-								cntt.goPage("../index.html");
-							} else {
-								// 휴면 회원 해제 안내 레이어 팝업 오픈
-								popOpen("#popSleepMember");
-							}
-						}
-					);		
-				};
-				
 				// 비회원 메뉴 선택
 				pf.noneUserMenuChoice = function() {
 					var _val = $(this).val();
@@ -272,7 +244,4 @@
 						$('#loginProcessButton').click();
 				});
 			}());	
-		</script>
-		
-<!-- Mirrored from delivery.burgerking.co.kr/member/login by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 30 Jan 2018 10:07:08 GMT -->
-</html>
+		</script>		

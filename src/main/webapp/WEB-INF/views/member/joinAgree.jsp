@@ -31,7 +31,7 @@
 		<!-- contents -->
 		<section id="contents">
 			<ul id="location">
-				<li><a class="home" href="../index.jsp">HOME</a></li>
+				<li><a class="home" href="<c:url value='/home.whpr'/>">HOME</a></li>
 				<li><span>버거킹 회원</span></li>
 				<li><strong>회원가입</strong></li>
 			</ul>

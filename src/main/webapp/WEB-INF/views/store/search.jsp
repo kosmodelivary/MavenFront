@@ -18,7 +18,7 @@
 <!-- contents -->
 <section id="contents">
 	<ul id="location">
-		<li><a class="home" href="/home.whpr">HOME</a></li>
+		<li><a class="home" href="<c:url value='/home.whpr'/>">HOME</a></li>
 		<li><span>STORE</span></li>
 		<li><strong>배달매장찾기</strong></li>
 	</ul>

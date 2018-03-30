@@ -18,14 +18,13 @@ public class FrontController {
 	@RequestMapping("/menu/All.whpr")
 	public String menu() throws Exception
 	{
-		
 		return "menu/All.tile";
 	}
 	
 	@RequestMapping("/home.whpr")
 	public String home() throws Exception
 	{
-		return "index.tile";
+		return "index";
 	}
 
 }

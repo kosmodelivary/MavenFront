@@ -1,9 +1,8 @@
 package com.bgk.delivery.web;
 
-
-import java.util.Map;
-
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.json.simple.JSONObject;
 import org.springframework.stereotype.Controller;
@@ -20,7 +19,7 @@ public class MemberController {
 	
 	@Resource(name="memberService")
 	MemberServiceImpl memService;
-	
+	//회원가입 및 로그인
 	@RequestMapping("/member/searchIdPassword.whpr")
 	public String searchIDPW() throws Exception{
 		
@@ -34,9 +33,9 @@ public class MemberController {
 	}
 	
 	@RequestMapping("/member/login.whpr")
-	public String login() throws Exception{
-		
-		return "member/login.tile";
+	public String login(HttpSession session) throws Exception{
+		if(session.getAttribute("dto") != null) return "member/memberorder.tile";
+		else return "member/login.tile";
 	}
 	
 	@RequestMapping("/member/join.whpr")
@@ -44,6 +43,32 @@ public class MemberController {
 		
 		return "member/join.tile";
 	}
+	
+	@RequestMapping("/mypage/memberUpdate.whpr")
+	public String memberUpdate() throws Exception{
+		
+		return "mypage/memberUpdate.tile";
+	}
+	
+	//마이페이지
+	@RequestMapping("/mypage/passwordUpdate.whpr")
+	public String passUpdate() throws Exception{
+		
+		return "mypage/passwordUpdate.tile";
+	}
+	
+	@RequestMapping("/mypage/memberWithdraw.whpr")
+	public String withdraw() throws Exception{
+		
+		return "mypage/memberWithdraw.tile";
+	}
+	
+	@RequestMapping("/mypage/mypage.whpr")
+	public String mypage() throws Exception{
+		
+		return "mypage/mypage.tile";
+	}
+	
 	//아이디 중복확인
 	@RequestMapping("/member/idcheck.whpr")
 	@ResponseBody
@@ -72,13 +97,41 @@ public class MemberController {
 	public String searchID(MemberDTO dto) throws Exception{
 		MemberDTO find= memService.memSearch(dto);
 		JSONObject json = new JSONObject();
-		if(find == null) {
-			json.put("data", "입력 하신 정보로 회원 정보를 조회할 수 없습니다.");
+		if(find == null) return null;
+		else {
+			json.put("find", find.getMember_email());
 			return json.toString();
+		}
+	}
+	//비밀번호 찾기
+	@ResponseBody
+	@RequestMapping(value = "/member/searchPW.whpr", produces = "text/html; charset=UTF-8")
+	public String findPW(MemberDTO dto) throws Exception {
+		MemberDTO findpass = memService.memPass(dto);
+		JSONObject json = new JSONObject();
+		if(findpass != null) return null;
+		else {
+			json.put("member_no", dto.getMember_no());
+			return json.toString();
+		}
+	}
+	//로그인
+	@RequestMapping("/member/loginProc.whpr")
+	public String isMember(MemberDTO dto,HttpSession session,HttpServletRequest req) throws Exception{
+		dto = memService.isMember(dto);
+		if(dto == null) {
+			req.setAttribute("loginErr", "일치하는 정보가 없습니다");
+			return "forward:/member/login.whpr";
 		}
 		else {
-			json.put("data", find.getMember_email());
-			return json.toString();
+			session.setAttribute("dto", dto);
+			return "forward:/mypage/mypage.whpr";
 		}
+	}
+	//로그아웃
+	@RequestMapping("/member/logout.whpr")
+	public String logout(HttpSession session) throws Exception{
+		session.invalidate();
+		return "redirect:/home.whpr";
 	}
 }

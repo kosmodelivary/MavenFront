@@ -1,6 +1,5 @@
 package com.bgk.delivery.service;
 
-
 public interface MemberService {
 	public MemberDTO memOne(String id);
 	
@@ -9,5 +8,7 @@ public interface MemberService {
 	public int memDelete(MemberDTO dto);
 	
 	public MemberDTO memSearch(MemberDTO dto);
-	public int memPass(MemberDTO dto);
+	public MemberDTO memPass(MemberDTO dto);
+	
+	public MemberDTO isMember(MemberDTO dto);
 }

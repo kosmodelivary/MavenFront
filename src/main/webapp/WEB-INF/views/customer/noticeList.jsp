@@ -19,7 +19,7 @@
 	<!-- contents -->
 	<section id="contents">
 		<ul id="location">
-			<li><a class="home" href="../index.jsp">HOME</a></li>
+			<li><a class="home" href="<c:url value='/home.whpr'/>">HOME</a></li>
 			<li><span>FAQ</span></li>
 			<li><strong>공지사항</strong></li>
 		</ul>

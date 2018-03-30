@@ -38,7 +38,14 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
-	public int memPass(MemberDTO dto) {
+	public MemberDTO memPass(MemberDTO dto) {
 		return memberdao.memPass(dto);
 	}
+
+	@Override
+	public MemberDTO isMember(MemberDTO dto) {
+		return memberdao.isMember(dto);
+	}
+	
+	
 }

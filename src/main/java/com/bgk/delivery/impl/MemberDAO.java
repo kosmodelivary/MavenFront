@@ -40,8 +40,15 @@ public class MemberDAO implements MemberService{
 	}
 
 	@Override
-	public int memPass(MemberDTO dto) {
+	public MemberDTO memPass(MemberDTO dto) {
 		return sqlMapper.selectOne("memPass", dto);
 	}
+
+	@Override
+	public MemberDTO isMember(MemberDTO dto) {
+		return sqlMapper.selectOne("isMember", dto);
+	}
+	
+	
 	
 }
