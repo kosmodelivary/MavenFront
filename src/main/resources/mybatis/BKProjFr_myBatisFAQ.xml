@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+<mapper namespace="mybatis.BKProjFr_myBatisFAQ">
+	<resultMap id="FAQDtoResult" type="FAQDto" >
+		<result property="faq_no" column="faq_no"/>
+		<result property="faq_ask" column="faq_ask"/>
+		<result property="faq_answer" column="faq_answer"/>
+		<result property="tabcon" column="tabcon"/>	
+	</resultMap>
+	
+	<select id="faqSelectList" resultMap="FAQDtoResult">
+		SELECT * FROM faq ORDER BY faq_no DESC
+	</select>
+	
+	<select id="faqSelectOne" parameterType="java.lang.String" resultMap="FAQDtoResult">
+		SELECT * FROM faq WHERE faq_no = #{faq_no}
+	</select>
+	
+	</mapper>
+	
