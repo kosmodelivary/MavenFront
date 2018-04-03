@@ -35,6 +35,11 @@ public class MemberDAO implements MemberService{
 	}
 
 	@Override
+	public int passChange(MemberDTO dto) {
+		return sqlMapper.update("passChange",dto);
+	}
+	
+	@Override
 	public MemberDTO memSearch(MemberDTO dto) {
 		return sqlMapper.selectOne("memSearch", dto);
 	}
@@ -48,7 +53,7 @@ public class MemberDAO implements MemberService{
 	public MemberDTO isMember(MemberDTO dto) {
 		return sqlMapper.selectOne("isMember", dto);
 	}
-	
+
 	
 	
 }

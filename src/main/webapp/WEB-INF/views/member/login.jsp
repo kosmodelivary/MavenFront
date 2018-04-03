@@ -34,8 +34,8 @@
 						<input type="hidden" id="loginFlag" name="loginFlag" value="user" />
 						<h2 class="cont_tit tit2">회원로그인</h2>
 						<ul class="login_list">
-							<li><input type="text" id="email" name="member_email" class="input" placeholder="이메일 주소 입력" title="이메일주소 입력" maxlength="50" /></li>
-							<li><input type="password" id="password" name="member_password" class="input" placeholder="비밀번호 입력(8~20 영문, 숫자, 특수문자 조합)" title="비밀번호 입력" maxlength="20" /></li>
+							<li><input type="text" id="email" name="member_email" class="input" placeholder="이메일 주소 입력" title="이메일주소 입력" maxlength="50" required/></li>
+							<li><input type="password" id="password" name="member_password" class="input" placeholder="비밀번호 입력(8~20 영문, 숫자, 특수문자 조합)" title="비밀번호 입력" maxlength="20" required/></li>
 							<li><label class="mt10 checkbox"><span>${loginErr }</span>
 								</label>
 								<button type="submit" class="button h40 w130 f_right" id="loginProcessButton">로그인</button>

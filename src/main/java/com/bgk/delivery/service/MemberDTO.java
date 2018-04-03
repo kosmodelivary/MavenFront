@@ -1,8 +1,8 @@
 package com.bgk.delivery.service;
 
 public class MemberDTO {
-	private int member_no;
-	private int findpass_no;
+	private String member_no;
+	private String findpass_no;
 	private String member_answer;
 	private String member_email;
 	private String member_password;
@@ -11,16 +11,17 @@ public class MemberDTO {
 	private String member_lastorderaddr;
 	private String member_agreesms;
 	private String member_agreeemail;
-	public int getMember_no() {
+	private String passchange;
+	public String getMember_no() {
 		return member_no;
 	}
-	public void setMember_no(int member_no) {
+	public void setMember_no(String member_no) {
 		this.member_no = member_no;
 	}
-	public int getFindpass_no() {
+	public String getFindpass_no() {
 		return findpass_no;
 	}
-	public void setFindpass_no(int findpass_no) {
+	public void setFindpass_no(String findpass_no) {
 		this.findpass_no = findpass_no;
 	}
 	public String getMember_answer() {
@@ -58,6 +59,12 @@ public class MemberDTO {
 	}
 	public void setMember_lastorderaddr(String member_lastorderaddr) {
 		this.member_lastorderaddr = member_lastorderaddr;
+	}
+	public String getPasschange() {
+		return passchange;
+	}
+	public void setPasschange(String passchange) {
+		this.passchange = passchange;
 	}
 	public String getMember_agreesms() {
 		return member_agreesms;

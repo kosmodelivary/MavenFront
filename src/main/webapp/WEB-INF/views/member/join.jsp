@@ -7,9 +7,7 @@
 <!DOCTYPE html>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.17.0/jquery.validate.js"></script>
-
 <script>
-
 $(function(){
 	//회원정보 유효성 검사
 	$('form').validate({
@@ -60,7 +58,6 @@ $(function(){
 		}
 	});
 });
-
 </script>
 		<!-- lnb -->
 		<aside id="lnb">
@@ -134,7 +131,7 @@ $(function(){
 					<li>
 						<div class="inp_wid wid3">
 							<i>*</i>
-							<input style="width:100%" type="tel" id="phone" class="input" title="휴대폰 앞자리" maxlength="13" name="member_tel" placeholder="휴대폰 번호 하이픈(-)제외 숫자만 입력"/>
+							<input style="width:100%" type="tel" id="phone" class="input" title="휴대폰 번호 입력" maxlength="13" name="member_tel" placeholder="휴대폰 번호 하이픈(-)제외 숫자만 입력"/>
 							<label class="error" for="phone" style="display:none;color:red;font-weight:bold"></label>
 						</div>								
 					</li>

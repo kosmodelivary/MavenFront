@@ -31,7 +31,12 @@ public class MemberServiceImpl implements MemberService {
 	public int memDelete(MemberDTO dto) {
 		return memberdao.memDelete(dto);
 	}
-
+	
+	@Override
+	public int passChange(MemberDTO dto) {
+		return memberdao.passChange(dto);
+	}
+	
 	@Override
 	public MemberDTO memSearch(MemberDTO dto) {
 		return memberdao.memSearch(dto);
@@ -46,6 +51,5 @@ public class MemberServiceImpl implements MemberService {
 	public MemberDTO isMember(MemberDTO dto) {
 		return memberdao.isMember(dto);
 	}
-	
 	
 }

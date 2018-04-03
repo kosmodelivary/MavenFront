@@ -1,9 +1,38 @@
+<%@page import="com.bgk.delivery.service.FindPassDTO"%>
+<%@page import="java.util.List"%>
+<%@page import="com.bgk.delivery.impl.FindPassDAO"%>
 <%@page import="com.bgk.delivery.service.MemberDTO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@include file="/WEB-INF/views/mypage/isMember.jsp" %>
 <!DOCTYPE html>
-
+<script>
+$(function(){
+	//전화번호 자동 하이픈 입력
+	$("#phone").on("focus",function(){
+		$(this).val($(this).val().replace(/[^0-9]/g,''));
+	});
+	$("#phone").on("blur",function(){
+		var num = $(this).val();
+		num = num.replace(/[^0-9]/g,'');
+		$(this).val(num);
+		tmp = '';
+		if(num.length==9){
+			tmp = num.substr(0,2)+'-'+num.substr(2,3)+'-'+num.substr(5,4);
+			$(this).val(tmp);
+		}
+		else if(num.length==10){
+			tmp = num.substr(0,3)+'-'+num.substr(3,3)+'-'+num.substr(6,4);
+			$(this).val(tmp);
+		}
+		else if(num.length==11){
+			tmp = num.substr(0,3)+'-'+num.substr(3,4)+'-'+num.substr(7,4);
+			$(this).val(tmp);
+		}
+	});
+});
+</script>
 			<!-- lnb -->
 			<aside id="lnb">
 				<h1>
@@ -12,14 +41,13 @@
 				<nav>
 					<ul>
 						<li><a href="<c:url value='/mypage/memberUpdate.whpr'/>">내 정보수정</a></li>
-						<li><a href="/mypage">내 주문내역</a></li>
+						<li><a href="<c:url value='/mypage/mypage.whpr'/>">내 주문내역</a></li>
 						<li><a href="<c:url value='/mypage/passwordUpdate.whpr'/>">비밀번호 변경</a></li>
 						<li><a href="<c:url value='/mypage/memberWithdraw.whpr'/>">회원탈퇴</a></li>
 					</ul>
 				</nav>
 			</aside>
 			<!-- //lnb -->
-
 			<!-- contents -->
 			<section id="contents">
 				<ul id="location">
@@ -31,76 +59,74 @@
 					<h1>내 정보수정</h1>
 				</div>
 				<p class="bold f16 mb15">회원님의 정보 중 변경된 내용이 있는 경우, 아래에서 수정해주세요.</p>
+				<form action="<c:url value='/mypage/update.whpr'/>" method="post">
 				<div class="form_list">
 					<h3 class="cont_tit tit3">회원정보변경</h3>
 					<ul>
 						<li>
 							<div class="inp_wid wid2">
-
-								<input type="text" class="input readonly" id="custName"
-									readonly="readonly" maxlength="10" value='${dto.member_name }' />
-
-
+								<input type="text" class="input readonly" id="custName" readonly="readonly" maxlength="10" value='${dto.member_name }' />
 							</div>
 						</li>
 						<li>
 							<p>
 								배달 시 사용되는 전화번호입니다. (변경 가능합니다.)
-								<!-- <a href="#" class="mypage_tip tooltip" onclick="return false;" title="인증하신 휴대폰 번호입니다. 휴대폰 번호를 변경할 경우 재인증이 필요합니다.">TIP &gt;</a> -->
-								<a href="#" class="mypage_tip tooltip" onclick="return false;" title="인증하신 휴대폰 번호입니다.">TIP &gt;</a>
 							</p>
 							<div class="inp_wid wid4 mt5">
-								<select class="select" id="phoneValid" title="휴대폰 앞자리">
-									<option value="010" selected="selected">010</option>
-									<option value="011">011</option>
-									<option value="016">016</option>
-									<option value="017">017</option>
-									<option value="018">018</option>
-									<option value="019">019</option>
-								</select> <input type="tel" class="input" id="phone2" title="휴대폰 앞자리"
-									maxlength="4" value="8729" /> <input type="tel" class="input"
-									id="phone3" title="휴대폰 뒷자리" maxlength="4" value="5178" /> <a
-									href="#" class="button btn_gray" style="display: none">휴대폰인증</a>
+								<input style="width:100%" type="tel" id="phone" class="input" title="휴대폰 번호 입력" maxlength="13" name="member_tel" placeholder="휴대폰 번호 하이픈(-)제외 숫자만 입력" value="${dto.member_tel }"/>
 							</div>
-						</li>
-						<li style="display: none">
-							<p class="inp_wid wid2">
-								<input type="text" class="input" maxlength="6"
-									placeholder="인증번호 입력" title="인증번호 입력" /> <a href="#"
-									class="button btn_gray w120">인증하기</a>
-							</p>
 						</li>
 						<li>
 							<p>이벤트 시 연락하는 이메일 주소입니다. (고객님의 아이디로 변경이 안됩니다)</p>
 							<div class="inp_wid mt5">
-								<input type="text" class="input tooltip readonly" id="email"
-									readonly="readonly" title="고객님의 아이디로 변경이 안됩니다"
-									value="${dto.member_email }" />
+								<input type="text" class="input tooltip readonly" id="email" readonly="readonly" title="고객님의 아이디로 변경이 안됩니다" name="member_email" value="${dto.member_email }" />
 							</div>
 						</li>
 					</ul>
 				</div>
-
+			<div class="form_list">
+				<h3 class="cont_tit tit3">비번 찾기 질문</h3>
+				<ul>
+					<li>
+						<div class="inp_wid"><i>*</i>
+							<select class="select" title="비번 찾기 질문 선택" id="quiz" name="findpass_no">
+<%
+FindPassDAO dao = new FindPassDAO();
+List<FindPassDTO> list = dao.selectList();
+dao.close();
+for(FindPassDTO record:list){
+%>
+								<option value="<%=record.getFindpass_no()%>" <%=record.getFindpass_no().equals(((MemberDTO)session.getAttribute("dto")).getFindpass_no())?"selected":"" %>><%=record.getFindpass_ask() %></option><%} %>								
+							</select>
+						</div>
+					</li>
+					<li>
+						<div class="inp_wid"><i>*</i>
+						<input type="text" name="member_answer" id="answer" class="input" placeholder="비번 찾기 정답 입력" title="비번 찾기 정답 입력" maxlength="20" value="${dto.member_answer }" required/>
+						</div>
+					</li>
+				</ul>
+			</div>
 				<div class="form_list">
 					<h3 class="cont_tit tit3">정보수신여부</h3>
 					<p>
 						<label class="checkbox">
-						<input id="event_sms_checkbox" type="checkbox" data-target="eventSms" ${dto.member_agreesms=="true"?"checked":"" } />
+						<input id="event_sms_checkbox" type="checkbox" data-target="eventSms" name="member_agreesms" ${dto.member_agreesms=="true"?"checked":"" }/>
 						<span class="lbl">이벤트/주문정보의 SMS 수신을 동의합니다.</span>
 						</label>
 					</p>
 					<p class="mt10">
 						<label class="checkbox">
-						<input id="event_email_checkbox" type="checkbox" data-target="eventEmail" ${dto.member_agreeemail=="true"?"checked":"" }/>
+						<input id="event_email_checkbox" type="checkbox" data-target="eventEmail" name="member_agreeemail" ${dto.member_agreeemail=="true"?"checked":"" }/>
 						<span class="lbl">이벤트/주문정보의 이메일 수신을 동의합니다. 정확한 정보를 입력해주세요.</span>
 						</label>
 					</p>
 				</div>
-
 				<p class="button_area btn2 mt30">
-					<a href="javascript:void(0);" id="memberInfoUpdate" class="button h40 w200">수정</a>
-					<a href="/mypage" class="button h40 w200 btn_gray">취소</a>
+					<input type="submit" class="button h40 w200" value="수정">
+					<a href="<c:url value='/mypage/mypage.whpr'/>" class="button h40 w200 btn_gray">취소</a>
 				</p>
+				</form>
 			</section>
 			<!-- //contents -->
 

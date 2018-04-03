@@ -46,7 +46,7 @@
 		<a href="#container">본문 바로가기</a> <a href="#gnb">주메뉴 바로가기</a> <a href="#footer">사이트정보 바로가기</a>
 	</div>
 	<div id="wrap" class="main">
-		<jsp:include page="/WEB-INF/views/template/Top.jsp"/>
+		<jsp:include page="/WEB-INF/views/template/top.jsp"/>
 		<div id="container">
 <!-- contents -->
 <section id="contents">
@@ -573,7 +573,7 @@
 		</script>
 		</div>
 		<div></div>
-		<jsp:include page="/WEB-INF/views/template/Footer.jsp"/>
+		<jsp:include page="/WEB-INF/views/template/footer.jsp"/>
 	</div>
 </body>
 </html>

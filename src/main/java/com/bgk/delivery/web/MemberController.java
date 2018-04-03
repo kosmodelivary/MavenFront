@@ -34,7 +34,9 @@ public class MemberController {
 	
 	@RequestMapping("/member/login.whpr")
 	public String login(HttpSession session) throws Exception{
-		if(session.getAttribute("dto") != null) return "member/memberorder.tile";
+		if(session.getAttribute("dto") != null) {
+			return "member/memberorder.tile";
+		}
 		else return "member/login.tile";
 	}
 	
@@ -44,13 +46,13 @@ public class MemberController {
 		return "member/join.tile";
 	}
 	
+	//마이페이지
 	@RequestMapping("/mypage/memberUpdate.whpr")
 	public String memberUpdate() throws Exception{
 		
 		return "mypage/memberUpdate.tile";
 	}
 	
-	//마이페이지
 	@RequestMapping("/mypage/passwordUpdate.whpr")
 	public String passUpdate() throws Exception{
 		
@@ -118,20 +120,45 @@ public class MemberController {
 	//로그인
 	@RequestMapping("/member/loginProc.whpr")
 	public String isMember(MemberDTO dto,HttpSession session,HttpServletRequest req) throws Exception{
-		dto = memService.isMember(dto);
-		if(dto == null) {
-			req.setAttribute("loginErr", "일치하는 정보가 없습니다");
-			return "forward:/member/login.whpr";
+		if(session.getAttribute("dto")==null) {
+			if(memService.isMember(dto)==null) {
+				req.setAttribute("loginErr", "일치하는 정보가 없습니다");
+				return "forward:/member/login.whpr";
+			}
+			dto = memService.memOne(dto.getMember_email());
 		}
-		else {
-			session.setAttribute("dto", dto);
-			return "forward:/mypage/mypage.whpr";
-		}
+		else
+			dto = memService.memOne(((MemberDTO)session.getAttribute("dto")).getMember_email());
+		session.setAttribute("dto", dto);
+		return "redirect:/mypage/mypage.whpr";
 	}
 	//로그아웃
 	@RequestMapping("/member/logout.whpr")
 	public String logout(HttpSession session) throws Exception{
 		session.invalidate();
 		return "redirect:/home.whpr";
+	}
+	//회원정보수정
+	@RequestMapping("/mypage/update.whpr")
+	public String update(MemberDTO dto,Model model) throws Exception{
+		dto.setMember_agreeemail(dto.getMember_agreeemail()!=null?"true":"false");
+		dto.setMember_agreesms(dto.getMember_agreesms()!=null?"true":"false");
+		int affected = memService.memUpdate(dto);
+		model.addAttribute("suc_fail", affected);
+		model.addAttribute("mmb", "edit");
+		return "member/proc";
+	}
+	//비밀번호 변경
+	@RequestMapping("/mypage/passchange.whpr")
+	public String passChange(MemberDTO dto,Model model) throws Exception{
+		int affected = 0;
+		//변경 전 비밀번호 일치 검사
+		if(dto.getMember_password().equals(((MemberDTO)memService.memOne(dto.getMember_email())).getMember_password())) {
+			dto.setMember_password(dto.getPasschange());
+			affected = memService.passChange(dto);
+		}
+		model.addAttribute("suc_fail", affected);
+		model.addAttribute("mmb", "pass");
+		return  "member/proc";
 	}
 }

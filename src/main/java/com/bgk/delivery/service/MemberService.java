@@ -6,6 +6,7 @@ public interface MemberService {
 	public int memInsert(MemberDTO dto);
 	public int memUpdate(MemberDTO dto);
 	public int memDelete(MemberDTO dto);
+	public int passChange(MemberDTO dto);
 	
 	public MemberDTO memSearch(MemberDTO dto);
 	public MemberDTO memPass(MemberDTO dto);

@@ -1,8 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@include file="/WEB-INF/views/mypage/isMember.jsp" %>
 <!DOCTYPE html>
-
 			<!-- lnb -->
 			<aside id="lnb">
 				<h1>
@@ -18,7 +18,6 @@
 				</nav>
 			</aside>
 			<!-- //lnb -->
-
 			<!-- contents -->
 			<section id="contents">
 				<ul id="location">
@@ -26,7 +25,6 @@
 					<li><span>마이페이지</span></li>
 					<li><strong>내 주문내역</strong></li>
 				</ul>
-
 				<div id="cont_tit">
 					<h1>내 주문내역</h1>
 				</div>
@@ -65,15 +63,12 @@
 							<tr>
 								<td colspan="7">내 주문내역이 없습니다.</td>
 							</tr>
-
 						</tbody>
 					</table>
 					<!-- paging -->
-
 				</div>
 			</section>
 			<!-- //contents -->
-
 			<script type="text/javascript">
 				// page parameter
 				var PageParam = {};
