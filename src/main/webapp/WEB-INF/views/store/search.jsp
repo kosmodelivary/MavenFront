@@ -148,7 +148,82 @@
 <!-- //contents -->
 
 <script type="text/javascript">
-	//<![CDATA[
+	$(document).ready(function(){
+	    $("#sido").on('change',function(){
+				console.log($('input[name=searchType]:checked').val()+$('#sido').val());
+				$.ajax({
+					url:"<c:url value='/store/find.whpr'/>",
+					type:"get",
+					dataType:"json",
+					data:{
+						"searchType" : $('input[name=searchType]:checked').val(),
+	    				"aSi" : $('#sido').val()},
+					success:function(data,target){
+							gugunCallback(data,$('#gugun'));					
+							},
+					error:function(request,status,error){
+						console.log("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+							}
+				});
+	    });
+	    
+	    $("#gugun").on('change',function(){
+			console.log($('input[name=searchType]:checked').val()+$('#sido').val());
+			$.ajax({
+				url:"<c:url value='/store/find.whpr'/>",
+				type:"get",
+				dataType:"json",
+				data:{"searchType" : $('input[name=searchType]:checked').val(),
+    			 "aSi" : $('#sido').val()},
+				success:function(data,target){
+				gugunCallback(data,$('#gugun'));					
+						},
+				error:function(request,status,error){
+					console.log("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+				}
+			});
+    });
+	    
+	    $('#searchWord').on('focus',function(){
+			$('input[name=searchType][value=name]').attr('checked', true);
+			console.log($('input[name=searchType]:checked').val()+$('#searchWord').val());
+			$.ajax({
+				url:"<c:url value='/store/find.whpr'/>",
+				type:"get",
+				dataType:"json",
+				data:{"searchType" : $('input[name=searchType]:checked').val(),
+					  "searchWord" : $('#searchWord').val()},
+				success:function(data){
+					nameCallback(data);
+				},
+				error:function(request,status,error){
+						console.log("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+					},
+			});
+		});
+	});
+	
+	/* $(document).ready(function(){
+		
+	}); */
+	
+	function gugunCallback(data,target){
+		//console.log('서버로부터 받은 데이터 : '+data+', 유형 : '+typeof data);
+		var value;
+		$.each(data, function(key, val) {
+			var obj = val.toString().split(',');
+			$.each(obj, function(i, elt) {
+				value += "<option value='elt'>"+elt+"</option>";
+			});
+		});
+		$(target).html(value);
+	}
+	
+	function nameCallback(data){
+		console.log('서버로부터 받은 데이터 : '+data+', 유형 : '+typeof data);
+	}
+	
+	/* //<![CDATA[
 	//page parameter
 	var PageParam = {};
 
@@ -204,6 +279,6 @@
 				PageFunction.getList(1);
 		});
 	});
-	//]]>
+	//]]> */
 </script>
 </html>

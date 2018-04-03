@@ -13,6 +13,7 @@
 	 <typeAliases>
 	 	<typeAlias alias="StoreDto" type="com.bgk.delivery.service.StoreDto"/>
 	 	<typeAlias alias="MemberDTO" type="com.bgk.delivery.service.MemberDTO"/>
+	 	<typeAlias alias="FAQDto" type="com.bgk.delivery.service.FAQDto"/>
 	 </typeAliases>
 	 <!-- 데이타베이스 연결정보 설정 -->
 
@@ -29,7 +30,8 @@
 
 	 <!-- 매퍼파일(SQL쿼리 결과와 자바빈 매핑) 정보 설정 -->	
 	 <mappers>
-	 	<mapper resource="mybatis/BKProjFr_myBatis.xml"/>
+	 	<mapper resource="mybatis/store.xml"/>
 	 	<mapper resource="mybatis/member.xml"/>
+	 	<mapper resource="mybatis/BKProjFr_myBatisFAQ.xml"/>
 	 </mappers>
 </configuration>
