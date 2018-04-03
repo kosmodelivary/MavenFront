@@ -20,11 +20,40 @@
 	</resultMap>
  
 	<select id="storeSelectList" resultMap="StoreDtoResult">
-		SELECT * FROM store ORDER BY store_no DESC
+		SELECT * FROM 
+		(SELECT T.*, ROWNUM R FROM (SELECT * FROM store 
+		<choose>
+			<when test="aSi != null">
+				WHERE store_addr LIKE '%' || #{aSi} || '%' 
+				<if test="aGu != null">
+					 AND store_addr LIKE '%' || #{aGu} || '%' 
+				</if>
+			</when>
+			<when test="searchWord != null">
+				WHERE store_name LIKE '%' || #{searchWord} || '%'
+			</when>
+		</choose>
+		ORDER BY store_name) T)
+		WHERE R BETWEEN #{start} AND #{end}
 	</select>
 	
 	<select id="storeSelectOne" parameterType="java.lang.String" resultMap="StoreDtoResult">
 		SELECT * FROM store WHERE store_no = #{store_no}
+	</select>
+	
+	<select id="storeTotalCount" resultType="Integer">
+		SELECT COUNT(*) FROM store 
+		<choose>
+			<when test="aSi != null">
+				WHERE store_addr LIKE '%' || #{aSi} || '%' 
+				<if test="aGu != null">
+					 AND store_addr LIKE '%' || #{aGu} || '%' 
+				</if>
+			</when>
+			<when test="searchWord != null">
+				WHERE store_name LIKE '%' || #{searchWord} || '%'
+			</when>
+		</choose>
 	</select>
 	
 	<!-- <select id="ReplyBBSlogin" parameterType="java.util.Map" resultType="int">

@@ -41,8 +41,8 @@
 					<option value="">시/도</option>
 					<option value="강원">강원도</option>
 					<option value="경기">경기도</option>
-					<option value="경상남도">경상남도</option>
-					<option value="경상북도">경상북도</option>
+					<option value="경남">경상남도</option>
+					<option value="경북">경상북도</option>
 					<option value="광주">광주광역시</option>
 					<option value="대구">대구광역시</option>
 					<option value="대전">대전광역시</option>
@@ -51,26 +51,21 @@
 					<option value="세종">세종특별자치시</option>
 					<option value="울산">울산광역시</option>
 					<option value="인천">인천광역시</option>
-					<option value="전라남도">전라남도</option>
-					<option value="전라북도">전라북도</option>
+					<option value="전남">전라남도</option>
+					<option value="전북">전라북도</option>
 					<option value="제주">제주특별자치도</option>
-					<option value="충청남도">충청남도</option>
-					<option value="충청북도">충청북도</option>
+					<option value="충남">충청남도</option>
+					<option value="충북">충청북도</option>
 			</select> <select class="select" title="주소 구/군 선택" id="gugun">
 					<option value="">구/군</option>
-
-
-
 			</select>
 			</span>
-
 		</div>
 		<div>
 			<label class="radio"> <input type="radio" name="searchType"
 				value="name" /> <span class="lbl">매장명으로 검색</span>
 			</label> <span> <input type="text" class="input" placeholder="매장명 입력"
-				title="매장명 입력" id="searchWord" /> <a
-				href="javascript:PageFunction.getList(1)" class="button">검색</a>
+				title="매장명 입력" id="searchWord" /> <a onclick="getList()" class="button">검색</a>
 			</span>
 		</div>
 	</div>
@@ -94,7 +89,7 @@
 					<th scope="col">상세보기</th>
 				</tr>
 			</thead>
-			<tbody>
+			<tbody id="storeListBody">
 				<c:if test="${empty store }" var="flag">
 					<tr>
 						<td colspan="6">등록된 자료가 없습니다.</td>
@@ -123,7 +118,9 @@
 				</c:if>
 			</tbody>
 		</table>
-
+		<p class="list_paging">
+			${pagingString }
+		</p>
 		<!-- paging -->
 		<!-- <p class="list_paging">
 						<a class="btn_paging" href="javascript:void(0)"> <img
@@ -150,43 +147,44 @@
 <script type="text/javascript">
 	$(document).ready(function(){
 	    $("#sido").on('change',function(){
-				console.log($('input[name=searchType]:checked').val()+$('#sido').val());
-				$.ajax({
-					url:"<c:url value='/store/find.whpr'/>",
-					type:"get",
-					dataType:"json",
-					data:{
-						"searchType" : $('input[name=searchType]:checked').val(),
-	    				"aSi" : $('#sido').val()},
-					success:function(data,target){
-							gugunCallback(data,$('#gugun'));					
-							},
-					error:function(request,status,error){
-						console.log("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
-							}
-				});
-	    });
-	    
-	    $("#gugun").on('change',function(){
-			console.log($('input[name=searchType]:checked').val()+$('#sido').val());
 			$.ajax({
 				url:"<c:url value='/store/find.whpr'/>",
 				type:"get",
 				dataType:"json",
-				data:{"searchType" : $('input[name=searchType]:checked').val(),
-    			 "aSi" : $('#sido').val()},
+				data:{
+					"searchType" : $('input[name=searchType]:checked').val(),
+    				"aSi" : $('#sido').val()},
 				success:function(data,target){
-				gugunCallback(data,$('#gugun'));					
+						gugunCallback(data,$('#gugun'))
+						},
+				error:function(request,status,error){
+					console.log("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+						}
+			});
+	    });
+	    
+	    $("#gugun").on('change',function(){
+			$.ajax({
+				url:"<c:url value='/store/find.whpr'/>",
+				type:"get",
+				dataType:"json",
+				data:{
+					"searchType" : $('input[name=searchType]:checked').val(),
+    			 	"aSi" : $('#sido').val(),
+    			 	"aGu" : $('#gugun').val()
+    			 	},
+				success:function(data,target){
+						searchCallback(data,$('#storeListBody'));					
 						},
 				error:function(request,status,error){
 					console.log("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
 				}
 			});
-    });
+   		});
 	    
 	    $('#searchWord').on('focus',function(){
 			$('input[name=searchType][value=name]').attr('checked', true);
-			console.log($('input[name=searchType]:checked').val()+$('#searchWord').val());
+			//console.log($('input[name=searchType]:checked').val()+$(this.value));
 			$.ajax({
 				url:"<c:url value='/store/find.whpr'/>",
 				type:"get",
@@ -194,34 +192,72 @@
 				data:{"searchType" : $('input[name=searchType]:checked').val(),
 					  "searchWord" : $('#searchWord').val()},
 				success:function(data){
-					nameCallback(data);
+					searchCallback(data);
 				},
 				error:function(request,status,error){
 						console.log("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
 					},
 			});
 		});
+	    
+	    //페이지스트링 검색 결과에 맞춰서 나머지 번호들도 같은 목록 뿌려줄수 있도록 하기..
 	});
 	
-	/* $(document).ready(function(){
-		
-	}); */
 	
 	function gugunCallback(data,target){
 		//console.log('서버로부터 받은 데이터 : '+data+', 유형 : '+typeof data);
-		var value;
+		var value, gugun;
 		$.each(data, function(key, val) {
 			var obj = val.toString().split(',');
-			$.each(obj, function(i, elt) {
-				value += "<option value='elt'>"+elt+"</option>";
+			$.each(obj, function(i, gugun) {
+				value += "<option value="+gugun+">"+gugun+"</option>";
 			});
 		});
 		$(target).html(value);
-	}
+	};
 	
-	function nameCallback(data){
+	function getList(){
+		console.log("1");
+		$.ajax({
+			url:"<c:url value='/store/find.whpr'/>",
+			type:"post",
+			dataType:"json",
+			data:{
+				"searchType" : $('input[name=searchType]:checked').val(),
+			 	"aSi" : $('#sido').val(),
+			 	"aGu" : $('#gugun').val(),
+			 	"searchWord" : $('#searchWord').val()
+			 	},
+			success:function(data,target){
+					searchCallback(data,$('#storeListBody')),					
+					console.log("2");
+					},
+			error:function(request,status,error){
+				console.log("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+			}
+		});
+	};
+	
+	function searchCallback(data,target){
 		console.log('서버로부터 받은 데이터 : '+data+', 유형 : '+typeof data);
-	}
+		$(target).html("");
+		var tableString = "";
+		$.each(data, function(i, record) {
+			tableString += "<tr>"+
+						"<td>" + record.name + "</td>" +
+						"<td>" + record.addr + "</td>" +
+						"<td>" + record.minordermoney + "</td>" +
+						"<td>"+
+							"<p>주중 : " + record.weekdayon + ":" + record.weekdayoff + "</p>" +
+							"<p>주말 : " + record.weekendon + ":" + record.weekendoff + "</p>" +
+							"<p class='t_blue'>개점</p></td>" +
+						"<td><a class=\"button h25 btn_white w60\" href=\"<c:url value='/store/Detail.whpr?no="+record.no+"'/>\">상세보기</a></td>"+
+						"</tr>";
+		});
+		$(target).append(tableString);
+	};
+	
+	
 	
 	/* //<![CDATA[
 	//page parameter

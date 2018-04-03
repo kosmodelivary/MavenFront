@@ -1,6 +1,7 @@
 package com.bgk.delivery.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -14,15 +15,20 @@ public class StoreServiceImpl implements StoreService{
 
 	@Resource(name="storeDao")
 	private StoreDao sdao;
-	
-	@Override
-	public List<StoreDto> selectList() {
-		return sdao.selectList();
-	}
 
 	@Override
 	public StoreDto selectOne(String no) {
 		return sdao.selectOne(no);
+	}
+
+	@Override
+	public List<StoreDto> selectList(Map map) {
+		return sdao.selectList(map);
+	}
+
+	@Override
+	public int getTotalRecCount(Map map) {
+		return sdao.getTotalRecCount(map);
 	}
 	
 

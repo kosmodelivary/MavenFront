@@ -1,6 +1,7 @@
 package com.bgk.delivery.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -17,13 +18,18 @@ public class StoreDao implements StoreService{
 	private SqlSessionTemplate sqlMapper;
 	
 	@Override
-	public List<StoreDto> selectList() {
-		return sqlMapper.selectList("storeSelectList");
+	public StoreDto selectOne(String no) {
+		return sqlMapper.selectOne("storeSelectOne",no);
 	}
 
 	@Override
-	public StoreDto selectOne(String no) {
-		return sqlMapper.selectOne("storeSelectOne",no);
+	public List<StoreDto> selectList(Map map) {
+		return sqlMapper.selectList("storeSelectList", map);
+	}
+
+	@Override
+	public int getTotalRecCount(Map map) {
+		return sqlMapper.selectOne("storeTotalCount",map);
 	}
 	
 
