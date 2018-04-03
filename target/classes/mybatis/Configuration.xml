@@ -30,7 +30,7 @@
 
 	 <!-- 매퍼파일(SQL쿼리 결과와 자바빈 매핑) 정보 설정 -->	
 	 <mappers>
-	 	<mapper resource="mybatis/BKProjFr_myBatis.xml"/>
+	 	<mapper resource="mybatis/store.xml"/>
 	 	<mapper resource="mybatis/member.xml"/>
 	 	<mapper resource="mybatis/BKProjFr_myBatisFAQ.xml"/>
 	 </mappers>
