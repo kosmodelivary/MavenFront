@@ -2,7 +2,6 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
-		
 		<!-- lnb -->
 		<aside id="lnb">
 		<h1><img src="<c:url value='/resources/images/common/tit_members.png'/>" alt="버거킹 회원" /></h1>
@@ -16,7 +15,6 @@
 		</nav>
 	</aside>
 		<!-- //lnb -->
-		
 		<!-- contents -->
 		<section id="contents">
 			<ul id="location">
@@ -27,15 +25,14 @@
 			<div id="cont_tit">
 				<h1>BURGER KING 로그인</h1>
 			</div>
-			
 			<div class="login_wrap">
 				<div class="login_left">		
 					<form id="loginForm" name="loginForm" action="<c:url value='/member/loginProc.whpr'/>" method="post">
 						<input type="hidden" id="loginFlag" name="loginFlag" value="user" />
 						<h2 class="cont_tit tit2">회원로그인</h2>
 						<ul class="login_list">
-							<li><input type="text" id="email" name="member_email" class="input" placeholder="이메일 주소 입력" title="이메일주소 입력" maxlength="50" required/></li>
-							<li><input type="password" id="password" name="member_password" class="input" placeholder="비밀번호 입력(8~20 영문, 숫자, 특수문자 조합)" title="비밀번호 입력" maxlength="20" required/></li>
+							<li><input type="email" id="email" name="member_email" class="input" placeholder="이메일 주소 입력" title="이메일주소 입력" maxlength="50" required/></li>
+							<li><input type="password" id="password" name="member_password" class="input" placeholder="비밀번호 입력(8~20 영문, 숫자)" title="비밀번호 입력" maxlength="20" required/></li>
 							<li><label class="mt10 checkbox"><span>${loginErr }</span>
 								</label>
 								<button type="submit" class="button h40 w130 f_right" id="loginProcessButton">로그인</button>
@@ -47,7 +44,6 @@
 						</ul>
 					</form>
 				</div>
-			
 				<div class="login_right">
 					<h2 class="cont_tit tit2">비회원주문</h2>
 					<p class="radio_box">
@@ -67,7 +63,6 @@
 							<a href="../order/nonMemberOrder.html" class="button h40 w130">비회원주문</a>
 						</p>
 					</div>
-					
 					<!-- 동의 후 조회: 기본숨김 -->
 					<div id="nonmember2" class="hide">
 						<div class="nonmember">
@@ -92,7 +87,6 @@
 										<input type="tel" class="input" id="phone2" placeholder="" title="휴대폰 앞자리 입력" maxlength="4" />
 										<input type="tel" class="input" id="phone3" placeholder="" title="휴대폰 뒷자리 입력" maxlength="4" />
 									</li>
-									
 									<li><input type="password" name="orderPassword" id="orderPassword" class="input" maxlength="6" placeholder="주문비밀번호 입력" title="주문비밀번호 입력" /></li>
 									<li class="t_right"><a href="javascript:void(0);" class="button h40 w130" id="nonMemberOrderLookup">비회원조회</a></li>
 								</ul>
@@ -103,7 +97,6 @@
 			</div>
 		</section>
 		<!-- //contents -->
-		
 		<!-- popup -->
 		<div id="popSleepMember" class="pop_bg">
 		<article class="pop_wrap">			
@@ -126,7 +119,6 @@
 		</article>
 	</div>
 		<!-- //popup -->
-		
 		<script type="text/javascript">
 			
 			// page parameter

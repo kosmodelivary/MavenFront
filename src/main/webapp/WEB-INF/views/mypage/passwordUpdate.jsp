@@ -3,8 +3,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@include file="/WEB-INF/views/mypage/isMember.jsp"%>
 <!DOCTYPE html>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.17.0/jquery.validate.js"></script>
 <script>
 $(function(){
 	//회원정보 유효성 검사
@@ -54,7 +52,7 @@ $(function(){
 			<ul>
 				<li>
 					<div class="inp_wid">
-						<input type="password" name="member_password" id="member_password" autocomplete="off" class="input" placeholder="현재 비밀번호 입력" title="현재 비밀번호 입력" maxlength="20"/><br>
+						<input type="password" name="member_password" id="member_password" autocomplete="off" class="input" placeholder="현재 비밀번호 입력" title="현재 비밀번호 입력" maxlength="20"/>
 						<label class="error" for="member_password" style="display:none;color:red;font-weight:bold"></label>
 					</div>
 				</li>
@@ -78,4 +76,3 @@ $(function(){
 	</p>
 	</form>
 </section>
-<!-- //contents -->

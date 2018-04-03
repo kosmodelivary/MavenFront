@@ -7,58 +7,6 @@
 <!DOCTYPE html>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.17.0/jquery.validate.js"></script>
-<script>
-$(function(){
-	//회원정보 유효성 검사
-	$('form').validate({
-		rules:{
-			member_email:{required:true,email:true,
-				remote:{
-					url:"<c:url value='/member/idcheck.whpr'/>",
-					type:"post",
-					data:{
-						username:function(){
-							return $("#member_email").val();
-						}}}},
-			member_password:{required:true,minlength:8,maxlength:20},
-			pass2:{required:true,equalTo:"#pass"},
-			member_name:"required",
-			member_tel:{required:true},
-			member_answer:"required"
-		},
-		messages:{
-			member_email:{required:"이메일주소를 입력하세요",email:"이메일주소를 올바르게 입력하세요",remote:"중복된 이메일주소입니다"},
-			member_password:"비밀번호를 8~20자 입력하세요",
-			pass2:{required:"비밀번호를 다시 입력하세요",equalTo:"비밀번호가 일치하지 않습니다"},
-			member_name:"이름을 입력하세요",
-			member_tel:"전화번호를 올바르게 입력하세요",
-			member_answer:"정답을 입력하세요"
-		}
-	});
-	//전화번호 자동 하이픈 입력
-	$("#phone").on("focus",function(){
-		$(this).val($(this).val().replace(/[^0-9]/g,''));
-	});
-	$("#phone").on("blur",function(){
-		var num = $(this).val();
-		num = num.replace(/[^0-9]/g,'');
-		$(this).val(num);
-		tmp = '';
-		if(num.length==9){
-			tmp = num.substr(0,2)+'-'+num.substr(2,3)+'-'+num.substr(5,4);
-			$(this).val(tmp);
-		}
-		else if(num.length==10){
-			tmp = num.substr(0,3)+'-'+num.substr(3,3)+'-'+num.substr(6,4);
-			$(this).val(tmp);
-		}
-		else if(num.length==11){
-			tmp = num.substr(0,3)+'-'+num.substr(3,4)+'-'+num.substr(7,4);
-			$(this).val(tmp);
-		}
-	});
-});
-</script>
 		<!-- lnb -->
 		<aside id="lnb">
 		<h1><img src="<c:url value='/resources/images/common/tit_members.png'/>" alt="버거킹 회원" /></h1>
@@ -72,7 +20,6 @@ $(function(){
 		</nav>
 	</aside>
 		<!-- //lnb -->
-		
 		<!-- contents -->
 		<section id="contents">
 			<ul id="location">
@@ -96,13 +43,13 @@ $(function(){
 				<ul>
 					<li>
 						<div class="inp_wid inp_mail"><i>*</i>
-							<input style="width:100%" type="text" autocomplete="off" class="input" id="emailValid" name="member_email" placeholder="이메일 주소 ID@example.com"/>
+							<input style="width:100%" type="text" autocomplete="off" id="emailValid" name="member_email" placeholder="이메일 주소 ID@example.com"/>
 						</div>
 						<label class="error" for="emailValid" style="display:none;color:red;font-weight:bold"></label>
 					</li>
 					<li>
 						<div class="inp_wid"><i>*</i>
-							<input type="password" name="member_password" id="pass" autocomplete="off" class="input" placeholder="비밀번호 영문,숫자 8~20자" title="비밀번호 입력" maxlength="20"/>
+							<input type="password" name="member_password" id="pass" autocomplete="off" placeholder="비밀번호 영문,숫자 8~20자" title="비밀번호 입력" maxlength="20"/>
 						</div>
 						<label class="error" for="pass" style="display:none;color:red;font-weight:bold"></label>
 					</li>
@@ -181,3 +128,55 @@ for(FindPassDTO record:list){
 			</form>
 		</section>
 		<!-- //contents -->
+<script>
+$(function(){
+	//회원정보 유효성 검사
+	$('form').validate({
+		rules:{
+			member_email:{required:true,email:true,
+				remote:{
+					url:"<c:url value='/member/idcheck.whpr'/>",
+					type:"post",
+					data:{
+						username:function(){
+							return $("#member_email").val();
+						}}}},
+			member_password:{required:true,minlength:8,maxlength:20},
+			pass2:{required:true,equalTo:"#pass"},
+			member_name:"required",
+			member_tel:{required:true},
+			member_answer:"required"
+		},
+		messages:{
+			member_email:{required:"이메일주소를 입력하세요",email:"이메일주소를 올바르게 입력하세요",remote:"중복된 이메일주소입니다"},
+			member_password:"비밀번호를 8~20자 입력하세요",
+			pass2:{required:"비밀번호를 다시 입력하세요",equalTo:"비밀번호가 일치하지 않습니다"},
+			member_name:"이름을 입력하세요",
+			member_tel:"전화번호를 올바르게 입력하세요",
+			member_answer:"정답을 입력하세요"
+		}
+	});
+	//전화번호 자동 하이픈 입력
+	$("#phone").on("focus",function(){
+		$(this).val($(this).val().replace(/[^0-9]/g,''));
+	});
+	$("#phone").on("blur",function(){
+		var num = $(this).val();
+		num = num.replace(/[^0-9]/g,'');
+		$(this).val(num);
+		tmp = '';
+		if(num.length==9){
+			tmp = num.substr(0,2)+'-'+num.substr(2,3)+'-'+num.substr(5,4);
+			$(this).val(tmp);
+		}
+		else if(num.length==10){
+			tmp = num.substr(0,3)+'-'+num.substr(3,3)+'-'+num.substr(6,4);
+			$(this).val(tmp);
+		}
+		else if(num.length==11){
+			tmp = num.substr(0,3)+'-'+num.substr(3,4)+'-'+num.substr(7,4);
+			$(this).val(tmp);
+		}
+	});
+});
+</script>

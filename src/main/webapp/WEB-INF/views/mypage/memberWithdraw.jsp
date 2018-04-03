@@ -28,7 +28,6 @@
 	<div id="cont_tit">
 		<h1>회원탈퇴</h1>
 	</div>
-	<form id="memberWithdrawForm" name="memberWithdrawForm">
 		<div class="memberOut">
 			<div class="first">
 				<h2>개인정보 안내</h2>
@@ -63,13 +62,14 @@
 					아이디 : <strong id="userEmail">${dto.member_email }</strong>
 				</p>
 				<div class="inp_wid wid4">
-					<input type="password" name="password" id="password" class="input wid3" placeholder="비밀번호 입력(8~20 영문, 숫자, 특수문자의 조합)" title="비밀번호 입력" maxlength="20" />
-					<a href="javascript:void(0);" class="button w120 ml6" id="memberWithdraw">회원탈퇴</a>
+				<form id="withdraw" action="/mypage/withdraw.whpr">
+					<input name="${dto.member_email }" hidden>
+					<input type="password" name="member_password" id="password" class="input wid3" placeholder="비밀번호 입력(8~20 영문, 숫자)" title="비밀번호 입력" maxlength="20" />
+					<input type="submit" class="button w120 ml6" id="memberWithdraw" value="회원탈퇴">
+				</form>
 				</div>
 			</div>
 		</div>
-	</form>
-</section>
 <!-- //contents -->
 <script type="text/javascript">
 				// page parameter

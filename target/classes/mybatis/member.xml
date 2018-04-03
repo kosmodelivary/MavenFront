@@ -32,7 +32,7 @@
 	</select>
 	
 	<select id="memPass" parameterType="MemberDTO" resultType="MemberDTO">
-		select * from member where member_name=#{member_name} and member_tel=#{member_email} and findpass_no=#{findpass_no} and member_answer=#{member_answer}
+		select * from member where member_name=#{member_name} and member_email=#{member_email} and findpass_no=#{findpass_no} and member_answer=#{member_answer}
 	</select>
 	
 	<select id="isMember" parameterType="MemberDTO" resultType="MemberDTO">

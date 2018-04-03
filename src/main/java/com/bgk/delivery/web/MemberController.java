@@ -111,9 +111,9 @@ public class MemberController {
 	public String findPW(MemberDTO dto) throws Exception {
 		MemberDTO findpass = memService.memPass(dto);
 		JSONObject json = new JSONObject();
-		if(findpass != null) return null;
+		if(findpass == null) return null;
 		else {
-			json.put("member_no", dto.getMember_no());
+			json.put("find", dto.getMember_email());
 			return json.toString();
 		}
 	}
