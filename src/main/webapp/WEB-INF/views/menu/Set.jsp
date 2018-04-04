@@ -55,18 +55,18 @@
 	<ul id="location">
 		<li><a class="home" href="<c:url value='/home.whpr'/>">HOME</a></li>
 		<li><span>MENU</span></li>
-		<li><strong>전체메뉴보기</strong></li>
+		<li><strong>세트메뉴</strong></li>
 	</ul>
 	<!-- 여기까지 궁금증이 드는 부분임. -->
 	<div id="cont_tit">
-		<h1>전체메뉴보기 ALL</h1>
+		<h1>세트 메뉴 SET MENU</h1>
 	</div>
 
 	<!-- 딜리버리 유의사항 보기 -->
 	<section class="delibery_box" id="deliveryInfo">
 		<div class="left">
 			<p>
-				<img src="../resources/images/common/callCenter.png"
+				<img src="<c:url value='/resources/images/common/callCenter.png'/>"
 					alt="집에서 만나는 버거킹 1599-0505" />
 			</p>
 		</div>
@@ -94,10 +94,6 @@
 		</div>
 	</section>
 	<!-- //딜리버리 유의사항 보기 -->
-
-	<div class="menu_sel">
-		<div class="tabmenu2"></div>
-	</div>
 	<!--
 					이미지 형식으로 title 뿌려준다.
 				-->
@@ -137,13 +133,12 @@
 		</ul>
 
 		<p class="product_more">
-			<a class="btn_more" href="javascript:PageFunction.getMoreList(2);">더보기</a>
+			<a class="btn_more" href="#">더보기</a>
 		</p>
 	</div>
 
 	<!-- 자세히 보기 -->
 	<div id="popMenuDetail" class="menu_view_wrap">
-
 
 		<script type="text/javascript">
 			//<![CDATA[
