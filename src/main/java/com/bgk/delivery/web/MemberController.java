@@ -19,7 +19,7 @@ public class MemberController {
 	
 	@Resource(name="memberService")
 	MemberServiceImpl memService;
-	//회원가입 및 로그인
+	//회원가입 및 로그인 페이지 연결
 	@RequestMapping("/member/searchIdPassword.whpr")
 	public String searchIDPW() throws Exception{
 		
@@ -46,7 +46,7 @@ public class MemberController {
 		return "member/join.tile";
 	}
 	
-	//마이페이지
+	//마이페이지 페이지 연결
 	@RequestMapping("/mypage/memberUpdate.whpr")
 	public String memberUpdate() throws Exception{
 		
@@ -60,7 +60,7 @@ public class MemberController {
 	}
 	
 	@RequestMapping("/mypage/memberWithdraw.whpr")
-	public String withdraw() throws Exception{
+	public String memberwithdraw() throws Exception{
 		
 		return "mypage/memberWithdraw.tile";
 	}
@@ -79,18 +79,18 @@ public class MemberController {
 	}
 	//회원가입 진행
 	@RequestMapping("/member/proc.whpr")
-	public String proc(MemberDTO dto,Model model) throws Exception{
+	public String proc(MemberDTO dto,Model model,HttpSession session) throws Exception{
 		dto.setMember_agreeemail(dto.getMember_agreeemail()!=null?"true":"false");
 		dto.setMember_agreesms(dto.getMember_agreesms()!=null?"true":"false");
 		int affected = memService.memInsert(dto);
+		session.setAttribute("email", dto.getMember_email());
 		model.addAttribute("suc_fail", affected);
-		model.addAttribute("dto", dto);
+		model.addAttribute("mmb", "join");
 		return "member/proc";
 	}
 	//회원가입 완료
 	@RequestMapping("/member/joinSuccess.whpr")
-	public String joinSuc(MemberDTO dto,Model model) throws Exception{
-		model.addAttribute("dto",dto);
+	public String joinSuc() throws Exception{
 		return "member/joinSuccess.tile";
 	}
 	//아이디 찾기
@@ -117,6 +117,13 @@ public class MemberController {
 			return json.toString();
 		}
 	}
+	//비밀번호 찾았을 경우 비밀번호 변경
+	@RequestMapping("/mypage/newpass.whpr")
+	public String newpass(MemberDTO dto,Model model) throws Exception{
+		int affected = memService.passChange(dto);
+		model.addAttribute("suc_fail", affected);
+		return "member/proc";
+	}
 	//로그인
 	@RequestMapping("/member/loginProc.whpr")
 	public String isMember(MemberDTO dto,HttpSession session,HttpServletRequest req) throws Exception{
@@ -127,8 +134,7 @@ public class MemberController {
 			}
 			dto = memService.memOne(dto.getMember_email());
 		}
-		else
-			dto = memService.memOne(((MemberDTO)session.getAttribute("dto")).getMember_email());
+		else dto = memService.memOne(((MemberDTO)session.getAttribute("dto")).getMember_email());
 		session.setAttribute("dto", dto);
 		return "redirect:/mypage/mypage.whpr";
 	}
@@ -160,5 +166,19 @@ public class MemberController {
 		model.addAttribute("suc_fail", affected);
 		model.addAttribute("mmb", "pass");
 		return  "member/proc";
+	}
+	//회원탈퇴
+	@RequestMapping("/mypage/withdraw.whpr")
+	public String withdraw(MemberDTO dto,Model model) throws Exception{
+		int affected = memService.memDelete(dto);
+		model.addAttribute("suc_fail",affected);
+		model.addAttribute("mmb", "with");
+		return "member/proc";
+	}
+	//회원탈퇴 완료
+	@RequestMapping("/mypage/withdrawsuccess.whpr")
+	public String withdrawsuccess(HttpSession session) throws Exception{
+		session.invalidate();
+		return "mypage/withdrawsuccess.tile";
 	}
 }

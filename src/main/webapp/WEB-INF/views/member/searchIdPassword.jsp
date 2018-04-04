@@ -69,7 +69,7 @@
 							<input type="text" class="input" size="35" id="custName" name="member_name" placeholder="이름" title="이름 입력" maxlength="10" />
 							</div>
 							<div class="inp_wid inp_mail mt10">
-							<input style="width:100%" type="text" autocomplete="off" class="input" id="emailValid" name="member_email" placeholder="이메일 주소 ID@example.com"/>
+							<input style="width:100%" type="text" autocomplete="off" class="input" id="mail" name="member_email" placeholder="이메일 주소 입력 ID@example.com"/>
 							</div>
 			<div>
 				<ul>
@@ -110,8 +110,9 @@ for(FindPassDTO record:list){
 	</div>
 		<!-- 비밀번호 재설정 팝업창 -->
 	<div id="passDialog">
-		<form action="<c:url value='/mypage/passchange.whpr'/>" id="newpass" method="post">
-			<span id='find_pass'></span>
+		<form action="<c:url value='/mypage/newpass.whpr'/>" id="newpass" method="post">
+			<input name="member_email" id="e_mail" hidden>
+			<span id='find_pass'></span> 님의 비밀번호를 새로 설정하세요
 			<div>새 비밀번호 입력</div>
 			<div class="inp_wid">
 				<input type="password" name="member_password" id="pass" autocomplete="off" placeholder="비밀번호 영문,숫자 8~20자" title="비밀번호 입력" maxlength="20"/>
@@ -189,7 +190,7 @@ for(FindPassDTO record:list){
 				data : $('#findpw').serialize(),
 				success : function(data){
 					if(data!=null){
-						$("#find_pass").html(data['find']+" 님의 비밀번호를 새로 설정하세요")
+						$("#find_pass").html(data['find']);
 						$("#passDialog").dialog("open");
 					}
 					else {
@@ -199,6 +200,7 @@ for(FindPassDTO record:list){
 				}
 			});
 		});
+		//아이디 찾기 다이얼로그 창
 	     $("#dialog").dialog({
 	         autoOpen: false,
 	         modal:true,
@@ -209,12 +211,14 @@ for(FindPassDTO record:list){
 	        	 }
 	         }
 	     });
+		//비밀번호 찾기 다이얼로그 창
 	     $("#passDialog").dialog({
 	         autoOpen: false,
 	         modal:true,
 	         title: "비밀번호 재설정",
 	         buttons:{
-	        	 "확인":function(){
+	        	 "변경":function(){
+	        		 $("#e_mail").val($("#find_pass").html());
 	        		 $("#newpass").submit();
 	        	 },
 	        	 "취소":function(){

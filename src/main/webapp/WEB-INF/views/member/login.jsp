@@ -33,14 +33,13 @@
 						<ul class="login_list">
 							<li><input type="email" id="email" name="member_email" class="input" placeholder="이메일 주소 입력" title="이메일주소 입력" maxlength="50" required/></li>
 							<li><input type="password" id="password" name="member_password" class="input" placeholder="비밀번호 입력(8~20 영문, 숫자)" title="비밀번호 입력" maxlength="20" required/></li>
-							<li><label class="mt10 checkbox"><span>${loginErr }</span>
-								</label>
+							<li><label style="color: red;font-weight: bold;">${loginErr }</label>
 								<button type="submit" class="button h40 w130 f_right" id="loginProcessButton">로그인</button>
 							</li>
 						</ul>
 						<ul class="login_list2">
-							<li><span>회원가입을 하시면 더 많은 혜택이 있습니다.</span><a href="joinAgree.html" class="button btn_gray">회원가입</a></li>
-							<li><span>아이디/비밀번호를 잃어버리셨나요?</span><a href="searchIdPassword.html" class="button btn_gray p10">아이디/비밀번호찾기</a></li>
+							<li><span>회원가입을 하시면 더 많은 혜택이 있습니다.</span><a href="<c:url value='/member/joinAgree.whpr'/>" class="button btn_gray">회원가입</a></li>
+							<li><span>아이디/비밀번호를 잃어버리셨나요?</span><a href="<c:url value='/member/searchIdPassword.whpr'/>" class="button btn_gray p10">아이디/비밀번호찾기</a></li>
 						</ul>
 					</form>
 				</div>

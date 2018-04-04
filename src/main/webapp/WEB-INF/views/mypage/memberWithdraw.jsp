@@ -45,7 +45,6 @@
 				<h2>탈퇴사유</h2>
 				<p>
 					<select class="select" title="탈퇴사유 선택" id="withdrawReason">
-						<option value="00">선택</option>
 						<option value="01">개인정보보호</option>
 						<option value="02">아이디변경</option>
 						<option value="03">웹사이트이용불만</option>
@@ -57,81 +56,80 @@
 				</p>
 			</div>
 			<div>
-				<h2>계정입력</h2>
-				<p>
-					아이디 : <strong id="userEmail">${dto.member_email }</strong>
-				</p>
-				<div class="inp_wid wid4">
-				<form id="withdraw" action="/mypage/withdraw.whpr">
-					<input name="${dto.member_email }" hidden>
-					<input type="password" name="member_password" id="password" class="input wid3" placeholder="비밀번호 입력(8~20 영문, 숫자)" title="비밀번호 입력" maxlength="20" />
-					<input type="submit" class="button w120 ml6" id="memberWithdraw" value="회원탈퇴">
+				<form id="withdraw" action="<c:url value='/mypage/withdraw.whpr'/>">
+					<h2>계정입력</h2>
+					<p>
+						아이디 : <strong id="userEmail"><input id="email" name="member_email" style="border:none;background-color:white;" value="${dto.member_email }" disabled></strong>
+					</p>
+					<div class="inp_wid wid4">
+						<input type="password" name="member_password" id="password" class="input wid3" placeholder="비밀번호 입력" title="비밀번호 입력" maxlength="20" required/>
+						<input type="button" class="button w120 ml6" id="memberWithdraw" value="회원탈퇴">
 				</form>
-				</div>
+			</div>
 			</div>
 		</div>
 <!-- //contents -->
-<script type="text/javascript">
-				// page parameter
-				var PageParam = {};
+<script>
+	$(function(){
+		$("#memberWithdraw").click(function() {
+			$("#email").removeAttr("disabled");
+			$("#withdraw").submit();
+		});
+	});
+</script>
+	<script type="text/javascript">
+		// page parameter
+		var PageParam = {};
 
-				// page function
-				var PageFunction = (function(pf) {
+		// page function
+		var PageFunction = (function(pf) {
 
-					// document ready
-					pf.init = function() {
-					};
+			// document ready
+			pf.init = function() {
+				var _seceReason = $('#seceReason');
+				var _withdrawReason = $('#withdrawReason');
 
-					// 회원 탈퇴 처리
-					pf.memberWithdraw = function() {
-						var _seceReason = $('#seceReason');
-						if ($('#withdrawReason').val() != 00) {
-							_seceReason.removeAttr('disabled');
-						}
-						cntt.ajax
-								.post(
-										'/mypage/memberWithdrawProcess',
-										$('#memberWithdrawForm')
-												.serializeObject(),
-										function() {
-											cntt
-													.goPage("/mypage/memberWithdrawSuccess");
-										});
-						if ($('#withdrawReason').val() != '04') {
-							PageFunction.withdrawReason();
-						}
-					};
+				_seceReason.val(_withdrawReason.children('option:selected').text());
+			};
 
-					// 회원 탈퇴 이유 
-					pf.withdrawReason = function() {
-						var _seceReason = $('#seceReason');
-						var _withdrawReason = $('#withdrawReason');
+			// 회원 탈퇴 처리
+			pf.memberWithdraw = function() {
+				var _seceReason = $('#seceReason');
+				if ($('#withdrawReason').val() != 00) {
+					_seceReason.removeAttr('disabled');
+				}
+				cntt.ajax.post('/mypage/memberWithdrawProcess', $('#memberWithdrawForm').serializeObject(), function() {
+					cntt.goPage("/mypage/memberWithdrawSuccess");
+				});
+				if ($('#withdrawReason').val() != '04') {
+					PageFunction.withdrawReason();
+				}
+			};
 
-						if (_withdrawReason.val() === '04') {
-							_seceReason.removeAttr('disabled').focus();
-							_seceReason.val('');
-						} else {
-							_seceReason.attr('disabled', 'disabled');
-							_seceReason.val(_withdrawReason.children(
-									'option:selected').text());
-						}
-					};
+			// 회원 탈퇴 이유 
+			pf.withdrawReason = function() {
+				var _seceReason = $('#seceReason');
+				var _withdrawReason = $('#withdrawReason');
 
-					return pf;
-				}(window.pf || {}));
+				if (_withdrawReason.val() === '04') {
+					_seceReason.removeAttr('disabled').focus();
+					_seceReason.val('');
+				} else {
+					_seceReason.attr('disabled', 'disabled');
+					_seceReason.val(_withdrawReason.children('option:selected').text());
+				}
+			};
 
-				// 이벤트
-				(function() {
+			return pf;
+		}(window.pf || {}));
 
-					// 로그인 버튼 클릭
-					$('#memberWithdraw').click(function() {
-						PageFunction.memberWithdraw();
-					});
+		// 이벤트
+		(function() {
 
-					// 탈퇴 사유 선택
-					$('#withdrawReason').change(function() {
-						PageFunction.withdrawReason();
-					});
+			// 탈퇴 사유 선택
+			$('#withdrawReason').change(function() {
+				PageFunction.withdrawReason();
+			});
 
-				}());
-			</script>
+		}());
+	</script>

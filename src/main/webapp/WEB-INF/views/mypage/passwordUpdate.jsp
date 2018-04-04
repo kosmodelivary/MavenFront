@@ -3,23 +3,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@include file="/WEB-INF/views/mypage/isMember.jsp"%>
 <!DOCTYPE html>
-<script>
-$(function(){
-	//회원정보 유효성 검사
-	$('form').validate({
-		rules:{
-			member_password:{required:true},
-			passchange:{required:true,minlength:8,maxlength:20},
-			pass2:{required:true,equalTo:"#pass"},
-		},
-		messages:{
-			member_password:"현재 비밀번호를 입력하세요",
-			passchange:"비밀번호를 8~20자 입력하세요",
-			pass2:{required:"비밀번호를 입력하세요",equalTo:"비밀번호가 일치하지 않습니다"},
-		}
-	});
-});
-</script>
 <!-- lnb -->
 <aside id="lnb">
 	<h1>
@@ -76,3 +59,20 @@ $(function(){
 	</p>
 	</form>
 </section>
+<script>
+$(function(){
+	//회원정보 유효성 검사
+	$('form').validate({
+		rules:{
+			member_password:{required:true},
+			passchange:{required:true,minlength:8,maxlength:20},
+			pass2:{required:true,equalTo:"#pass"},
+		},
+		messages:{
+			member_password:"현재 비밀번호를 입력하세요",
+			passchange:"비밀번호를 8~20자 입력하세요",
+			pass2:{required:"비밀번호를 입력하세요",equalTo:"비밀번호가 일치하지 않습니다"},
+		}
+	});
+});
+</script>

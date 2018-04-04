@@ -33,7 +33,7 @@
 							
 			<div class="order_tit">
 				<h2>정보입력</h2>
-				<p><img src="../resources/images/member/step2.gif" alt="01약관동의, 02정보입력(현재위치), 03가입완료" /></p>
+				<p><img src="<c:url value='/resources/images/member/step2.gif'/>" alt="01약관동의, 02정보입력(현재위치), 03가입완료" /></p>
 			</div>
 			<form action="<c:url value='/member/proc.whpr'/>" >
 			<input type="hidden" name="eventSms" id="eventSms" value="Y" />
@@ -43,13 +43,13 @@
 				<ul>
 					<li>
 						<div class="inp_wid inp_mail"><i>*</i>
-							<input style="width:100%" type="text" autocomplete="off" id="emailValid" name="member_email" placeholder="이메일 주소 ID@example.com"/>
+							<input style="width:100%" type="text" autocomplete="off" class="input" id="emailValid" name="member_email" placeholder="이메일 주소 ID@example.com"/>
 						</div>
 						<label class="error" for="emailValid" style="display:none;color:red;font-weight:bold"></label>
 					</li>
 					<li>
 						<div class="inp_wid"><i>*</i>
-							<input type="password" name="member_password" id="pass" autocomplete="off" placeholder="비밀번호 영문,숫자 8~20자" title="비밀번호 입력" maxlength="20"/>
+							<input type="password" name="member_password" id="pass" class="input" autocomplete="off" placeholder="비밀번호 영문,숫자 8~20자" title="비밀번호 입력" maxlength="20"/>
 						</div>
 						<label class="error" for="pass" style="display:none;color:red;font-weight:bold"></label>
 					</li>
@@ -133,14 +133,11 @@ $(function(){
 	//회원정보 유효성 검사
 	$('form').validate({
 		rules:{
-			member_email:{required:true,email:true,
+			member_email:{required:true,email:true,maxlength:20,
 				remote:{
 					url:"<c:url value='/member/idcheck.whpr'/>",
 					type:"post",
-					data:{
-						username:function(){
-							return $("#member_email").val();
-						}}}},
+					}},
 			member_password:{required:true,minlength:8,maxlength:20},
 			pass2:{required:true,equalTo:"#pass"},
 			member_name:"required",
@@ -148,13 +145,13 @@ $(function(){
 			member_answer:"required"
 		},
 		messages:{
-			member_email:{required:"이메일주소를 입력하세요",email:"이메일주소를 올바르게 입력하세요",remote:"중복된 이메일주소입니다"},
+			member_email:{required:"이메일주소를 입력하세요",email:"이메일주소를 올바르게 입력하세요",maxlength:"최대 20자까지 가능합니다",remote:"중복된 이메일주소입니다"},
 			member_password:"비밀번호를 8~20자 입력하세요",
 			pass2:{required:"비밀번호를 다시 입력하세요",equalTo:"비밀번호가 일치하지 않습니다"},
 			member_name:"이름을 입력하세요",
 			member_tel:"전화번호를 올바르게 입력하세요",
 			member_answer:"정답을 입력하세요"
-		}
+		},
 	});
 	//전화번호 자동 하이픈 입력
 	$("#phone").on("focus",function(){
