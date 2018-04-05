@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace속성:매퍼파일의 완전한경로 .xml는 생략 -->
+<!-- ※ibatis와는 다르게 id값에 .(dot)를 사용 못한다. -->
+<mapper namespace="mybatis.menu">
+	<resultMap id="MenuDtoResult" type="MenuDto">
+		<!-- resultMap사용시 column속성 필수 -->
+		<result property="menu_no" column="menu_no" />
+		<result property="category_name" column="category_name" />
+		<result property="menu_name" column="menu_name" />
+		<result property="menu_price" column="menu_price" />
+		<result property="menu_weight" column="menu_weight" />
+		<result property="menu_calrorie" column="menu_calrorie" />
+		<result property="menu_protein" column="menu_protein" />
+		<result property="menu_sugars" column="menu_sugars" />
+		<result property="menu_fat" column="menu_fat" />
+		<result property="menu_enddate" column="menu_enddate" />
+		<result property="menu_file_extension" column="menu_file_extension" />
+	</resultMap>
+ 
+	<select id="menuSelectList" resultMap="MenuDtoResult">
+		SELECT * FROM 
+		(SELECT T.*, ROWNUM R FROM (SELECT m.* FROM menu m
+		JOIN menu_category mc ON m.category_name = mc.category_name 
+		<if test="category_name != null">
+			WHERE m.category_name = #{category_name}
+		</if>
+		ORDER BY mc.c_order) T)
+		<if test="start != null and end != null">
+			WHERE R BETWEEN #{start} AND #{end}
+		</if>
+	</select>
+	
+	<select id="menuSelectOne" parameterType="java.lang.String" resultMap="MenuDtoResult">
+		SELECT * FROM menu WHERE menu_no = #{menu_no}
+	</select>
+	
+	<select id="menuTotalCount" resultType="Integer">
+		SELECT COUNT(*) FROM menu 
+	</select>
+	
+</mapper>
