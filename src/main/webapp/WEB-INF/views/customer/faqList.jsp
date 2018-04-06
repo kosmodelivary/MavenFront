@@ -33,7 +33,9 @@
 		</ul>
 		<div id="tabCon1" class="tab_cont">
 			<dl class="qna_list qna_motion">
+			
 			<c:forEach var="item" items="${faq }" varStatus="loop" >
+			<c:if test="${item.tabcon eq 'product' }">
 				<dt>
 					<strong>Q</strong> <a href="#">${item.faq_ask }</a>
 				</dt>
@@ -41,23 +43,27 @@
 					<div>${item.faq_answer }</div>
 					<a href="#" class="btn_close">닫기</a>
 				</dd>
-			
+				</c:if>
 				</c:forEach>
+				
 			</dl>
 		</div>
 		
 		<div id="tabCon2" class="tab_cont">
 			<dl class="qna_list qna_motion">
+			
 			<c:forEach var="item" items="${faq }" varStatus="loop" >
+			<c:if test="${item.tabcon eq 'etc' }">
 				<dt>
 					<strong>Q</strong> <a href="#">${item.faq_ask }</a>
 				</dt>
 				<dd>
 					<div>${item.faq_answer }</div>
 					<a href="#" class="btn_close">닫기</a>
-				</dd>	
+				</dd>
+			</c:if>		
 			</c:forEach>
-				
+			
 			</dl>
 		</div>
 	</section>
