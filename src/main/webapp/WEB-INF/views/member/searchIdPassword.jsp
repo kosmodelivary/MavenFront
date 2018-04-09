@@ -192,9 +192,11 @@
 								$("#find_msg").html(
 										"회원님의 아이디는 " + data['find'] + "입니다");
 								$("#dialog").dialog("open");
+								
 							} else {
-								$("#find_msg").html("입력하신 정보로 회원을 조회할 수 없습니다");
-								$("#dialog").dialog("open");
+								//$("#find_msg").html("입력하신 정보로 회원을 조회할 수 없습니다");
+								//$("#dialog").dialog("open");
+								popAlert("입력하신 정보로 회원을 조회할 수 없습니다.");
 							}
 						}
 					});
@@ -218,6 +220,7 @@
 			});
 		});
 		//아이디 찾기 다이얼로그 창
+		
 		$("#dialog").dialog({
 			autoOpen : false,
 			modal : true,

@@ -6,11 +6,13 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -136,4 +138,19 @@ public class CartController {
 
         return mav;
     }
+	
+	@RequestMapping("/cart/payment.whpr")
+	public String toBack(@RequestParam String [] amount,
+						 @RequestParam int[] menu_no,
+						 HttpSession session,
+						 HttpServletRequest req) throws Exception
+	{
+		//백엔드로 주문을 넘겨야하는 메소드...
+		
+		
+		
+		return null;
+	}
+	
+	
 }

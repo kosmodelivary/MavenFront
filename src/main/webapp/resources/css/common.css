@@ -315,7 +315,7 @@ a.grayscale:hover img, a.grayscale:focus img, a.grayscale:active img{
 			.layer_box{display:none;position:absolute;padding:10px 15px;background:#6e3c2e;border-radius:5px;text-align:center;z-index:10;color:#fff}
 				.layer_box > i{display:inline-block;width:8px;height:5px;position:absolute;top:-5px;left:87px;background:url(../images/common/bg_layer.png) no-repeat;}
 				.layer_box a{margin-left:6px;color:#fddf13;text-decoration:underline;}
-			.logout_box{top:43px;right:155px;}
+			.logout_box{top:43px;right:90px;}
 	.cart_box{position:absolute;right:50%;top:0;margin-right:-493px;}
 		.cart_box .cart_btn{display:inline-block;width:120px;line-height:20px;padding:9px 0;color:#fff;text-align:center;}
 		.cart_box .cart_btn i{display:inline-block;width:21px;height:17px;background:url(../images/common/head_cart.png) no-repeat center center;vertical-align:middle;margin-right:5px;}
@@ -645,7 +645,7 @@ i.icon{display:inline-block;width:20px;height:20px;vertical-align:middle;backgro
 	.head_util ul > li{float:none;display:inline-block;}
 	.head_util ul > li:before{background:#fff;}
 	.head_util ul > li > a{padding:0 8px;color:#fff;}
-	.logout_box{padding:8px 10px;right:auto;left:10px;top:28px;}
+	.logout_box{padding:8px 10px;right:auto;left:40px;top:28px;}
 	.logout_box.layer_box > i{left:60px;}
 	.head_call{width:auto;position:static;padding:20px 10px;background:#fff;text-align:center;height:auto;}
 	.head_call img{height:40px;}

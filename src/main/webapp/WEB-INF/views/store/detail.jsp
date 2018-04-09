@@ -39,7 +39,7 @@
 		<tbody>
 			<tr>
 				<th scope="row">주소</th>
-				<td>${sdto.address }</td>
+				<td>${sdto.addr }</td>
 				<th scope="row">전화번호</th>
 				<td><a href="tel:070-7462-8673">${sdto.tel }</a></td>
 			</tr>
@@ -85,7 +85,7 @@
 				viewStore = function(coords, title) {
 					
 					// 마커 이미지의 주소
-					var markerImageUrl = '<c:url value="resources/images/common/map_pin_02.png"/>', 
+					var markerImageUrl = '<c:url value="/resources/images/common/map_pin_02.png"/>', 
 					    markerImageSize = new daum.maps.Size(46, 55), // 마커 이미지의 크기
 					    markerImageOptions = { 
 					        offset : new daum.maps.Point(23, 55)// 마커 좌표에 일치시킬 이미지 안의 좌표
@@ -124,7 +124,7 @@
 	//주소-좌표 변환 객체 생성
 	var geocoder = new daum.maps.services.Geocoder();
 	
-	geocoder.addressSearch('${sdto.address}', function(result, status) {
+	geocoder.addressSearch('${sdto.addr}', function(result, status) {
 	
 	    // 정상적으로 검색이 완료됐으면 
 	     if (status === daum.maps.services.Status.OK) {
