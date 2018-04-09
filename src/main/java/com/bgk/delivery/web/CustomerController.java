@@ -27,10 +27,4 @@ public class CustomerController {
 		return "customer/faqList.tile";
 	}
 	
-	@RequestMapping("/customer/noticeList.whpr")
-	public String noticelist() throws Exception{
-		
-		return "customer/noticeList.tile";
-	}
-	
-}
+}/////CustomerController

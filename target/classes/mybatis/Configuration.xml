@@ -13,6 +13,7 @@
 	 <typeAliases>
 	 	<typeAlias alias="StoreDto" type="com.bgk.delivery.service.StoreDto"/>
 	 	<typeAlias alias="MemberDTO" type="com.bgk.delivery.service.MemberDTO"/>
+	 	<typeAlias alias="NoticeDto" type="com.bgk.delivery.service.NoticeDto"/>
 	 	<typeAlias alias="FAQDto" type="com.bgk.delivery.service.FAQDto"/>
 	 	<typeAlias alias="MenuDto" type="com.bgk.delivery.service.MenuDto"/>
 	 	<typeAlias alias="CartDTO" type="com.bgk.delivery.service.CartDTO"/>
@@ -34,6 +35,7 @@
 	 <mappers>
 	 	<mapper resource="mybatis/store.xml"/>
 	 	<mapper resource="mybatis/member.xml"/>
+	 	<mapper resource="mybatis/notice.xml"/>
 	 	<mapper resource="mybatis/cart.xml"/>
 	 	<mapper resource="mybatis/BKProjFr_myBatisFAQ.xml"/>
 	 	<mapper resource="mybatis/menu.xml"/>

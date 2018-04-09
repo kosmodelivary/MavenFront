@@ -3,20 +3,16 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 
-	<div id="container">
-	<!-- lnb -->
-	<aside id="lnb">
-		<h1><img src="../resources/images/common/tit_faq.png" alt="버거킹 회원" /></h1>
-		<nav>
-			<ul>
-				<li><a href="<c:url value='/customer/faqList.whpr'/>">FAQ</a></li>
-				<li><a href="<c:url value='/customer/noticeList.whpr'/>">공지사항</a></li>
-			</ul>
-		</nav>
-	</aside>
-	<!-- //lnb -->
-
-	<!-- contents -->
+<aside id="lnb">
+	<h1><img src="../resources/images/common/tit_faq.png" alt="버거킹 회원" /></h1>
+	<nav>
+		<ul>
+			<li><a href="<c:url value='/customer/faqList.whpr'/>">FAQ</a></li>
+			<li><a href="<c:url value='/customer/noticeList.whpr'/>">공지사항</a></li>
+		</ul>
+	</nav>
+</aside>
+	
 	<section id="contents">
 		<ul id="location">
 			<li><a class="home" href="<c:url value='/home.whpr'/>">HOME</a></li>
@@ -28,9 +24,6 @@
 			<h1>공지사항</h1>
 		</div>
 
-		<p>
-			총 <strong class="t_red">13</strong>개의 글이 등록되어 있습니다.
-		</p>
 		<div id="noticeList">
 			<table class="table mt15">
 				<caption>공지사항 리스트 - 번호, 제목, 작성일, 조회수 등 확인</caption>
@@ -45,40 +38,38 @@
 						<th scope="col">번호</th>
 						<th scope="col">제목</th>
 						<th scope="col">작성일</th>
-						<th scope="col">조회수</th>
+						<!-- <th scope="col">조회수</th> -->
 					</tr>
 				</thead>
-				<tbody>
-					<tr>
-						<td>13</td>
-						<td class="t_left">
-							<a href="javascript:PageFunction.getNoticeDetail(26, 13, 1)">포항법원앞SK점 11월 29일(수) ~ 12월 20일(수) 휴점</a>
-						</td>
-						<td>2017-11-30</td>
-						<td>165</td>
-					</tr>
+				
+				<tbody id="noticeListBody"><!-- id 설정  -->
+					<c:if test="${empty notice }" var="flag">
+						<tr>
+							<td colspan="6">등록된 자료가 없습니다.</td>
+						</tr>
+					</c:if>
+					<c:if test="${not flag }">
+						<c:forEach var="item" items="${notice }" varStatus="loop">						
+						<tr>
+							<!-- 공지사항 번호 -->
+							<td>${item.notice_no }</td>
+							<!-- 공지사항 타이틀 -->
+							<td class="t_left">
+								<a href="<c:url value='/customer/noticeDetail.whpr?no=${item.notice_no }'/>"/>
+								${item.notice_title }</a>
+							</td>
+							<!-- 공자사항 작성일 -->
+							<td>${item.notice_postdate }</td>
+							<!-- 공지사항 조회수 -->
+							<%-- <td>${item.notice_visitcount }</td> --%>
+						</tr>
+						</c:forEach>
+					</c:if>
 				</tbody>
 			</table>
-	
-			<!-- paging -->
+			
 			<p class="list_paging">
-				<a class="btn_paging" href="javascript:void(0)">
-					<img src="../resources/images/common/paging_prev.gif" alt="이전페이지" />
-				</a>
-				
-				<a href="javascript:PageFunction.getNoticeList(1)">
-					
-					<strong>1</strong>
-				</a>
-				
-				<a href="javascript:PageFunction.getNoticeList(2)">
-					2
-					
-				</a>
-				
-				<a class="btn_paging" href="javascript:PageFunction.getNoticeList(2)">
-					<img src="../resources/images/common/paging_next.gif" alt="다음페이지" />
-				</a>
+				${pagingString }
 			</p>
 		</div>
 	</section>
@@ -113,6 +104,4 @@
 			}(window.pf || {}));
 		//]]>
 		</script>
-	</div>
-</body>
 </html>
