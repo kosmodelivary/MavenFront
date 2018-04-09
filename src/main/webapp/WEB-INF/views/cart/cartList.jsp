@@ -111,6 +111,7 @@
 											<span class="opt_area">
 												<span class="opt_txt">${items.amount }</span>
 												<input type="hidden" name="amount" value="${items.amount}">
+												<!-- <input type="hidden" name="amount" value="">  -->
 												<input type="hidden" name="menu_price" value="${items.menu_price}"> 
 											</span>
 												<a href="javascript:void(0);" class="btn_opt opt_plus">더하기</a>
@@ -163,58 +164,57 @@
 		</form>
 	</div>
 </section>
-												<script type="text/javascript">
-
-
-													var plus = document.getElementsByClassName('opt_plus');
-													for(var i=0; i<plus.length; i++){
-														(function(){
-														 	plus[i].index=i;
-														    plus[i].onclick = function(){
-															 	var amount = document.getElementsByClassName('opt_txt')[this.index].innerHTML;
-															 	var price = parseInt(document.getElementsByName('sum')[this.index].innerHTML.replace(",", "")) / amount;
+	<script type="text/javascript">
+		var plus = document.getElementsByClassName('opt_plus');
+		for(var i=0; i<plus.length; i++){
+			(function(){
+			 	plus[i].index=i;
+			    plus[i].onclick = function(){
+				 	var amount = document.getElementsByClassName('opt_txt')[this.index].innerHTML;
+				 	var price = parseInt(document.getElementsByName('sum')[this.index].innerHTML.replace(",", "")) / amount;
 	
-															 	amount = parseInt(amount) + 1;
-															 	var sum = price * amount;
-															 	document.getElementsByClassName('opt_txt')[this.index].innerHTML = amount;
-															 	document.getElementsByName('sum')[this.index].innerHTML = sum;
-
-																calculate(plus.length);
-															}
-														})();
-													}
-													var minus = document.getElementsByClassName('opt_minus');
-													for(var i=0; i<minus.length; i++){
-														(function(){
-															minus[i].index=i;
-															minus[i].onclick = function(){
-															 	var amount = document.getElementsByClassName('opt_txt')[this.index].innerHTML;
-															 	var price = parseInt(document.getElementsByName('sum')[this.index].innerHTML.replace(",", "")) / amount;
+				 	amount = parseInt(amount) + 1;
+				 	var sum = price * amount;
+				 	document.getElementsByClassName('opt_txt')[this.index].innerHTML = amount;
+				 	document.getElementsByName('sum')[this.index].innerHTML = sum.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "원";
 	
-															 	amount = parseInt(amount) > 1 ? parseInt(amount) - 1 : parseInt(amount);
-															 	var sum = price * amount;
-															 	document.getElementsByClassName('opt_txt')[this.index].innerHTML = amount;
-															 	document.getElementsByName('sum')[this.index].innerHTML = sum;
+				 	document.getElementsByName('amount')[this.index].value = amount;
+					
+				 	calculate(plus.length);
+				}
+			})();
+		}
+		var minus = document.getElementsByClassName('opt_minus');
+		for(var i=0; i<minus.length; i++){
+			(function(){
+				minus[i].index=i;
+				minus[i].onclick = function(){
+				 	var amount = document.getElementsByClassName('opt_txt')[this.index].innerHTML;
+				 	var price = parseInt(document.getElementsByName('sum')[this.index].innerHTML.replace(",", "")) / amount;
+	
+				 	amount = parseInt(amount) > 1 ? parseInt(amount) - 1 : parseInt(amount);
+				 	var sum = price * amount;
+				 	document.getElementsByClassName('opt_txt')[this.index].innerHTML = amount;
+				 	document.getElementsByName('sum')[this.index].innerHTML = sum.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "원";
+	
+				 	document.getElementsByName('amount')[this.index].value = amount;
 
-																calculate(minus.length);
-															}
-														})();
-													}
-
-													var calculate = function(length) {
-														var total = 0;
-														for (var i = 0; i < length; i++) {
-															var amount = document.getElementsByClassName('opt_txt')[i].innerHTML;
-															var price = parseInt(document.getElementsByName('sum')[i].innerHTML.replace(",", "")) / amount;
-
-															total += (price * amount);
-														}
-														console.log(document.getElementsByClassName('price_all')[0].innerHTML);
-														document.getElementsByClassName('price_all')[0].innerHTML = total;
-													};
-												
-
-												</script>
+				 	calculate(minus.length);
+				}
+			})();
+		}
+	
+		var calculate = function(length) {
+			var total = 0;
+			for (var i = 0; i < length; i++) {
+				var amount = document.getElementsByClassName('opt_txt')[i].innerHTML;
+				var price = parseInt(document.getElementsByName('sum')[i].innerHTML.replace(",", "")) / amount;
+	
+				total += (price * amount);
+			}
+			document.getElementsByClassName('price_all')[0].innerHTML = total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "원";
+		};
+	</script>
 <!-- //contents -->
 <%--  <c:choose>
 		<c:when test="${map.count == 0}">
