@@ -50,4 +50,9 @@ public class CartServiceImpl implements CartService{
 		cartdao.updateCart(dto);		
 	}
 
+	@Override
+	public void completeOrder(CartDTO dto) {
+		cartdao.completeOrder(dto);
+	}
+
 }

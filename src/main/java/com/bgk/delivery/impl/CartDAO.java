@@ -64,4 +64,9 @@ public class CartDAO implements CartService {
 		sqlMapper.update("updateCart", dto);
 	}
 
+	@Override
+	public void completeOrder(CartDTO dto) {
+		sqlMapper.update("completeOrder", dto);
+	}
+
 }

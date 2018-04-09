@@ -18,6 +18,9 @@ public interface CartService {
 	public int countCart(int menuNo, String memberEmail);
 	// 7. 장바구니 상품 수량 변경
 	public void updateCart(CartDTO dto);
+	// temp. 장바구니 최종 결제 완료
+	public void completeOrder(CartDTO dto);
+	
 
 	/*	
 	* insertCart 	: 장바구니 insert

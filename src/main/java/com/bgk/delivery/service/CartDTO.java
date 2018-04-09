@@ -10,6 +10,7 @@ public class CartDTO {
 	private int 	menu_price;		// 메뉴가격
 	private int 	amount;			// 수량
 	private int 	total_price;	// 가격합계
+	private String  pay_complete;
 	
 	public int getCart_no() {
 		return cart_no;
@@ -59,12 +60,17 @@ public class CartDTO {
 	public void setTotal_price(int total_price) {
 		this.total_price = total_price;
 	}
-	
+	public String getPay_complete() {
+		return pay_complete;
+	}
+	public void setPay_complete(String pay_complete) {
+		this.pay_complete = pay_complete;
+	}
 	@Override
 	public String toString() {
 		return "CartDTO [cart_no=" + cart_no + ", member_email=" + member_email + ", member_name=" + member_name
 				+ ", menu_no=" + menu_no + ", menu_name=" + menu_name + ", menu_price=" + menu_price + ", amount="
-				+ amount + ", total_price=" + total_price + "]";
+				+ amount + ", total_price=" + total_price + ", pay_complete=" + pay_complete + "]";
 	}
 	
 }

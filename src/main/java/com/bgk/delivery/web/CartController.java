@@ -5,14 +5,12 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
-import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -22,7 +20,6 @@ import com.bgk.delivery.impl.CartServiceImpl;
 import com.bgk.delivery.impl.MemberServiceImpl;
 import com.bgk.delivery.service.CartDTO;
 import com.bgk.delivery.service.MemberDTO;
-import com.bgk.delivery.service.MemberService;
 
 @Controller
 public class CartController {
@@ -146,7 +143,16 @@ public class CartController {
 						 HttpServletRequest req) throws Exception
 	{
 		//백엔드로 주문을 넘겨야하는 메소드...
-		
+		// session의 id
+		String memberEmail = ((MemberDTO) session.getAttribute("dto")).getMember_email();
+        // 레코드의 갯수 만큼 반복문 실행
+        for(int i=0; i<menu_no.length; i++){
+            CartDTO dto = new CartDTO();
+            dto.setMember_email(memberEmail);
+            dto.setAmount(Integer.parseInt(amount[i]));
+            dto.setMenu_no(menu_no[i]);
+            service.completeOrder(dto);
+        }
 		
 		
 		return null;

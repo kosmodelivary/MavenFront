@@ -14,6 +14,7 @@
 		<result property="menu_price" 	column="menu_price" />
 		<result property="amount" 		column="amount" />
 		<result property="total_price" 	column="total_price" />	
+		<result property="pay_complete" column="pay_complete" />	
 	</resultMap>
 
 	<!-- 1. 장바구니 추가 -->
@@ -69,5 +70,12 @@
         WHERE member_email = #{member_email} 
         AND menu_no = #{menu_no}
     </update>
+    <!-- temp. 장바구니 최종 결제 -->
+    <update id="completeOrder" parameterType="CartDTO">
+    	UPDATE cart
+    	set pay_complete = #{flag}
+    	WHERE member_email = #{member_email} AND menu_no = #{menu_no}
+    </update>
+    
 
 </mapper>
