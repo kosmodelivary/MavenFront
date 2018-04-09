@@ -59,7 +59,12 @@
 	<select id="findshop" parameterType="java.util.Map" resultMap="StoreDtoResult">
 		SELECT * FROM (SELECT T.*,ROWNUM R FROM (SELECT st.* FROM store st 
 		WHERE store_addr LIKE '%' || #{find} || '%' or store_name like '%' || #{find} || '%'
-		) T) WHERE R BETWEEN #{start} AND #{end}
+		) T)
+		<choose>
+			<when test="start != null and end !=null">
+				WHERE R BETWEEN #{start} AND #{end}
+			</when>
+		</choose>
 	</select>
 	
 	<!-- <select id="ReplyBBSlogin" parameterType="java.util.Map" resultType="int">

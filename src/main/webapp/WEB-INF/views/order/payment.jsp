@@ -78,7 +78,7 @@
 				<li>
 					<div class="inp_wid">
 						<i>*</i><input type="text" id="custNm" name="custNm"
-							maxlength="10" class="input" placeholder="이름 직접입력" title="이름 입력" value="${map.ordererName }"/>
+							maxlength="10" class="input" placeholder="이름 직접입력" title="이름 입력" />
 					</div>
 				</li>
 				<li>
@@ -90,18 +90,16 @@
 						<!-- 회원 -->
 						<select class="select phone" id="phone1" name="phone1"
 							title="휴대폰 앞자리">
-							<option value="010" <c:if test="${map.phone1 == '010' }">selected</c:if>>010</option>
-							<option value="011" <c:if test="${map.phone1 == '011' }">selected</c:if>>011</option>
-							<option value="016" <c:if test="${map.phone1 == '016' }">selected</c:if>>016</option>
-							<option value="017" <c:if test="${map.phone1 == '017' }">selected</c:if>>017</option>
-							<option value="018" <c:if test="${map.phone1 == '018' }">selected</c:if>>018</option>
-							<option value="019" <c:if test="${map.phone1 == '019' }">selected</c:if>>019</option>
-						</select> 
-						<input type="tel" id="phone2" name="phone2" class="input phone"
-							title="휴대폰 앞자리" maxlength="4" value="${map.phone2 }" /> 
-						<input type="tel"
+							<option value="010" selected="selected">010</option>
+							<option value="011">011</option>
+							<option value="016">016</option>
+							<option value="017">017</option>
+							<option value="018">018</option>
+							<option value="019">019</option>
+						</select> <input type="tel" id="phone2" name="phone2" class="input phone"
+							title="휴대폰 앞자리" maxlength="4" value="" /> <input type="tel"
 							id="phone3" name="phone3" class="input phone" title="휴대폰 뒷자리"
-							maxlength="4" value="${map.phone3 }" />
+							maxlength="4" value="" />
 
 
 
@@ -117,7 +115,7 @@
 				</li>
 
 				<li><textarea class="textarea" name="orderMemo" maxlength="120"
-						placeholder="배달시 참고사항은 이곳에 기록해주세요.(예: 도착시 전화, 현금영수증)" title="배달시 참고사항 입력"></textarea></li>
+						placeholder="배달시 참고사항 입력" title="배달시 참고사항 입력"></textarea></li>
 				<li>* <font color="red">제품구성 변경은 메뉴 선택시에만 가능합니다.</font></li>
 				<li>* <font color="red">예약주문은 콜센터(1599-0505)에서만 가능합니다.</font></li>
 			</ul>
@@ -173,6 +171,10 @@
 					</tbody> 
 				</table>
 
+				<div>
+					<div id="loca" style="overflow:visible;width:100%;height:300px;display:none;"></div>
+				</div>
+				
 			</div>
 		
 
@@ -190,17 +192,12 @@
 				</label>
 			</div>
 			<div>
-				<strong class="tit">배달원에게 결제</strong> 
-					<label class="radio">
-						<input type="radio" name="aCheckCard" value="0" />
-						<span class="lbl">신용카드</span>
-					</label>
-					<label class="radio"> 
-						<input type="radio" name="aCheckCard"value="1" />
-						<span class="lbl">현금 </span>
-					</label>
-					<!--  
-					<span class="pay_group">( <label class="radio"> <input
+				<strong class="tit">배달원에게 결제</strong> <label class="radio">
+					<input type="radio" name="aCheckCard" value="0" /> <span
+					class="lbl">신용카드</span>
+				</label> <label class="radio"> <input type="radio" name="aCheckCard"
+					value="1" /> <span class="lbl">현금 </span>
+				</label> <span class="pay_group">( <label class="radio"> <input
 						type="radio" name="cashType" value="[일반현금 결제]/"
 						disabled="disabled" /><span class="lbl">일반현금</span>
 				</label> <label class="radio"> <input type="radio" name="cashType"
@@ -212,10 +209,9 @@
 						class="lbl">현금영수증</span>
 				</label>
 				</span>
-				 -->
 			</div>
 			<div class="price_info">
-				<strong class="tit">배달매장</strong><span>구로점</span> <strong class="tit">배달예상시간</strong><span>45~60분</span>
+				<strong>배달매장</strong><span>구로점</span> <strong>배달예상시간</strong><span>45~60분</span>
 				<p class="f_right all_price">
 					<span class="bold">총 상품금액</span> 
 					<strong><fmt:formatNumber pattern="###,###,###" value="${map.sumMoney}" />원</strong>
@@ -230,6 +226,34 @@
 	</form>
 </section>
 <!-- //contents -->
+<script>
+	function initMap(store) {
+		if(store == null) return;
+		document.getElementById('loca').style.display = 'block';
+		
+		var storePlace = {lat: -25.363, lng: 131.044};
+		var map = new google.maps.Map(document.getElementById('loca'), {
+			zoom: 17,
+			center: storePlace
+		});
+
+		var geocoder = new google.maps.Geocoder();
+	    geocoder.geocode({'address': store}, function(results, status) {
+	        if (status == 'OK') {
+	          map.setCenter(results[0].geometry.location);
+	          var marker = new google.maps.Marker({
+	              map: map,
+	              position: results[0].geometry.location,
+	              icon: "../resources/images/common/map_pin_02.png"
+	          });
+	        } else {
+	          alert('Geocode was not successful for the following reason: ' + status);
+	        }
+      	});
+	}
+</script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAQo9FPSR1RWpd2JWBwrhbTlIi5DzeubEM&callback=initMap"></script>
+
 <script src="https://ssl.daumcdn.net/dmaps/map_js_init/postcode.v2.js"></script>
 <script>
     function sample6_execDaumPostcode() {
@@ -277,10 +301,10 @@
             }
         }).open();
     }
-    function findshop(input,nowPage){
-    	var sigungu = input;
+    function findshop(sigungu,nowPage){
+    	document.getElementById('loca').style.display = 'none';
     	
-    	if(input.trim() == 0){
+    	if(sigungu.trim() == 0){
     		alert("검색어를 입력하세요"); return;
     	}
     	
@@ -302,14 +326,16 @@
 							recstr += "</td>"+"<td>"+data.store_tel+"</td>";
 							recstr += "<td scope='col'>"+data.store_minordermoney+"</td>"
 							recstr += "<td>주중:"+data.store_weekdayon+":00~"+data.store_weekdayoff+":00 주말:"+data.store_weekendon+":00~"+data.store_weekendoff+":00</td>";
-							recstr += "<td><label class='radio only'><input id='radio' name='radio' value='1' type='radio'/><span class='lbl'>선택</span></label></td></tr>";
+							recstr += "<td><label class='radio only'><input name='radio' value='1' type='radio' onclick='initMap(\""+data.store_addr+"\")'/><span class='lbl'>선택</span></label></td></tr>";
 						}
 						else {
 							recstr += "<tr><td colspan='6'>"+data.pagingstr+"</td></tr>";
 						}
 					});
 				}
-				else recstr = "<tr><td colspan='6'>선택된 매장정보가 없습니다.</td></tr>";
+				else {
+					recstr = "<tr><td colspan='6'>선택된 매장정보가 없습니다.</td></tr>";
+				}
 				$("#storeInfo").html(recstr);
 			},
 			error:function(request,status,error){

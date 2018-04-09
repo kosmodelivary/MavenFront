@@ -135,8 +135,7 @@ public class StoreController {
 		
 		Map map = new HashMap();
 		map.put("find", find);
-		map.put("start", 0);
-		map.put("end", 1000);
+		
 		List<StoreDto> list = service.findshop(map);
 		int totalcount = list.size();
 		

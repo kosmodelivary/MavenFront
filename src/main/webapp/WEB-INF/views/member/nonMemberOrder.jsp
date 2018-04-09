@@ -19,6 +19,7 @@
 		<h1>비회원 주문</h1>
 	</div>
 	<div class="full_order">
+	
 		<div class="form_list first">
 			<h2 class="cont_tit tit3">버거킹 이용약관</h2>
 			<div>
@@ -39,7 +40,6 @@
 			</div>
 		</div>
 		
-		
 		<div class="form_list">
 			<h2 class="cont_tit tit3">
 				<label for="address">주소입력</label>
@@ -52,17 +52,17 @@
 				<div class="inp_wid wid4 mt10">
 					<input type="text" id="nonMemberAddrDetail" class="input wid3" placeholder="상세주소" title="상세주소 입력" required/>
 				</div>
-				<div id="map" style="width:300px;height:300px;margin-top:10px;display:none"></div>
 			</div>
 		</div>
+		
 		<div class="form_list">
 			<h2 class="cont_tit tit3">배달매장</h2>
 			<div>
-			<p class="mb10" style="text-align:right;">
-				<strong class="t_black">배달매장 직접 검색</strong>
-				<input type="text" class="input wid3" placeholder="매장명 혹은 주소 입력" id="find">
-				<button class="pop_open button btn_gray" onclick="findshop(document.getElementById('find').value,1)">검색</button>
-			</p>
+				<p class="mb10" style="text-align:right;">
+					<strong class="t_black">배달매장 직접 검색</strong>
+					<input type="text" class="input wid3" placeholder="매장명 혹은 주소 입력" id="find">
+					<button class="pop_open button btn_gray" onclick="findshop(document.getElementById('find').value,1)">검색</button>
+				</p>
 				<table class="table">
 					<caption>배달 매장 정보</caption>
 					<colgroup>
@@ -87,15 +87,50 @@
 						<tr><td colspan='6'>선택된 매장정보가 없습니다.</td></tr>
 					</tbody> 
 				</table>
+				
+				<div>
+					<div id="loca" style="overflow:visible;width:100%;height:300px;display:none;"></div>
+				</div>
+				
 				<p class="button_area btn2 mt30">
 					<a href="javascript:PageFunction.goNextOrderStep();" class="button h40 w200">다음</a>
 					<a href="<c:url value='/'/>" class="button h40 w200 btn_gray">취소</a>
 				</p>
+
 			</div>
+		</div>
+					
 		</div>
 
 </section>
 <!-- //contents -->
+<script>
+	function initMap(store) {
+		if(store == null) return;
+		document.getElementById('loca').style.display = 'block';
+		
+		var storePlace = {lat: -25.363, lng: 131.044};
+		var map = new google.maps.Map(document.getElementById('loca'), {
+			zoom: 17,
+			center: storePlace
+		});
+
+		var geocoder = new google.maps.Geocoder();
+	    geocoder.geocode({'address': store}, function(results, status) {
+	        if (status == 'OK') {
+	          map.setCenter(results[0].geometry.location);
+	          var marker = new google.maps.Marker({
+	              map: map,
+	              position: results[0].geometry.location,
+	              icon: "../resources/images/common/map_pin_02.png"
+	          });
+	        } else {
+	          alert('Geocode was not successful for the following reason: ' + status);
+	        }
+      	});
+	}
+</script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAQo9FPSR1RWpd2JWBwrhbTlIi5DzeubEM&callback=initMap"></script>
 <script src="https://ssl.daumcdn.net/dmaps/map_js_init/postcode.v2.js"></script>
 <script>
     function sample6_execDaumPostcode() {
@@ -138,15 +173,16 @@
                 
                 document.getElementById('find').value = data.sigungu;
                 
+                document.getElementById('loca').style.display = 'none';
+                
                 findshop(data.sigungu,1);
                 
             }
         }).open();
     }
-    function findshop(input,nowPage){
-    	var sigungu = input;
+    function findshop(sigungu,nowPage){
     	
-    	if(input.trim() == 0){
+    	if(sigungu.trim() == 0){
     		alert("검색어를 입력하세요"); return;
     	}
     	
@@ -168,14 +204,17 @@
 							recstr += "</td>"+"<td>"+data.store_tel+"</td>";
 							recstr += "<td scope='col'>"+data.store_minordermoney+"</td>"
 							recstr += "<td>주중:"+data.store_weekdayon+":00~"+data.store_weekdayoff+":00 주말:"+data.store_weekendon+":00~"+data.store_weekendoff+":00</td>";
-							recstr += "<td><label class='radio only'><input id='radio' name='radio' value='1' type='radio'/><span class='lbl'>선택</span></label></td></tr>";
+							recstr += "<td><label class='radio only'><input name='radio' value='1' type='radio' onclick='initMap(\""+data.store_addr+"\")'/><span class='lbl'>선택</span></label></td></tr>";
 						}
 						else {
 							recstr += "<tr><td colspan='6'>"+data.pagingstr+"</td></tr>";
 						}
 					});
 				}
-				else recstr = "<tr><td colspan='6'>선택된 매장정보가 없습니다.</td></tr>";
+				else {
+					recstr = "<tr><td colspan='6'>선택된 매장정보가 없습니다.</td></tr>";
+					document.getElementById('loca').style.display = 'none';
+				}
 				$("#storeInfo").html(recstr);
 			},
 			error:function(request,status,error){

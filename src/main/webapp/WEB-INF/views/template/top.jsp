@@ -40,7 +40,7 @@
 		<div class="inner">
 			<nav id="gnb">
 				<ul>
-					<li class="gnb01"><a href="<c:url value='/member/login.whpr'/>">ORDER</a></li>
+					<li class="gnb01"><a href="<c:url value='/cart/cartList.whpr'/>">ORDER</a></li>
 					<li class="gnb02"><a href="<c:url value='/menu/All.whpr'/>" class="in_sub">MENU</a>
 						<ul id="menuClass">
 							<li><a href="https://www.burgerking.co.kr/nutrition" target="_blank">영양정보</a></li>
