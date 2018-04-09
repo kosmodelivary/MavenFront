@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mybatis.cart">
+	<resultMap type="CartDTO" id="CartDtoResult">
+		<!-- resultMap사용시 column속성 필수 -->
+		<result property="cart_no"		column="cart_no" />
+		<result property="member_email"	column="member_email" />
+		<result property="member_name" 	column="member_name" />
+		<result property="menu_no" 		column="menu_no" />
+		<result property="menu_name" 	column="menu_name" />
+		<result property="menu_price" 	column="menu_price" />
+		<result property="amount" 		column="amount" />
+		<result property="total_price" 	column="total_price" />	
+	</resultMap>
+
+	<!-- 1. 장바구니 추가 -->
+	<insert id="insertCart" parameterType="CartDTO">
+		insert into cart
+		(cart_no, member_email, menu_no,
+		amount) values
+		(seq_cart.nextval, #{member_email}, #{menu_no},
+		#{amount})
+	</insert>
+	<!-- 2. 장바구니 목록 -->
+	<select id="listCart" resultType="CartDTO">
+		select
+		cart_no, m.member_email,
+		p.menu_no, menu_name, menu_price, amount,
+		menu_price*amount
+		from cart c,
+		member m, menu p
+		where c.member_email = m.member_email and 
+		c.menu_no = p.menu_no
+	</select>
+	<!-- 3. 장바구니 전체 금액 -->
+	<select id="sumMoney" resultType="int">
+		SELECT NVL(SUM(menu_price * amount), 0) money
+		FROM cart c, menu p
+		WHERE c.menu_no = p.menu_no AND c.member_email = #{member_email}
+	</select>
+	<!-- 4. 장바구니 수량 수정 -->
+	<update id="modifyCart">
+		UPDATE cart    
+        SET amount = #{amount} 
+        WHERE member_email= #{member_email} 
+        AND menu_no = #{menu_no}
+	</update>
+	<!-- 5. 장바구니 삭제 -->
+	<delete id="deleteCart" parameterType="CartDTO">
+	 DELETE FROM cart 
+        WHERE cart_no = #{cart_no}
+	</delete>
+	<!-- 6. 장바구니에 동일한 상품 레코드 확인 -->
+	<select id="countCart" resultType="Integer">
+		SELECT
+		COUNT(*)
+		FROM cart
+		WHERE
+		member_email= #{member_email}
+		AND menu_no = #{menu_no}
+	</select>
+	<!-- 7. 장바구니 상품수량 변경 -->
+	<update id="updateCart" parameterType="CartDTO">
+	 UPDATE cart
+        SET amount = amount + #{amount} 
+        WHERE member_email = #{member_email} 
+        AND menu_no = #{menu_no}
+    </update>
+
+</mapper>

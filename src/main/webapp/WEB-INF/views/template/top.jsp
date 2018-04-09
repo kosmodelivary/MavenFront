@@ -73,7 +73,7 @@
 
 	<section class="cart_box" id="headerCart">
 
-		<a class="cart_btn" href="#"><i></i><span>장바구니</span><strong>0</strong></a>
+		<a class="cart_btn" href="#"><i></i><span>장바구니</span></a>
 		<!-- 장바구니 페이지가 따로 있다. -->
 
 	</section>
@@ -93,8 +93,8 @@
 					$('#menuClass').getLoad('/menu/getHeaderMenuClass');
 				}
 
-				// 헤더 장바구니 갱신
-				this.loadHeaderCart();
+				/* // 헤더 장바구니 갱신
+				this.loadHeaderCart(); */
 			};
 
 			// 로그아웃 처리

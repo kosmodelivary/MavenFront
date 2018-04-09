@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <!DOCTYPE html>
 <!-- lnb -->
 <aside id="lnb">
@@ -119,17 +120,18 @@
 									<!-- <span class="tit">제품명 컬럼 el태그</span> -->
 									<span class="tit">${items.menu_name }</span>
 									<!-- <strong>제품 가격 컬럼 el태그</strong> -->
-									<strong>${items.menu_price }원</strong>
+									<strong><fmt:formatNumber
+												pattern="###,###,###"
+												value="${items.menu_price}" />원</strong>
 								</figcaption>
 							</figure> <i></i>
 					   </a>
 						<div class="list_cont">
 							<!-- <a class="btn_cart" href="javascript:PopupFunction.addProduct(제품번호 컬럼 el 태그,1)"><span>담기</span></a> -->
 							<!-- <a class="btn_view" href="javascript:PageFunction.openDetailPopup(제품번호 컬럼 el 태그)"><span>상세보기</span></a> -->
-							<a class="btn_cart"
-								href="#"><span>담기</span></a>
-							<a class="btn_view"
-								href="#"><span>상세보기</span></a>
+							<a class="btn_cart" href="<c:url value="/cart/cartInsert.whpr?menu_no=${items.menu_no }&amount=1"/>"><span>담기</span></a>
+							<a class="btn_view"	href="#"><span>상세보기</span></a>
+				
 						</div>
 					</li>
 				</c:forEach>
