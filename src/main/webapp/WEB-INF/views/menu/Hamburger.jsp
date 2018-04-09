@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <!-- lnb -->
 <aside id="lnb">
@@ -114,7 +115,9 @@
 									<!-- <span class="tit">제품명 컬럼 el태그</span> -->
 									<span class="tit">${items.menu_name }</span>
 									<!-- <strong>제품 가격 컬럼 el태그</strong> -->
-									<strong>${items.menu_price }원</strong>
+									<strong><fmt:formatNumber
+												pattern="###,###,###"
+												value="${items.menu_price}" />원</strong>
 								</figcaption>
 							</figure> <i></i>
 					   </a>
@@ -137,11 +140,8 @@
 	</div>
 
 	<!-- 자세히 보기 -->
-	<!-- <div id="popMenuDetail">
-	</div> -->
-	<article id="menuDetail" class="menu_view">
-	
-	</article>
+	<div id="popMenuDetail" class="menu_view_wrap">
+	</div>
 	<script type="text/javascript">
     	function menu_view(menu_no){
     		$.ajax({
@@ -150,7 +150,7 @@
 				dataType:'json',
 				data:{"menu_no":menu_no},
 				success:function(data,target){
-					successAjax(data,'#menuDetail');
+					successAjax(data,'#popMenuDetail');
 				},
 				error:function(request,error){
 						console.log("code:"+request.status+"\n");
@@ -158,44 +158,22 @@
 						console.log("error:"+error+"\n");								
 					   }
     		});
-	    	$('body').addClass('hidden');
-	    	
 	    	
 	    };
 	    function successAjax(data,target){
 	    	console.log("data : "+data+", 데이터 타입 : "+typeof data);
 	    	console.log("target의 display 상태 : "+$(target).css('display'));
-	    	$(target).css('display','inline-block');
-	    	var $w = $(window).height(),
-				$h = $('.menu_view').outerHeight(),
-				$mt = Math.max(0,($w-$h*2)/2);
-			console.log('$w : '+$w);
-			console.log('$h : '+$h);
-			console.log('$mt : '+$mt);
-			if($('.menu_view').is(':visible')){
-				$('.menu_view').stop().animate({opacity:1})
-			}
-			
-	    	$.each(data, function(i, val) {
-    			$.blockUI({ message : $(target).html(getOne(val)),
-	    			css: { 
-	    				padding: '0', 
-	    		        margin:  '0',
-	    		        width:   'auto',
-	    		        height:  'auto',
-	    		        top:     '15%', 
-	    		        left:    'auto',
-	    		        right:   '30%',
-	    		        border: 'none',
-	    		        cursor: 'default' }
-    			});
-    		});
+			$.each(data, function(i, val) {
+	    		$(target).html(getOne(val));
+	    	})
+	    	menuOpen();
 	    }
 	    
 	    function getOne(val){
 	    	var string = "";
 	    	string += 
-				"<div class='f_left'>"+
+	    		'<article id="menuDetail" class="menu_view">'+
+				'<div class="f_left">'+
 					'<div class="img">'+
 						"<img src='http://restapi.fs.ncloud.com/bkproject/image/menu/"+val.menu_name+""+val.menu_file_extension+"'"+
 							"alt=\""+val.menu_name+"\" />"+
@@ -205,7 +183,8 @@
 						"<br /> <br /> 해당사항없음"+
 					"<div class=\"hidden pb10\">"+
 						"<span class=\"unit_price detail_product_text_price price\""+
-							"data-price=\""+val.menu_price+"\">"+val.menu_price+"원</span>"+
+							"data-price=\""+val.menu_price+"\">"+val.menu_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g,
+									',')+"원</span>"+
 						"<div class=\"opt_spinner_wrap\">"+
 							"<strong>수량선택</strong> <span class=\"opt_spinner\"> <span"+
 								"class=\"opt_area\"> <span class=\"opt_txt opt_qty\">1</span>"+
@@ -259,17 +238,12 @@
 					"<div class=\"button_area btn2 mt10\">"+
 						"<a class=\"button btn_org h40 w150\""+
 								"href=\"#\">주문하기</a> <a class=\"button h40 w150\""+
-								"href=\"#\">장바구니담기</a>"+
+								"href=\"<c:url value='/cart/cartInsert.whpr?menu_no="+val.menu_no+"&amount=1'/>\">장바구니담기</a>"+
 					"</div>"+
 				"</div>"+
-				"<a href=\"javascript:menu_close()\" class=\"btn_close menu_close\">닫기</a>";
+				"<a href=\"javascript:menu_close()\" class=\"btn_close menu_close\">닫기</a>"+
+				'</article>';
 				return string;
-	    }
-	    
-	    function menu_close(){
-	    	$.unblockUI();
-	    	$('popMenuDetail').css('display','none');
-	    	$('body').removeClass('hidden');
 	    }
 	</script>
 	<!-- //자세히 보기 -->

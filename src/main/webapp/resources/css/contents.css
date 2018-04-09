@@ -143,10 +143,10 @@
 	.list_cont a{float:left;display:block;width:50%;padding:11px 0;text-align:center;box-sizing:border-box;color:#f37c01;font-weight:600;font-size:16px;}
 	.list_cont .btn_cart{background:#ef7a01;color:#fff;}
 	.list_cont .btn_view{}
-.menu_list + .menu_list li, .menu_list + .blockUI blockMsg blockPage +.menu_list li{border-top:0 none;}
+.menu_list + .menu_list li, .menu_list + .menu_view_wrap +.menu_list li{border-top:0 none;}
 
-.blockUI blockMsg blockPage{display:none;position:fixed;left:0;top:0;right:0;bottom:0;padding:10px;background:rgba(0,0,0,0.6);z-index:500;overflow:auto;}
-.menu_view{position:relative;width:680px;margin:0 auto;padding:45px 29px;background:#fff;overflow:auto;border:1px solid #ed7901 ;clear:both;opacity:0;}
+.menu_view_wrap{display:none;position:fixed;left:0;top:0;right:0;bottom:0;padding:10px;background:rgba(0,0,0,0.6);z-index:500;overflow:auto;}
+.menu_view{position:relative;width:680px;margin:0 auto;padding:45px 29px;background:#fff;overflow:hidden;border:1px solid #ed7901 ;clear:both;opacity:0;}
 .menu_view .btn_close{clear:both;display:block;position:absolute;right:20px;top:20px;width:25px;height:25px;background:url(../images/product/btn_close.png) no-repeat center center/100% 100%;text-indent:-9999em;}
 .menu_view > .f_left{width:300px;}
 .menu_view  .img{text-align:center;}
@@ -528,7 +528,7 @@ div.cart_tbl .all_price strong{margin-right:0;}
 	.menu_view .f_left{float:none;width:auto;max-width:300px;margin:0 auto;padding-top:45px;}
 	.menu_view .img img{width:80%;}
 	.menu_view .f_right{float:none;width:auto;}
-	.menu_view h1{position:absolute;top:0px;left:0px;width:100%;text-align:center;font-size:24px;}
+	.menu_view h1{position:absolute;top:45px;left:0px;width:100%;text-align:center;font-size:24px;}
 	.menu_view .price{font-size:24px;line-height:30px;}
 	.menu_view .opt_spinner_wrap{padding:0;}
 	.menu_view .btn_close{right:10px;top:10px;width:15px;height:15px;}
@@ -550,11 +550,11 @@ div.cart_tbl .all_price strong{margin-right:0;}
 	.main_info .main_brand{display:block;}
 	
 	/* 메뉴 */
-	.blockUI blockMsg blockPage{padding:0;}
+	.menu_view_wrap{padding:0;}
 	.menu_list li{width:50%;}
 	.menu_view .f_left{padding-top:35px;}
-	.menu_view h1{top:0px;}
-	.menu_view{padding:0px;}
+	.menu_view h1{top:15px;}
+	.menu_view{padding:15px;}
 	
 	/* store */
 	.store_search .radio{display:block;width:auto;}
@@ -566,8 +566,8 @@ div.cart_tbl .all_price strong{margin-right:0;}
 	.zipcode_cont .button{width:80px;}
 	
 	/* 회원가입 14세 미만 사용자 정보수집 안내 팝업 */
-	.agree_pop .menu_view{padding: 0px;}
-	.agree_fail .menu_view{padding-top:0px}
+	.agree_pop .menu_view{padding: 15px;}
+	.agree_fail .menu_view{padding-top:30px}
 	
 	/* order */
 	.cart_tbl .prd_tbl .img_box{width:60px;}

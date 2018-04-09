@@ -106,7 +106,7 @@ function commonUi(){
 
 /*장바구니*/
 function cartBtn(){
-	$(document).on("click",'.cart_bt', function(){
+	$(document).on("click",'.cart_btn', function(){
 		$('.cart_view').show(500);
 		return false;
 	});
@@ -601,19 +601,40 @@ function menuCtrl() {
 	});
 }
 //메뉴 상세보기
-/*function menuOpen(){
+function menuOpen(){
 	$('body').addClass('hidden');		
 	$('.menu_view_wrap').fadeIn(500,function(){
 		menuPosition();	
 	});
-}*/
+}
 function menuPosition(){
 	var $w = $(window).height(),
 		$h = $('.menu_view').outerHeight(),
-		$mt = Math.max(0,($w-$h*2)/2);// /2
+		$mt = Math.max(0,($w-$h)/2),
+		$rw = $(window).width();
 	
+	console.log('$w : '+$w+'\n$h : '+$h+'\n$mt : '+$mt+'\n$rw : '+$rw);
+		
 	if($('.menu_view').is(':visible')){
 		$('.menu_view').stop().animate({marginTop:$mt,opacity:1})
+		$('.menu_view').css(
+				{
+					position: 'relative',
+					width: '680px',
+					marginTop: $mt,
+					marginLeft: 'auto',
+					marginRight: 'auto',
+					marginBotton: 'auto',
+					padding: '45px 29px',
+					background: '#fff',
+					overflow: 'hidden',
+					border: '1px solid #ed7901',
+					clear: 'both'
+				}
+		)
+		if($rw <= 740){
+			$('.menu_view').css({width:'auto',marginTop:'0'})
+		}
 	}
 }
 
