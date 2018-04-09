@@ -55,6 +55,12 @@
 			</when>
 		</choose>
 	</select>
+
+	<select id="findshop" parameterType="java.util.Map" resultMap="StoreDtoResult">
+		SELECT * FROM (SELECT T.*,ROWNUM R FROM (SELECT st.* FROM store st 
+		WHERE store_addr LIKE '%' || #{find} || '%' or store_name like '%' || #{find} || '%'
+		) T) WHERE R BETWEEN #{start} AND #{end}
+	</select>
 	
 	<!-- <select id="ReplyBBSlogin" parameterType="java.util.Map" resultType="int">
 		SELECT COUNT(*) FROM MEMBER WHERE ID=#{id} AND PWD=#{pwd}

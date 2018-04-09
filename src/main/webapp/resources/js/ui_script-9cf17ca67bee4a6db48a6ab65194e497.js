@@ -106,7 +106,7 @@ function commonUi(){
 
 /*장바구니*/
 function cartBtn(){
-	$(document).on("click",'.cart_btn', function(){
+	$(document).on("click",'.cart_bt', function(){
 		$('.cart_view').show(500);
 		return false;
 	});

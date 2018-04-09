@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.bgk.delivery.service.StoreDto;
 import com.bgk.delivery.common.PagingUtil;
+import com.bgk.delivery.common.PagingUtilFindshop;
 import com.bgk.delivery.impl.StoreServiceImpl;
 
 
@@ -120,6 +121,56 @@ public class StoreController {
 			return pagingList(map, nowPage, req);
 		}
 		return null;
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="/store/findshop.whpr",produces="text/html; charset=UTF-8")
+	public String findshop(@RequestParam String find,HttpServletRequest req,@RequestParam(required=false,defaultValue="1") int nowPage) throws Exception{
+		
+		int pageSize = 5;
+		int blockPage = 10;
+		
+		int start= (nowPage-1)*pageSize +1;
+		int end  = nowPage*pageSize;
+		
+		Map map = new HashMap();
+		map.put("find", find);
+		map.put("start", 0);
+		map.put("end", 1000);
+		List<StoreDto> list = service.findshop(map);
+		int totalcount = list.size();
+		
+		map.put("start", start);
+		map.put("end", end);
+		list = service.findshop(map);
+		
+		int totalPage =(int)Math.ceil((double)totalcount/4);
+		
+		List<Map> collections = new Vector<Map>();
+		
+		if(list.size() != 0) {
+			for(StoreDto dto:list) {
+				Map record = new HashMap();
+				record.put("store_name",dto.getName());
+				record.put("store_addr", dto.getAddr());
+				record.put("store_tel", dto.getTel());
+				record.put("store_weekdayon", dto.getWeekdayon());
+				record.put("store_weekdayoff", dto.getWeekdayoff());
+				record.put("store_weekendon", dto.getWeekendon());
+				record.put("store_weekendoff", dto.getWeekendoff());
+				record.put("store_minordermoney", dto.getMinordermoney());
+				collections.add(record);
+			}
+					
+			Map paging = new HashMap();
+			
+			String pagingstr = PagingUtilFindshop.pagingText(totalcount, pageSize, blockPage, nowPage, req.getContextPath() + "/store/findshop.whpr?",find);
+			
+			paging.put("pagingstr", pagingstr);
+			collections.add(paging);
+		}
+		
+		return JSONArray.toJSONString(collections);
 	}
 	
 	public String pagingList(Map map, int nowPage, HttpServletRequest req)

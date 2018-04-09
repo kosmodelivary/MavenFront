@@ -121,35 +121,58 @@
 			</ul>
 		</div>
 
-		<h3 class="cont_tit tit3 mt40">배달 주소정보</h3>
-		<table class="table">
-			<caption>배달 주소 리스트 - 주문배달지, 상세정보, 배달매장, 매장변경을 확인</caption>
-			<colgroup>
-				<col />
-				<col style="width: 25%" />
-				<col style="width: 15%" />
-				<col style="width: 10%" />
-			</colgroup>
-			<thead>
-				<tr>
-					<th scope="col">주문배달지</th>
-					<th scope="col">상세정보</th>
-					<th scope="col">배달매장</th>
-					<th scope="col">변경</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr>
-					<td class="t_left">서울특별시 금천구 가산동</td>
-					<td>월드메르디앙1차 333</td>
-					<td>구로점</td>
-					<td><a href="/order/memberOrder"
-						class="button h25 w80 btn_gray2">주소변경</a> <!-- <a href="#popZipcode" class="pop_open button h25 w80 btn_gray2">주소추가</a>
-							<a href="#popMyAddress" class="pop_open button h25 w80 btn_gray2 gray2">주소선택</a> -->
-					</td>
-				</tr>
-			</tbody>
-		</table>
+		
+		<div class="form_list">
+			<h2 class="cont_tit tit3">
+				<label for="address">주문배달지</label>
+			</h2>
+			<div>
+				<div class="inp_wid wid4">
+					<input type="text" id="nonMemberAddr" class="input wid3" placeholder="주소" title="기본주소" disabled="disabled"/>
+					<input type="button" class="pop_open button btn_gray" onclick="sample6_execDaumPostcode()" value="주소 찾기"><br>
+				</div>
+				<div class="inp_wid wid4 mt10">
+					<input type="text" id="nonMemberAddrDetail" class="input wid3" placeholder="상세주소" title="상세주소 입력" required/>
+				</div>
+				<div id="map" style="width:300px;height:300px;margin-top:10px;display:none"></div>
+			</div>
+		</div>
+		
+		
+			<h2 class="cont_tit tit3 mt40">배달매장</h2>
+			<div>
+			<p class="mb10" style="text-align:right;">
+				<strong class="t_black">배달매장 직접 검색</strong>
+				<input type="text" class="input wid3" placeholder="매장명 혹은 주소 입력" id="find">
+				<button class="pop_open button btn_gray" onclick="findshop(document.getElementById('find').value,1)">검색</button>
+			</p>
+				<table class="table">
+					<caption>배달 매장 정보</caption>
+					<colgroup>
+						<col style="width:15%" />
+						<col />
+						<col style="width:15%" />
+						<col style="width:15%" />
+						<col style="width:15%" />
+						<col style="width:10%" />
+					</colgroup>
+					<thead>
+						<tr>
+							<th scope="col">매장명</th>
+							<th scope="col">주소</th>
+							<th scope="col">매장전화</th>
+							<th scope="col">최소주문금액</th>
+							<th scope="col">배달시간</th>
+							<th scope="col">선택</th>
+						</tr>
+					</thead>
+					<tbody id="storeInfo">
+						<tr><td colspan='6'>선택된 매장정보가 없습니다.</td></tr>
+					</tbody> 
+				</table>
+
+			</div>
+		
 
 		<h3 class="cont_tit tit3 mt40">결제 정보입력</h3>
 		<ul class="comment_list mt25">
@@ -199,7 +222,94 @@
 	</form>
 </section>
 <!-- //contents -->
+<script src="https://ssl.daumcdn.net/dmaps/map_js_init/postcode.v2.js"></script>
+<script>
+    function sample6_execDaumPostcode() {
+        new daum.Postcode({
+            oncomplete: function(data) {
+                // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
 
+                // 각 주소의 노출 규칙에 따라 주소를 조합한다.
+                // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
+                var fullAddr = ''; // 최종 주소 변수
+                var extraAddr = ''; // 조합형 주소 변수
+
+                // 사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
+                if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
+                    fullAddr = data.roadAddress;
+
+                } else { // 사용자가 지번 주소를 선택했을 경우(J)
+                    fullAddr = data.jibunAddress;
+                }
+
+                // 사용자가 선택한 주소가 도로명 타입일때 조합한다.
+                if(data.userSelectedType === 'R'){
+                    //법정동명이 있을 경우 추가한다.
+                    if(data.bname !== ''){
+                        extraAddr += data.bname;
+                    }
+                    // 건물명이 있을 경우 추가한다.
+                    if(data.buildingName !== ''){
+                        extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+                    }
+                    // 조합형주소의 유무에 따라 양쪽에 괄호를 추가하여 최종 주소를 만든다.
+                    fullAddr += (extraAddr !== '' ? ' ('+ extraAddr +')' : '');
+                }
+
+                // 우편번호와 주소 정보를 해당 필드에 넣는다.
+                document.getElementById('nonMemberAddr').value = fullAddr;
+
+                // 커서를 상세주소 필드로 이동한다.
+                document.getElementById('nonMemberAddrDetail').focus();
+                
+                document.getElementById('find').value = data.sigungu;
+                
+                findshop(data.sigungu,1);
+                
+            }
+        }).open();
+    }
+    function findshop(input,nowPage){
+    	var sigungu = input;
+    	
+    	if(input.trim() == 0){
+    		alert("검색어를 입력하세요"); return;
+    	}
+    	
+    	$.ajax({
+			url:'<c:url value="/store/findshop.whpr"/>',
+			type:'post',
+			dataType:'json',
+			data:'find='+sigungu+"&nowPage="+nowPage,
+			success:function(record){
+				var recstr;
+				
+				if(record.length != 0){
+					
+					$.each(record,function(index,data){
+						
+						if(data.store_name != undefined){
+							recstr += "<tr><td>"+data.store_name+"</td>";
+							recstr += "<td class='t_left'>"+data.store_addr+"</td>";
+							recstr += "</td>"+"<td>"+data.store_tel+"</td>";
+							recstr += "<td scope='col'>"+data.store_minordermoney+"</td>"
+							recstr += "<td>주중:"+data.store_weekdayon+":00~"+data.store_weekdayoff+":00 주말:"+data.store_weekendon+":00~"+data.store_weekendoff+":00</td>";
+							recstr += "<td><label class='radio only'><input id='radio' name='radio' value='1' type='radio'/><span class='lbl'>선택</span></label></td></tr>";
+						}
+						else {
+							recstr += "<tr><td colspan='6'>"+data.pagingstr+"</td></tr>";
+						}
+					});
+				}
+				else recstr = "<tr><td colspan='6'>선택된 매장정보가 없습니다.</td></tr>";
+				$("#storeInfo").html(recstr);
+			},
+			error:function(request,status,error){
+				alert("Error");
+			}
+		});
+    }
+</script>
 <!-- 주소검색 팝업 -->
 <div id="popConfirm" class="pop_bg">
 	<article class="pop_wrap">

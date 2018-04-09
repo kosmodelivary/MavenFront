@@ -35,7 +35,7 @@ public class MemberController {
 	@RequestMapping("/member/login.whpr")
 	public String login(HttpSession session) throws Exception{
 		if(session.getAttribute("dto") != null) {
-			return "member/memberorder.tile";
+			return "redirect:/cart/cartList.whpr";
 		}
 		else return "member/login.tile";
 	}
@@ -44,6 +44,12 @@ public class MemberController {
 	public String join() throws Exception{
 		
 		return "member/join.tile";
+	}
+	
+	@RequestMapping("/order/nonMemberOrder.whpr")
+	public String order() throws Exception{
+		
+		return "member/nonMemberOrder.tile";
 	}
 	
 	//마이페이지 페이지 연결

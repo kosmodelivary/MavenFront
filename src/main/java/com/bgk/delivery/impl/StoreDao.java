@@ -31,6 +31,10 @@ public class StoreDao implements StoreService{
 	public int getTotalRecCount(Map map) {
 		return sqlMapper.selectOne("storeTotalCount",map);
 	}
-	
+
+	@Override
+	public List<StoreDto> findshop(Map map) {
+		return sqlMapper.selectList("findshop",map);
+	}
 
 }

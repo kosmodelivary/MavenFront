@@ -30,6 +30,10 @@ public class StoreServiceImpl implements StoreService{
 	public int getTotalRecCount(Map map) {
 		return sdao.getTotalRecCount(map);
 	}
-	
+
+	@Override
+	public List<StoreDto> findshop(Map map) {
+		return sdao.findshop(map);
+	}
 
 }

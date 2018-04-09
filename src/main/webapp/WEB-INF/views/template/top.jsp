@@ -73,7 +73,7 @@
 
 	<section class="cart_box" id="headerCart">
 
-		<a class="cart_btn" href="#"><i></i><span>장바구니</span></a>
+		<a class="cart_btn" href="<c:url value='/cart/cartList.whpr'/>"><i></i><span>장바구니</span></a>
 		<!-- 장바구니 페이지가 따로 있다. -->
 
 	</section>
