@@ -92,12 +92,20 @@
 							</div>
 						</div>
 				</div>
-				<div class="form_list">
+				<!-- 기웅 주문 백엔드로 넘기기 테스트용 div -->
+				<div id="test">
+					<script type="text/javascript">
+						console.log('나는 뜨나요~?');
+						console.log('${param.menu }');
+					</script>
+					메뉴 번호 : ${param.menu }
+					<a href="<c:url value='/cart/cartList.whpr'/>" class="button btn_org h50 w200">테스트 다음</a>
+				</div>
+				<!-- <div class="form_list">
 					<h2 class="cont_tit tit3">매장위치정보</h2>
 					<div class="map_area">
 						
 		<div id="map"></div>
-		
 		<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=115b7b387bc25ada55206e93884ad731"></script>
 		<script>
 			var daumMap = function() {
@@ -122,7 +130,7 @@
 				// 매장 지도 표시
 				viewStore = function(x, y, title) {
 					// 마커 이미지의 주소
-					var markerImageUrl = '/resources/images/common/map_pin_02.png', 
+					var markerImageUrl = "<c:url value='/resources/images/common/map_pin_02.png'/>", 
 					    markerImageSize = new daum.maps.Size(46, 55), // 마커 이미지의 크기
 					    markerImageOptions = { 
 					        offset : new daum.maps.Point(23, 55)// 마커 좌표에 일치시킬 이미지 안의 좌표
@@ -151,11 +159,12 @@
 			
 		</script>
 	
-					</div>
-				</div>
+					</div> -->
+				<!-- </div> -->
 			</div>
 		</section>
 		<!-- //contents -->
+		
 		
 		<!-- 주소검색 팝업 -->
 		<div id="popZipcode" class="pop_bg">
@@ -243,7 +252,7 @@
 	</article>
 	
 	<!-- 팝업 스크립트 -->
-	<script type="text/javascript">
+	<!-- <script type="text/javascript">
 	//<![CDATA[
 		//popup parameter
 		var PopupParam = {
@@ -579,11 +588,11 @@
 			return money.money();
 		}
 	//]]>
-	</script>
+	</script> -->
 </div>
 		<!-- //주소검색 팝업 -->
 		
-		<script type="text/javascript">
+		<!-- <script type="text/javascript">
 		//<![CDATA[
 			//page parameter
 			var PageParam = {};
@@ -648,4 +657,4 @@
 				
 			}(window.pf || {}));
 		//]]>
-		</script>
+		</script> -->

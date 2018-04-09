@@ -601,16 +601,16 @@ function menuCtrl() {
 	});
 }
 //메뉴 상세보기
-function menuOpen(){
+/*function menuOpen(){
 	$('body').addClass('hidden');		
 	$('.menu_view_wrap').fadeIn(500,function(){
 		menuPosition();	
 	});
-}
+}*/
 function menuPosition(){
 	var $w = $(window).height(),
 		$h = $('.menu_view').outerHeight(),
-		$mt = Math.max(0,($w-$h)/2);
+		$mt = Math.max(0,($w-$h*2)/2);// /2
 	
 	if($('.menu_view').is(':visible')){
 		$('.menu_view').stop().animate({marginTop:$mt,opacity:1})

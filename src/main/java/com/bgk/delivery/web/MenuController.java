@@ -3,10 +3,12 @@ package com.bgk.delivery.web;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.Vector;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.json.simple.JSONArray;
 import org.springframework.stereotype.Controller;
@@ -82,7 +84,7 @@ public class MenuController {
 	
 	@RequestMapping("/menu/Drink.whpr")
 	public String drinkList(Model model,
-					   @RequestParam Map map) 
+					   @RequestParam Map map,HttpServletResponse resp) 
 	throws Exception
 	{
 		map.put("category_name", "drink");
@@ -90,8 +92,51 @@ public class MenuController {
 		
 		model.addAttribute("menu", records);
 		
+		
+		
 		return "menu/Drink.tile";
 	}
+	
+	@ResponseBody
+	@RequestMapping(value= {"/menu/getMenu.whpr"}, produces={"text/html; charset=UTF-8"})
+	public String getMenu(@RequestParam Map map,
+								Map param) 
+			throws Exception
+	{
+		MenuDto md = service.selectOne(map.get("menu_no").toString());
+//		System.out.println(map.get("menu_no").toString());
+//		System.out.println(md);
+		
+//		param.put("oneMenu", md);
+		
+//		return "redirect:/menu/detail.whpr";
+		List<Map> oneMenu = new Vector<Map>();
+		Map record = new HashMap();
+		record.put("menu_no", md.getMenu_no());
+		record.put("category_name", md.getCategory_name());
+		record.put("menu_name", md.getMenu_name());
+		record.put("menu_price", md.getMenu_price());
+		record.put("menu_weight", md.getMenu_weight());
+		record.put("menu_calrorie", md.getMenu_calrorie());
+		record.put("menu_protein", md.getMenu_protein());
+		record.put("menu_sodium", md.getMenu_sodium());
+		record.put("menu_sugars", md.getMenu_sugars());
+		record.put("menu_fat", md.getMenu_fat());
+		record.put("menu_enddate", md.getMenu_enddate().toString());
+		record.put("menu_file_extension", md.getMenu_file_extension());
+		oneMenu.add(record);
+		
+		return JSONArray.toJSONString(oneMenu);
+	}
+	
+	@RequestMapping("/menu/detail.whpr")
+	public String detail(HttpServletRequest req, HttpServletResponse resp) throws Exception{
+		System.out.println(req.getAttribute("oneMenu"));
+		
+		return null;
+	}
+	
+	
 //	@ResponseBody
 //	@RequestMapping(value= {"/menu/menuList.whpr"}, produces={"text/html; charset=UTF-8"})
 //	public String menuList(@RequestParam Map map)

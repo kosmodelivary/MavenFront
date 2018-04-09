@@ -122,9 +122,9 @@
 							<!-- <a class="btn_cart" href="javascript:PopupFunction.addProduct(제품번호 컬럼 el 태그,1)"><span>담기</span></a> -->
 							<!-- <a class="btn_view" href="javascript:PageFunction.openDetailPopup(제품번호 컬럼 el 태그)"><span>상세보기</span></a> -->
 							<a class="btn_cart"
-								href="#"><span>담기</span></a>
+								href="#"><span><!-- 주문 진척용 테스트 -->주문<!-- 원래 담기 --></span></a>
 							<a class="btn_view"
-								href="#"><span>상세보기</span></a>
+								href="javascript:menu_view(${items.menu_no })"><span>상세보기</span></a>
 						</div>
 					</li>
 				</c:forEach>
@@ -137,282 +137,144 @@
 	</div>
 
 	<!-- 자세히 보기 -->
-	<div id="popMenuDetail" class="menu_view_wrap">
+	<!-- <div id="popMenuDetail">
+	</div> -->
+	<article id="menuDetail" class="menu_view">
+	
+	</article>
+	<script type="text/javascript">
+    	function menu_view(menu_no){
+    		$.ajax({
+    			url:'<c:url value="/menu/getMenu.whpr"/>',
+				type:'get',
+				dataType:'json',
+				data:{"menu_no":menu_no},
+				success:function(data,target){
+					successAjax(data,'#menuDetail');
+				},
+				error:function(request,error){
+						console.log("code:"+request.status+"\n");
+						console.log("서버로부터 받은 데이타"+request.responseText+"\n");
+						console.log("error:"+error+"\n");								
+					   }
+    		});
+	    	$('body').addClass('hidden');
+	    	
+	    	
+	    };
+	    function successAjax(data,target){
+	    	console.log("data : "+data+", 데이터 타입 : "+typeof data);
+	    	console.log("target의 display 상태 : "+$(target).css('display'));
+	    	$(target).css('display','inline-block');
+	    	var $w = $(window).height(),
+				$h = $('.menu_view').outerHeight(),
+				$mt = Math.max(0,($w-$h*2)/2);
+			console.log('$w : '+$w);
+			console.log('$h : '+$h);
+			console.log('$mt : '+$mt);
+			if($('.menu_view').is(':visible')){
+				$('.menu_view').stop().animate({opacity:1})
+			}
+			
+	    	$.each(data, function(i, val) {
+    			$.blockUI({ message : $(target).html(getOne(val)),
+	    			css: { 
+	    				padding: '0', 
+	    		        margin:  '0',
+	    		        width:   'auto',
+	    		        height:  'auto',
+	    		        top:     '15%', 
+	    		        left:    'auto',
+	    		        right:   '30%',
+	    		        border: 'none',
+	    		        cursor: 'default' }
+    			});
+    		});
+	    }
+	    
+	    function getOne(val){
+	    	var string = "";
+	    	string += 
+				"<div class='f_left'>"+
+					'<div class="img">'+
+						"<img src='http://restapi.fs.ncloud.com/bkproject/image/menu/"+val.menu_name+""+val.menu_file_extension+"'"+
+							"alt=\""+val.menu_name+"\" />"+
+					"</div></div>"+
+				"<div class=\"f_right\">"+
+					"<h1>"+val.menu_name+"</h1>"+
+						"<br /> <br /> 해당사항없음"+
+					"<div class=\"hidden pb10\">"+
+						"<span class=\"unit_price detail_product_text_price price\""+
+							"data-price=\""+val.menu_price+"\">"+val.menu_price+"원</span>"+
+						"<div class=\"opt_spinner_wrap\">"+
+							"<strong>수량선택</strong> <span class=\"opt_spinner\"> <span"+
+								"class=\"opt_area\"> <span class=\"opt_txt opt_qty\">1</span>"+
+							"</span> <a href=\"javascript:PopupFunction.changeQty('P')\""+
+								"class=\"btn_opt opt_plus\"></a> <!-- 더하기 --> <a"+
+								"href=\"javascript:PopupFunction.changeQty('M')\""+
+								"class=\"btn_opt opt_minus\"></a> <!-- 빼기 -->"+
+							"</span>"+
+						"</div>"+
+					"</div>"+
+					"<p class=\"opt_txt topping_options\">"+
 
-		<script type="text/javascript">
-			//<![CDATA[
-			//popup parameter
-			var PopupParam = {};
-
-			//popup function
-			var PopupFunction = (function(pf) {
-
-				pf.init = function() {
-					PopupParam.freeToppingList = []
-				};
-
-				//가격 원단위 변환
-				pf.convertWon = function(price) {
-					return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g,
-							",")
-							+ '원';
-				};
-
-				//컨디먼트 추가
-				pf.addCondiment = function(el) {
-					var opt = $(el).find('option:selected');
-					var price = opt.attr('data-price') * 1;
-					var part = $(el).attr('title');
-					var memo = $('.' + part + '_memo');
-					var totPrice = $('.unit_price').attr('data-price') * 1;
-					var qty = $('.opt_qty').text() * 1;
-
-					if (opt.val() != "") {
-						// 음료와 사이드는 있을 시 삭제 후 추가
-						if ((part == "drink" || part == "side")
-								&& memo.size() > 0) {
-							this.deleteCondiment(memo.attr('data-cCode'), memo
-									.attr('data-price'));
-							totPrice -= memo.attr('data-price');
-						}
-						// 동일 재료 추가 불가
-						else if (memo.andSelf().find(
-								'[data-cCode=' + opt.val() + ']').size() > 0) {
-							popAlert('같은 재료는 한번만 추가 가능합니다.');
-							return;
-						}
-
-						var condimentTag = '<span class="'
-								+ part
-								+ '_memo" data-cCode="'
-								+ opt.val()
-								+ '" data-price='
-								+ price
-								+ '>'
-								+ opt.text()
-								+ '<a href="javascript:PopupFunction.deleteCondiment(\''
-								+ opt.val() + '\',' + price
-								+ ')" class="btn_delete"></a></span>';
-
-						// 0원 재료 추가 시
-						if (part == "topping" && price == 0) {
-							PopupParam.freeToppingList.push(opt.val());
-
-							// 0원 재료 2개이상일 시 올 엑스트라 추가
-							if (PopupParam.freeToppingList.length >= 2
-									&& $(".topping_memo[data-cCode=7111011]")
-											.size() == 0
-									&& $(".topping_memo[data-cCode=7111012]")
-											.size() == 0) {
-								if ($('select[title=topping]').find(
-										'option[value=7111011]').length > 0) {
-									condimentTag += '<span class="topping_memo" data-cCode="7111011" data-price="400">올엑스트라 400 (+400)</span>';
-									totPrice += 400;
-								} else if ($('select[title=topping]').find(
-										'option[value=7111012]').length > 0) {
-									condimentTag += '<span class="topping_memo" data-cCode="7111012" data-price="300">올엑스트라 300 (+300)</span>';
-									totPrice += 300;
-								}
-
-								popAlert('0원 재료 중 2개이상 선택 시\n300~400원이 추가 됩니다.');
-							}
-						}
-
-						$('.topping_options').append(condimentTag);
-						$('.unit_price').attr('data-price', totPrice + price);
-						$('.unit_price').text(
-								this.convertWon((totPrice + price) * qty));
-					}
-
-					$(el).val("");
-				};
-
-				//컨디먼트 삭제
-				pf.deleteCondiment = function(cCode, price) {
-					var totPrice = $('.unit_price').attr('data-price') * 1;
-					var qty = $('.opt_qty').text() * 1;
-					price = price * 1;
-
-					// 0원 재료 2개 미만일 때 엑스트라 삭제
-					if (PopupParam.freeToppingList.indexOf(cCode) > -1) {
-						PopupParam.freeToppingList.splice(
-								PopupParam.freeToppingList.indexOf(cCode), 1);
-
-						if (PopupParam.freeToppingList.length < 2) {
-							if ($('.topping_memo[data-ccode=7111011]').length > 0) {
-								$('.topping_options span[data-cCode=7111011]')
-										.remove();
-								totPrice -= 400;
-							} else if ($('.topping_memo[data-ccode=7111012]').length > 0) {
-								$('.topping_options span[data-cCode=7111012]')
-										.remove();
-								totPrice -= 300;
-							}
-						}
-					}
-
-					$('.topping_options span[data-ccode=' + cCode + ']')
-							.remove();
-					$('.unit_price').attr('data-price', totPrice - price * 1);
-					$('.unit_price').text(
-							this.convertWon((totPrice - price * 1) * qty));
-				};
-
-				//제품상세 수량조절
-				pf.changeQty = function(flag) {
-					var qty = $('.opt_qty').text() * 1;
-					var price = $('.unit_price').attr('data-price') * 1;
-
-					if (flag == 'P') { //Plus
-						if (price * (qty + 1) > 150000) { //15만원 미만 주문가능
-							popAlert("15만원 미만까지 주문 가능합니다.");
-						} else {
-							$('.opt_qty').text(qty + 1);
-							$('.unit_price').text(
-									this.convertWon(price * (qty + 1)));
-						}
-					} else { //Minus
-						//최소 수량 1
-						if (qty > 1) {
-							$('.opt_qty').text(qty - 1);
-							$('.unit_price').text(
-									this.convertWon(price * (qty - 1)));
-						}
-					}
-				};
-
-				//제품 담기
-				pf.addProduct = function(pCode, qty) {
-					if (qty != 1) {
-						qty = $('.opt_qty').text();
-					}
-					var condimentList = $('.topping_options').find('span');
-					var cCode = [];
-
-					if (condimentList.size() > 0) {
-						for (var i = 0; i < condimentList.size(); i++) {
-							cCode.push(condimentList.eq(i).attr('data-cCode'));
-						}
-						cCode = cCode.join(',');
-					} else {
-						cCode = null;
-					}
-
-					cntt.ajax.post('/cart/addProduct', {
-						pCode : pCode,
-						cCode : cCode,
-						qty : qty
-					}, function(response) {
-						if (response) {
-							popAlert("제품이 담겼습니다.");
-
-							//TODO : 공통스크립트로 빼기??
-							$('.menu_close').click(); //메뉴 상세 팝업 닫기
-							condimentList.remove(); //컨디먼트 리스트 삭제
-							$('html, body').animate({
-								scrollTop : 0
-							}, 500); //스크롤 상단 이동
-							headerFunc.loadHeaderCart('Y'); //장바구니 갱신
-						}
-					});
-				};
-
-				//제품 담은 후 주문
-				pf.goOrderProduct = function(pCode, qty) {
-					if (qty != 1) {
-						qty = $('.opt_qty').text();
-					}
-					var condimentList = $('.topping_options').find('span');
-					var cCode = [];
-
-					if (condimentList.size() > 0) {
-						for (var i = 0; i < condimentList.size(); i++) {
-							cCode.push(condimentList.eq(i).attr('data-cCode'));
-						}
-						cCode = cCode.join(',');
-					} else {
-						cCode = null;
-					}
-
-					cntt.ajax.post('/cart/addProduct', {
-						pCode : pCode,
-						cCode : cCode,
-						qty : qty
-					}, function(response) {
-						if (response) {
-							popAlert("제품이 담겼습니다.");
-							location.href = "SpecialOffer.html";
-						}
-					});
-				};
-
-				return pf;
-
-			}(window.pf || {}));
-			//]]>
-		</script>
-	</div>
+					"</p>"+
+					"<div class=\"mt20\">"+
+						"<table class=\"table2\">"+
+							"<caption>제품 성분 리스트</caption>"+
+							"<colgroup>"+
+								"<col />"+
+								"<col />"+
+								"<col />"+
+								"<col />"+
+								"<col />"+
+								"<col />"+
+							"</colgroup>"+
+							"<thead>"+
+								"<tr>"+
+									"<th scope=\"col\">중량(g)</th>"+
+									"<th scope=\"col\">열량(kcal)</th>"+
+									"<th scope=\"col\">단백질(g)</th>"+
+									"<th scope=\"col\">나트륨(mg)</th>"+
+									"<th scope=\"col\">당류(g)</th>"+
+									"<th scope=\"col\">포화지방(g)</th>"+
+								"</tr>"+
+							"</thead>"+
+							"<tbody>"+
+								"<tr>"+
+									"<td>"+val.menu_weight+"</td>"+
+									"<td>"+val.menu_calrorie+"</td>"+
+									"<td>"+val.menu_protein+"</td>"+
+									"<td>"+val.menu_sodium+"</td>"+
+									"<td>"+val.menu_sugars+"</td>"+
+									"<td>"+val.menu_fat+"</td>"+
+								"</tr>"+
+							"</tbody>"+
+						"</table>"+
+					"</div>"+
+					"<p class=\"t_right bold mt10\">"+
+						"<a href=\"https://www.burgerking.co.kr/nutrition\" target=\"_blank\""+
+							"title=\"새창열림\"><span>알러지 유발성분 확인</span></a>"+
+					"</p>"+
+					"<div class=\"button_area btn2 mt10\">"+
+						"<a class=\"button btn_org h40 w150\""+
+								"href=\"#\">주문하기</a> <a class=\"button h40 w150\""+
+								"href=\"#\">장바구니담기</a>"+
+					"</div>"+
+				"</div>"+
+				"<a href=\"javascript:menu_close()\" class=\"btn_close menu_close\">닫기</a>";
+				return string;
+	    }
+	    
+	    function menu_close(){
+	    	$.unblockUI();
+	    	$('popMenuDetail').css('display','none');
+	    	$('body').removeClass('hidden');
+	    }
+	</script>
 	<!-- //자세히 보기 -->
 
 </section>
 <!-- //contents -->
 
-<script type="text/javascript">
-	//<![CDATA[
-	//TODO : 토핑추가 상세 로직 추가(엑스트라 등)
-
-	//page parameter
-	var PageParam = {};
-
-	//page function
-	//TODO : 상세 팝업 관련 스크립트, 팝업 소스 안으로 옮기기
-	var PageFunction = (function(pf) {
-
-		pf.init = function() {
-		};
-
-		//제품 상세보기 팝업
-		pf.openDetailPopup = function(pCode) {
-			$('#popMenuDetail').getLoad('/menu/getMenuDetail?pCode=' + pCode,
-					function() {
-						PopupFunction.init();
-						menuOpen();
-					});
-		};
-
-		//리스트 더보기 버튼
-		pf.getMoreList = function(nextPage) {
-			$('.btn_more').eq(0).parent('p').after(
-					'<div id="menuList'+ nextPage +'"></div>');
-			$('#menuList' + nextPage).getLoad(
-					location.pathname + '?pageNum=' + nextPage);
-			$('.btn_more').eq(0).parent('p').remove();
-		};
-
-		return pf;
-
-	}(window.pf || {}));
-
-	//퍼블추가:17-08-24
-	$(window).load(
-			function() {
-				setTimeout(function() {
-					var $active = $('#lnb > nav > ul > li.active');
-
-					if ($active.length > 0) {
-						var $ul = $active.children('ul'), $length = $ul
-								.children('li').length;
-
-						if ($length > 1) {
-							$ul.clone().appendTo('.menu_sel > div');
-							$('.menu_sel a').prepend('#')
-						} else {
-							$('.menu_sel').remove();
-						}
-					}
-				}, 100)
-
-			})
-	//]]>
-</script>
 </html>

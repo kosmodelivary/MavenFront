@@ -35,7 +35,6 @@
 <script type="text/javascript" src="<c:url value='/resources/js/lib/jquery-migrate-1.4.1.min-7121994eec5320fbe6586463bf9651c2.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/resources/js/lib/jquery-ui-1.11.4.min-d935d506ae9c8dd9e0f96706fbb91f65.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/resources/js/lib/modernizr-2.8.3.min-65f1d21d5fcc9d21da758adababd0c3c.js'/>"></script>
-<script type="text/javascript" src="<c:url value='/resources/js/jquery.blockUI.js'/>"></script>
 
 <!--[if lt IE 9]>
 		<script src="/resources/js/lib/html5shiv-3.7.3.js"></script>
