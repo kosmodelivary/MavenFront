@@ -15,6 +15,7 @@
 	 	<typeAlias alias="MemberDTO" type="com.bgk.delivery.service.MemberDTO"/>
 	 	<typeAlias alias="FAQDto" type="com.bgk.delivery.service.FAQDto"/>
 	 	<typeAlias alias="MenuDto" type="com.bgk.delivery.service.MenuDto"/>
+	 	<typeAlias alias="CartDTO" type="com.bgk.delivery.service.CartDTO"/>
 	 </typeAliases>
 	 <!-- 데이타베이스 연결정보 설정 -->
 
@@ -33,6 +34,7 @@
 	 <mappers>
 	 	<mapper resource="mybatis/store.xml"/>
 	 	<mapper resource="mybatis/member.xml"/>
+	 	<mapper resource="mybatis/cart.xml"/>
 	 	<mapper resource="mybatis/BKProjFr_myBatisFAQ.xml"/>
 	 	<mapper resource="mybatis/menu.xml"/>
 	 </mappers>
