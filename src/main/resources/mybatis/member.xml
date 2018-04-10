@@ -24,7 +24,7 @@
 	</update>
 	
 	<delete id="memDelete" parameterType="MemberDTO">
-		delete from where member_email=#{member_email}
+		delete from where member_email=#{member_email} and member_password=#{member_password}
 	</delete>
 	
 	<select id="memSearch" parameterType="MemberDTO" resultType="MemberDTO">

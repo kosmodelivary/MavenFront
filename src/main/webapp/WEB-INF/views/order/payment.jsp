@@ -297,35 +297,7 @@
 		var mapFunc = daumMap();
 	}
 </script>
-<!-- 
-<script>
-	function initMap(store) {
-		if(store == null) return;
-		document.getElementById('loca').style.display = 'block';
-		
-		var storePlace = {lat: -25.363, lng: 131.044};
-		var map = new google.maps.Map(document.getElementById('loca'), {
-			zoom: 17,
-			center: storePlace
-		});
 
-		var geocoder = new google.maps.Geocoder();
-	    geocoder.geocode({'address': store}, function(results, status) {
-	        if (status == 'OK') {
-	          map.setCenter(results[0].geometry.location);
-	          var marker = new google.maps.Marker({
-	              map: map,
-	              position: results[0].geometry.location,
-	              icon: "<c:url value='/resources/images/common/map_pin_02.png'/>"
-	          });
-	        } else {
-	          alert('Geocode was not successful for the following reason: ' + status);
-	        }
-      	});
-	}
-</script>
-<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAQo9FPSR1RWpd2JWBwrhbTlIi5DzeubEM&callback=initMap"></script>
- -->
 <script src="https://ssl.daumcdn.net/dmaps/map_js_init/postcode.v2.js"></script>
 <script>
     function sample6_execDaumPostcode() {
