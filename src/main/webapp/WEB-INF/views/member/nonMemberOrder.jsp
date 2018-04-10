@@ -61,7 +61,7 @@
 				<p class="mb10" style="text-align:right;">
 					<strong class="t_black">배달매장 직접 검색</strong>
 					<input type="text" class="input wid3" placeholder="매장명 혹은 주소 입력" id="find">
-					<button class="pop_open button btn_gray" onclick="findshop(document.getElementById('find').value,1)">검색</button>
+					<input type="button" class="pop_open button btn_gray" onclick="findshop(document.getElementById('find').value,1)" value="검색">
 				</p>
 				<table class="table">
 					<caption>배달 매장 정보</caption>
@@ -89,7 +89,7 @@
 				</table>
 				
 				<div>
-					<div id="loca" style="overflow:visible;width:100%;height:300px;display:none;"></div>
+					<div id="ma" style="overflow:visible;width:100%;height:300px;display:none;"></div>
 				</div>
 				
 				<p class="button_area btn2 mt30">
@@ -99,38 +99,85 @@
 
 			</div>
 		</div>
-					
+	
+
 		</div>
 
 </section>
 <!-- //contents -->
+<script type="text/javascript" src="http://dapi.kakao.com/v2/maps/sdk.js?appkey=7d0762c91ed93f00cf6d928deec8e3f5&libraries=services"></script>
 <script>
-	function initMap(store) {
-		if(store == null) return;
-		document.getElementById('loca').style.display = 'block';
+	function kakao(addr,name){
+		document.getElementById('ma').style.display = 'block';
+		//주소-좌표 변환 객체 생성
+		var geocoder = new daum.maps.services.Geocoder();
 		
-		var storePlace = {lat: -25.363, lng: 131.044};
-		var map = new google.maps.Map(document.getElementById('loca'), {
-			zoom: 17,
-			center: storePlace
+		geocoder.addressSearch(addr, function(result, status) {
+		
+		    // 정상적으로 검색이 완료됐으면 
+		     if (status === daum.maps.services.Status.OK) {
+		    	 
+		        var coords = new daum.maps.LatLng(result[0].y, result[0].x);
+		        
+				mapFunc.viewStore(coords,name);
+		    } 
 		});
+	
+	//매장 좌표 지도 표시
 
-		var geocoder = new google.maps.Geocoder();
-	    geocoder.geocode({'address': store}, function(results, status) {
-	        if (status == 'OK') {
-	          map.setCenter(results[0].geometry.location);
-	          var marker = new google.maps.Marker({
-	              map: map,
-	              position: results[0].geometry.location,
-	              icon: "../resources/images/common/map_pin_02.png"
-	          });
-	        } else {
-	          alert('Geocode was not successful for the following reason: ' + status);
-	        }
-      	});
+		var daumMap = function() {
+			$('#ma').width('100%');
+			$('#ma').height('300px');
+			var mapContainer = document.getElementById('ma'), // 지도를 표시할 div 
+		    mapOption = {
+		        center: new daum.maps.LatLng(37.5725668, 126.9804712), // 초기 지도 중심좌표(버거킹 종로구청점)
+		        level: 2, // 지도의 확대 레벨
+		        mapTypeId : daum.maps.MapTypeId.ROADMAP // 지도종류
+		    }; 
+			
+			// 지도를 생성한다 
+			var map = new daum.maps.Map(mapContainer, mapOption); 
+			
+			// 지도에 확대 축소 컨트롤을 생성한다
+			var zoomControl = new daum.maps.ZoomControl();
+			
+			// 지도의 우측에 확대 축소 컨트롤을 추가한다
+			map.addControl(zoomControl, daum.maps.ControlPosition.RIGHT);
+			
+			
+			// 매장 지도 표시
+			viewStore = function(coords, title) {
+				
+				// 마커 이미지의 주소
+				var markerImageUrl = '<c:url value="/resources/images/common/map_pin_02.png"/>', 
+				    markerImageSize = new daum.maps.Size(46, 55), // 마커 이미지의 크기
+				    markerImageOptions = { 
+				        offset : new daum.maps.Point(23, 55)// 마커 좌표에 일치시킬 이미지 안의 좌표
+				    };
+				
+				// 마커 이미지를 생성한다
+				var markerImage = new daum.maps.MarkerImage(markerImageUrl, markerImageSize, markerImageOptions);
+				
+				// 지도에 마커를 생성하고 표시한다
+				var marker = new daum.maps.Marker({
+				    position: coords, // 마커의 좌표
+				    image : markerImage, // 마커의 이미지
+				    map: map, // 마커를 표시할 지도 객체
+				    title: title
+				});
+				
+				// 매장좌표로 지도 이동
+				map.setCenter(coords);
+			}
+			
+			return {
+				viewStore : viewStore
+			}
+		}
+		var mapFunc = daumMap();
 	}
 </script>
-<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAQo9FPSR1RWpd2JWBwrhbTlIi5DzeubEM&callback=initMap"></script>
+
 <script src="https://ssl.daumcdn.net/dmaps/map_js_init/postcode.v2.js"></script>
 <script>
     function sample6_execDaumPostcode() {
@@ -173,17 +220,16 @@
                 
                 document.getElementById('find').value = data.sigungu;
                 
-                document.getElementById('loca').style.display = 'none';
+                document.getElementById('ma').style.display = 'none';
                 
                 findshop(data.sigungu,1);
-                
             }
         }).open();
     }
     function findshop(sigungu,nowPage){
     	
     	if(sigungu.trim() == 0){
-    		alert("검색어를 입력하세요"); return;
+    		popAlert("검색어를 입력하세요"); return;
     	}
     	
     	$.ajax({
@@ -201,10 +247,10 @@
 						if(data.store_name != undefined){
 							recstr += "<tr><td>"+data.store_name+"</td>";
 							recstr += "<td class='t_left'>"+data.store_addr+"</td>";
-							recstr += "</td>"+"<td>"+data.store_tel+"</td>";
+							recstr += "</td><td>"+data.store_tel+"</td>";
 							recstr += "<td scope='col'>"+data.store_minordermoney+"</td>"
 							recstr += "<td>주중:"+data.store_weekdayon+":00~"+data.store_weekdayoff+":00 주말:"+data.store_weekendon+":00~"+data.store_weekendoff+":00</td>";
-							recstr += "<td><label class='radio only'><input name='radio' value='1' type='radio' onclick='initMap(\""+data.store_addr+"\")'/><span class='lbl'>선택</span></label></td></tr>";
+							recstr += "<td><label class='radio only'><input name='radio' value='1' type='radio' onclick='kakao(\""+data.store_addr+"\",\""+data.store_name+"\")'/><span class='lbl'>선택</span></label></td></tr>";
 						}
 						else {
 							recstr += "<tr><td colspan='6'>"+data.pagingstr+"</td></tr>";
@@ -213,7 +259,7 @@
 				}
 				else {
 					recstr = "<tr><td colspan='6'>선택된 매장정보가 없습니다.</td></tr>";
-					document.getElementById('loca').style.display = 'none';
+					document.getElementById('ma').style.display = 'none';
 				}
 				$("#storeInfo").html(recstr);
 			},

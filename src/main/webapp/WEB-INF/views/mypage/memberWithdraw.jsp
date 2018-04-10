@@ -56,7 +56,7 @@
 				</p>
 			</div>
 			<div>
-				<form id="withdraw" action="<c:url value='/mypage/withdraw.whpr'/>">
+				<form id="withdraw" action="<c:url value='/mypage/withdraw.whpr'/>" method="post">
 					<h2>계정입력</h2>
 					<p>
 						아이디 : <strong id="userEmail"><input id="email" name="member_email" style="border:none;background-color:white;" value="${dto.member_email }" disabled></strong>
@@ -64,10 +64,10 @@
 					<div class="inp_wid wid4">
 						<input type="password" name="member_password" id="password" class="input wid3" placeholder="비밀번호 입력" title="비밀번호 입력" maxlength="20" required/>
 						<input type="button" class="button w120 ml6" id="memberWithdraw" value="회원탈퇴">
+					</div>
 				</form>
 			</div>
 			</div>
-		</div>
 <!-- //contents -->
 <script>
 	$(function(){

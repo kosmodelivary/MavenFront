@@ -34,7 +34,7 @@
 		<script src="/resources/js/lib/html5shiv-3.7.3.js"></script>
 	<![endif]-->
 <script type="text/javascript" src="<c:url value='/resources/js/plugins.js'/>"></script>
-<script type="text/javascript" src="<c:url value='/resources/js/ui_script.js?ver=1'/>"></script>
+<script type="text/javascript" src="<c:url value='/resources/js/ui_script.js'/>"></script>
 
 <script src="<c:url value='/resources/js/cntt.js'/>"></script>
 

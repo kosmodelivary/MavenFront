@@ -6,6 +6,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
 <!-- lnb -->
 <aside id="lnb">
 	<h1>
@@ -61,7 +62,7 @@
 	<!-- 비밀번호 찾기	 -->
 	<div id="tab2" class="tab_cont">
 		<section class="find_pw boxStyle">
-			<h2 class="cont_tit tit3">비밀번호 찾기 질문으로 비밀번호 재설정</h2>
+			<h2 class="cont_tit tit3" style="padding:0 0 0 0;">비밀번호 찾기 질문으로 비밀번호 재설정</h2>
 			<form id="findpw" method="post">
 				<div id="mail">
 					<div class="find_mail">
@@ -110,26 +111,42 @@
 			<li>회원 가입 시 입력한 비밀번호 찾기 질문과 답으로 비밀번호를 재설정합니다.</li>
 		</ul>
 	</div>
-	<!-- 아이디 찾기 결과 팝업창 -->
-	<div id="dialog">
-		<span id='find_msg'></span>
-	</div>
-	<!-- 비밀번호 재설정 팝업창 -->
-	<div id="passDialog">
+	
+	<!-- 비밀번호 찾기 결과 팝업창 -->
+ 	<div id="passAlert" class="pop_bg">
+		<article class="pop_rap" style="width:640px;position:relative;margin:0 auto;">
+			<header class="pop_head">
+				<h1>안내</h1>
+			</header>
+			<section class="pop_cont">
+				<div>
+					<div class="pt10 pb10 t_center">
 		<form action="<c:url value='/mypage/newpass.whpr'/>" id="newpass" method="post">
-			<input name="member_email" id="e_mail" hidden> <span id='find_pass'></span> 님의 비밀번호를 새로 설정하세요
-			<div>새 비밀번호 입력</div>
-			<div class="inp_wid">
-				<input type="password" name="member_password" id="pass" autocomplete="off" placeholder="비밀번호 영문,숫자 8~20자" title="비밀번호 입력" maxlength="20"/>
-			</div>
-			<label class="error" for="pass" style="display: none; color: red; font-weight: bold"></label>
-			<div>새 비밀번호 재입력</div>
-			<div class="inp_wid">
-				<input type="password" name="pass2" id="pass2" autocomplete="off" placeholder="비밀번호 재입력" title="비밀번호 재입력" maxlength="20" />
-			</div>
-			<label class="error" for="pass2" style="display: none; color: red; font-weight: bold"></label>
+			<ul class="login_list" style="padding-bottom:0">
+				<li><h3><input name="member_email" id="e_mail" hidden> <span id='find_id' class="t_blue"></span> 님의 비밀번호를 새로 설정하세요</h3></li>
+				<li>
+				<input type="password" class="input" name="member_password" id="pass" autocomplete="off" placeholder="비밀번호 영문,숫자 8~20자" title="비밀번호 입력" maxlength="20" style="width:320px"/>
+				</li>
+				<li> <label class="error" for="pass" style="display: none; color: red; font-weight: bold"></label> </li>
+				<li>
+				<input type="password" class="input" name="pass2" id="pass2" autocomplete="off" placeholder="비밀번호 재입력" title="비밀번호 재입력" maxlength="20" style="width:320px"/>
+				</li>
+				<li> <label class="error" for="pass2" style="display: none; color: red; font-weight: bold"></label> </li>
+			</ul>
 		</form>
+					</div>
+					<p class="button_area mt10">
+						<a href="#" id="confirm" class="pop_close button btn_org w120">확인</a>
+						<a href="#" class="pop_close button btn_org w120">취소</a>
+					</p>
+			</div>
+			</section>
+			<footer class="pop_foot">
+				<a href="#" class="pop_close">팝업 닫기</a>
+			</footer>
+		</article>
 	</div>
+		
 </section>
 <script>
 	$(function() {
@@ -145,16 +162,13 @@
 					$(this).val(num);
 					tmp = '';
 					if (num.length == 9) {
-						tmp = num.substr(0, 2) + '-' + num.substr(2, 3) + '-'
-								+ num.substr(5, 4);
+						tmp = num.substr(0, 2) + '-' + num.substr(2, 3) + '-' + num.substr(5, 4);
 						$(this).val(tmp);
 					} else if (num.length == 10) {
-						tmp = num.substr(0, 3) + '-' + num.substr(3, 3) + '-'
-								+ num.substr(6, 4);
+						tmp = num.substr(0, 3) + '-' + num.substr(3, 3) + '-' + num.substr(6, 4);
 						$(this).val(tmp);
 					} else if (num.length == 11) {
-						tmp = num.substr(0, 3) + '-' + num.substr(3, 4) + '-'
-								+ num.substr(7, 4);
+						tmp = num.substr(0, 3) + '-' + num.substr(3, 4) + '-' + num.substr(7, 4);
 						$(this).val(tmp);
 					}
 				});
@@ -189,13 +203,8 @@
 						data : $('#search').serialize(),
 						success : function(data) {
 							if (data != null) {
-								$("#find_msg").html(
-										"회원님의 아이디는 " + data['find'] + "입니다");
-								$("#dialog").dialog("open");
-								
+								popAlert("회원님의 아이디는 " + data['find'] + " 입니다");
 							} else {
-								//$("#find_msg").html("입력하신 정보로 회원을 조회할 수 없습니다");
-								//$("#dialog").dialog("open");
 								popAlert("입력하신 정보로 회원을 조회할 수 없습니다.");
 							}
 						}
@@ -210,27 +219,33 @@
 				data : $('#findpw').serialize(),
 				success : function(data) {
 					if (data != null) {
-						$("#find_pass").html(data['find']);
-						$("#passDialog").dialog("open");
+						var tar = '#passAlert';
+						var $speed = 300,
+							$ease = 'easeOutQuart',
+							$pop = $(tar).find('.pop_rap');
+						
+						$("#find_id").html(data.find);
+						
+						$('body').addClass('hidden');
+						$(tar).fadeIn($speed);
+						$(tar).css('z-index', 600);
+						
+						var $wrapH = $(tar).height(),
+							$popH = $pop.outerHeight(),
+							$mT = Math.max(0,($wrapH-$popH)/2);
+					
+					$pop.stop().animate({'margin-top':$mT,'opacity':1},300);
 					} else {
-						$("#find_msg").html("입력하신 정보로 회원을 조회할 수 없습니다");
-						$("#dialog").dialog("open");
+						popAlert("입력하신 정보로 회원을 조회할 수 없습니다.");
 					}
 				}
 			});
 		});
-		//아이디 찾기 다이얼로그 창
+		$("#confirm").click(function(){
+			$("#e_mail").val($("#find_id").html());
+			$("#newpass").submit();
+		})
 		
-		$("#dialog").dialog({
-			autoOpen : false,
-			modal : true,
-			title : "아이디 찾기",
-			buttons : {
-				"확인" : function() {
-					$(this).dialog("close");
-				}
-			}
-		});
 		//비밀번호 찾기 다이얼로그 창
 		$("#passDialog").dialog({
 			autoOpen : false,
@@ -238,7 +253,7 @@
 			title : "비밀번호 재설정",
 			buttons : {
 				"변경" : function() {
-					$("#e_mail").val($("#find_pass").html());
+					$("#e_mail").val($("#find_id").html());
 					$("#newpass").submit();
 				},
 				"취소" : function() {
