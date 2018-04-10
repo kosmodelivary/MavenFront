@@ -1,5 +1,9 @@
 package com.bgk.delivery.web;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -11,14 +15,25 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.bgk.delivery.impl.CartServiceImpl;
 import com.bgk.delivery.impl.MemberServiceImpl;
+import com.bgk.delivery.impl.StoreServiceImpl;
+import com.bgk.delivery.service.CartDTO;
 import com.bgk.delivery.service.MemberDTO;
+import com.bgk.delivery.service.StoreDto;
 
 @Controller
 public class MemberController {
 	
 	@Resource(name="memberService")
 	MemberServiceImpl memService;
+	
+	@Resource(name = "cartService")
+	private CartServiceImpl service;
+	
+	@Resource(name = "storeService")
+	private StoreServiceImpl st_service;
+	
 	//회원가입 및 로그인 페이지 연결
 	@RequestMapping("/member/searchIdPassword.whpr")
 	public String searchIDPW() throws Exception{
@@ -72,8 +87,25 @@ public class MemberController {
 	}
 	
 	@RequestMapping("/mypage/mypage.whpr")
-	public String mypage() throws Exception{
-		
+	public String mypage(HttpSession session, Model model) throws Exception{
+		// session의 id
+		if(session.getAttribute("dto") != null) {
+			String member_email = ((MemberDTO) session.getAttribute("dto")).getMember_email();
+			
+			List<CartDTO> orderComplete = service.listCart(member_email); // 주문 정보
+			int sumMoney = service.sumMoney(member_email); // 주문 금액 호출
+			for(CartDTO cd : orderComplete) {
+				if(cd.getOrder_no() != null) {
+					System.out.println(cd.getMember_email());
+					System.out.println(cd.getOrder_no());
+					model.addAttribute("sumMoney", sumMoney);
+					model.addAttribute("orderComplete", orderComplete); // 주문완료 정보를 model에 저장
+					//StoreDto sd = st_service.selectOne(session.getAttribute("store_no").toString());
+					//map.put("storeInfo", sd);
+				}
+			}
+		}
+	
 		return "mypage/mypage.tile";
 	}
 	

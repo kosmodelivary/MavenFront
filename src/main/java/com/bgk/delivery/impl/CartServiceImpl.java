@@ -31,8 +31,8 @@ public class CartServiceImpl implements CartService{
 	}
 
 	@Override
-	public void modifyCart(CartDTO dto) {
-		cartdao.modifyCart(dto);
+	public int modifyCart(CartDTO dto) {
+		return cartdao.modifyCart(dto);
 	}
 
 	@Override
@@ -46,13 +46,13 @@ public class CartServiceImpl implements CartService{
 	}
 
 	@Override
-	public void updateCart(CartDTO dto) {
-		cartdao.updateCart(dto);		
+	public int updateCart(CartDTO dto) {
+		return cartdao.updateCart(dto);		
 	}
 
 	@Override
-	public void completeOrder(CartDTO dto) {
-		cartdao.completeOrder(dto);
+	public int completeOrder(CartDTO dto) {
+		return cartdao.completeOrder(dto);
 	}
 
 }

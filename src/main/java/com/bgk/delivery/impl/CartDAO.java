@@ -38,8 +38,8 @@ public class CartDAO implements CartService {
 
 	// 4. 장바구니 수정
 	@Override
-	public void modifyCart(CartDTO dto) {
-		sqlMapper.update("modifyCart", dto);
+	public int modifyCart(CartDTO dto) {
+		return sqlMapper.update("modifyCart", dto);
 	}
 
 	// 5. 장바구니 금액 합계
@@ -60,13 +60,13 @@ public class CartDAO implements CartService {
 
 	// 7. 장바구니 상품수량 변경
 	@Override
-	public void updateCart(CartDTO dto) {
-		sqlMapper.update("updateCart", dto);
+	public int updateCart(CartDTO dto) {
+		return sqlMapper.update("updateCart", dto);
 	}
 
 	@Override
-	public void completeOrder(CartDTO dto) {
-		sqlMapper.update("completeOrder", dto);
+	public int completeOrder(CartDTO dto) {
+		return sqlMapper.update("completeOrder", dto);
 	}
 
 }

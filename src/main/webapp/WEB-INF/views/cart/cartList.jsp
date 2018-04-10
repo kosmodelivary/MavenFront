@@ -1,8 +1,9 @@
+<%@page import="java.util.Date"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-<%@include file="/WEB-INF/views/mypage/isMember.jsp" %>
+<%@ include file="/WEB-INF/views/mypage/isMember.jsp" %>
 <!DOCTYPE html>
 <script>
 	$(function() {
@@ -124,6 +125,7 @@
 									<td class="btn_td">
 										<a class="button btn_white h25 w60" href="<c:url value='#'/>">주문</a>
 										<a class="button btn_gray2 h25 w60" href="<c:url value='/cart/cartDelete.whpr?cart_no=${items.cart_no}'/>">삭제</a>
+										<input type="hidden" name="cart_no" value="${items.cart_no }"/>
 									</td>
 								</tr>
 							</c:forEach>
@@ -159,7 +161,7 @@
 			</div>
 			<p class="button_area btn2 mt50">
 				<button type="submit" id="btnUpdate" class="button btn_org h50 w200">다음</button>
-				<a href="<c:url value='/menu/All.whpr'/>" class="button btn_gray h50 w200">계속쇼핑하기</a>
+				<a href="javascript:keepshop();" class="button btn_gray h50 w200">계속쇼핑하기</a>
 			</p>
 		</form>
 	</div>
@@ -213,6 +215,19 @@
 				total += (price * amount);
 			}
 			document.getElementsByClassName('price_all')[0].innerHTML = total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "원";
+		};
+	</script>
+	<script type="text/javascript">
+		function keepshop(){
+			var menu_no    = "", 
+				menu_name  = $('.tit').html()+"&", 
+				amount	   = "", 
+				menu_price = $('input[type="hidden"][name="menu_price"]').val(), 
+				cart_no	   = "";
+			menu_no += $('input[type="hidden"][name="menu_no"]').val()+"&";
+			amount  += $('input[type="hidden"][name="amount"]').val()+"&";
+			cart_no += $('input[type="hidden"][name="cart_no"]').val()+"&";
+			location.href="<c:url value='/cart/keepShopping.whpr?menu_no="+menu_no+"menu_name="+menu_name+"amount="+amount+"cart_no="+cart_no"'/>";
 		};
 	</script>
 <!-- //contents -->

@@ -1,8 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<%@ include file="/WEB-INF/views/mypage/isMember.jsp" %>
+<%@include file="/WEB-INF/views/mypage/isMember.jsp" %>
 <!DOCTYPE html>
 <!-- lnb -->
 <aside id="lnb">
@@ -34,7 +33,7 @@
 	</h2>
 	<div id="myOrderList">
 		<table class="table order_list">
-			<caption>주문내역 - 주문일자, 주문번호, 주문상품, 결제금액, 주문매장, 재주문등 확인</caption>
+			<caption>주문내역 - 주문일자, 주문번호, 주문상품, 결제금액, 주문매장 확인</caption>
 			<colgroup>
 				<col style="width: 15%" />
 				<col style="width: 13%" />
@@ -42,7 +41,6 @@
 				<col style="width: 15%" />
 				<col style="width: 15%" />
 				<col style="width: 13%" />
-				<!-- <col style="width:13%" /> -->
 			</colgroup>
 			<thead>
 				<tr>
@@ -55,34 +53,10 @@
 				</tr>
 			</thead>
 			<tbody>
-				<c:if test="${empty orderComplete }" var="flag"><!--  empty storeInfo -->
+				<c:if test="">
 					<tr>
 						<td colspan="7">내 주문내역이 없습니다.</td>
 					</tr>
-				</c:if>
-				<c:if test="${not flag }">
-					<c:forEach items="${orderComplete }" var="item">
-						<tr>
-							<td>
-								${item.order_no }
-							</td>
-							<td>
-								${item.order_no }
-							</td>
-							<td>
-								${item.menu_name }
-							</td>
-							<td>
-								${item.total_price }
-							</td>
-							<td>
-								공백
-							</td>
-							<td>
-								공백
-							</td>
-						</tr>
-					</c:forEach>
 				</c:if>
 			</tbody>
 		</table>

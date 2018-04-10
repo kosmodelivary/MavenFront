@@ -1,5 +1,8 @@
 package com.bgk.delivery.web;
 
+import java.sql.Date;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,27 +27,27 @@ import com.bgk.delivery.service.MemberDTO;
 @Controller
 public class CartController {
 
-	private static final Logger logger = LoggerFactory.getLogger(CartController.class);
-
 	@Resource(name = "cartService")
 	private CartServiceImpl service;
 	@Resource(name = "memberService")
 	private MemberServiceImpl memService;
 
+	String member_email;
+	
 	// 1. 장바구니 추가
 	@RequestMapping("/cart/cartInsert.whpr")
 	public String insert(@ModelAttribute CartDTO dto, HttpSession session) {
 
-		String memberEmail = ((MemberDTO) session.getAttribute("dto")).getMember_email();
-		System.out.println("memberEmail : " + memberEmail);
+		member_email = ((MemberDTO) session.getAttribute("dto")).getMember_email();
+		System.out.println("memberEmail : " + member_email);
 
-		if (memberEmail == null) {
+		if (member_email == null) {
 			return "member/login.tile";
 		}
-		dto.setMember_email(memberEmail);
+		dto.setMember_email(member_email);
 
 		// 장바구니에 기존 상품이 있는지 검사
-		int count = service.countCart(dto.getMenu_no(), memberEmail);
+		int count = service.countCart(dto.getMenu_no(), member_email);
 		if (count == 0) {
 			// 없으면 insert
 			service.insert(dto);
@@ -63,11 +66,11 @@ public class CartController {
 	@RequestMapping("/cart/cartList.whpr")
 	public ModelAndView list(HttpSession session, ModelAndView mav) {
 		if(session.getAttribute("dto") != null) {
-			String memberEmail = ((MemberDTO) session.getAttribute("dto")).getMember_email();
+			member_email = ((MemberDTO) session.getAttribute("dto")).getMember_email();
 	
 			Map<String, Object> map = new HashMap<String, Object>();
-			List<CartDTO> list = service.listCart(memberEmail); // 장바구니 정보
-			int sumMoney = service.sumMoney(memberEmail); // 장바구니 전체 금액 호출
+			List<CartDTO> list = service.listCart(member_email); // 장바구니 정보
+			int sumMoney = service.sumMoney(member_email); // 장바구니 전체 금액 호출
 	
 			// 장바구니 전체 긍액에 따라 배송비 구분
 			// 배송료(10만원이상 => 무료, 미만 => 2500원)
@@ -99,23 +102,26 @@ public class CartController {
 	// 4. 장바구니 수량 확정 후 오더페이지 이동
 	@RequestMapping("/cart/cartUpdateAndPayment.whpr")
 	public ModelAndView update(@RequestParam String[] amount, 
-						@RequestParam int[] menu_no, 
-						HttpSession session, 
-						ModelAndView mav) {
+							   @RequestParam int[] menu_no, 
+							   HttpSession session, HttpServletRequest req,
+							   ModelAndView mav) {
         // session의 id
-		String memberEmail = ((MemberDTO) session.getAttribute("dto")).getMember_email();
-        // 레코드의 갯수 만큼 반복문 실행
+		member_email = ((MemberDTO) session.getAttribute("dto")).getMember_email();
+
+		// 레코드의 갯수 만큼 반복문 실행해서 db자료 업데이트
         for(int i=0; i<menu_no.length; i++){
             CartDTO dto = new CartDTO();
-            dto.setMember_email(memberEmail);
+            dto.setMember_email(member_email);
             dto.setAmount(Integer.parseInt(amount[i]));
             dto.setMenu_no(menu_no[i]);
+            System.out.println("메뉴 번호 : "+menu_no[i]+", 수량 : "+amount[i]);
+            
             service.modifyCart(dto);
         }
         
         Map<String, Object> map = new HashMap<String, Object>();
-        List<CartDTO> list = service.listCart(memberEmail); // 장바구니 정보
-        int sumMoney = service.sumMoney(memberEmail); 
+        List<CartDTO> list = service.listCart(member_email); // 장바구니 정보
+        int sumMoney = service.sumMoney(member_email); 
 
 		int fee = sumMoney >= 30000 ? 0 : 2500;
 
@@ -125,10 +131,10 @@ public class CartController {
 		map.put("fee", fee); // 배송금액
 		map.put("allSum", sumMoney + fee); // 주문 상품 전체 금액
 
-		map.put("ordererName", memService.memOne(memberEmail).getMember_name());
-		map.put("phone1", memService.memOne(memberEmail).getMember_tel().split("-")[0]);
-		map.put("phone2", memService.memOne(memberEmail).getMember_tel().split("-")[1]);
-		map.put("phone3", memService.memOne(memberEmail).getMember_tel().split("-")[2]);
+		map.put("ordererName", memService.memOne(member_email).getMember_name());
+		map.put("phone1", memService.memOne(member_email).getMember_tel().split("-")[0]);
+		map.put("phone2", memService.memOne(member_email).getMember_tel().split("-")[1]);
+		map.put("phone3", memService.memOne(member_email).getMember_tel().split("-")[2]);
 		
         mav.setViewName("order/payment.tile"); // view(jsp)의 이름 저장
 		mav.addObject("map", map); // map 변수 저장
@@ -137,26 +143,49 @@ public class CartController {
     }
 	
 	@RequestMapping("/cart/payment.whpr")
-	public String toBack(@RequestParam String [] amount,
+	public String sendToBackEnd(@RequestParam String [] amount,
 						 @RequestParam int[] menu_no,
 						 HttpSession session,
 						 HttpServletRequest req) throws Exception
 	{
 		//백엔드로 주문을 넘겨야하는 메소드...
 		// session의 id
-		String memberEmail = ((MemberDTO) session.getAttribute("dto")).getMember_email();
-        // 레코드의 갯수 만큼 반복문 실행
+		member_email = ((MemberDTO) session.getAttribute("dto")).getMember_email();
+        // 레코드의 갯수 만큼 반복문 실행 db 업데이트
+		System.out.println(req.getParameter("order_no"));
         for(int i=0; i<menu_no.length; i++){
             CartDTO dto = new CartDTO();
-            dto.setMember_email(memberEmail);
-            dto.setAmount(Integer.parseInt(amount[i]));
+            dto.setMember_email(member_email);
             dto.setMenu_no(menu_no[i]);
+            dto.setPay_complete(req.getParameter("payFlag").toString());
+            dto.setOrder_no(req.getParameter("order_no"));
             service.completeOrder(dto);
         }
-		
-		
-		return null;
+		session.setAttribute("store_no", req.getParameter("store_no").toString());
+        //return null;
+		return "redirect:/mypage/mypage.whpr";
 	}
 	
+	@RequestMapping("/cart/keepShopping.whpr")
+	public String keepShop(@RequestParam String [] amount,
+						   @RequestParam int [] menu_no,
+						   HttpSession session,
+						   HttpServletRequest req) throws Exception
+	{
+		// 회원의 장바구니를 조회
+		member_email = ((MemberDTO) session.getAttribute("dto")).getMember_email();
+		List<CartDTO> list = service.listCart(member_email);
+		for(CartDTO pickOne : list) {
+			for(int i = 0 ; i < menu_no.length ; i++) {
+				if(pickOne.getMenu_no() == menu_no[i] && // 메뉴 번호 같으면서 수량은 다른지 
+						pickOne.getAmount() != Integer.parseInt(amount[i]))
+				{
+					pickOne.setAmount(Integer.parseInt(amount[i])); // 다르면 이 코드 실행
+				}
+				service.modifyCart(pickOne);// 바뀐 수량 적용
+			}
+		}
+		return "redirect:/menu/All.whpr";
+	}
 	
 }

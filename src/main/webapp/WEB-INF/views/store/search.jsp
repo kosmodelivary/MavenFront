@@ -96,7 +96,7 @@
 					</tr>
 				</c:if>
 				<c:if test="${not flag }">
-					<c:forEach var="item" items="${store }" varStatus="loop">
+					<c:forEach var="item" items="${store }">
 						<tr>
 							<!-- 매장이름 -->
 							<td>${item.name }</td>

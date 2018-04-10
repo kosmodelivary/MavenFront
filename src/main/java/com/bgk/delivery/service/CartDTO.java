@@ -1,16 +1,20 @@
 package com.bgk.delivery.service;
 
+import java.sql.Date;
+import java.sql.Timestamp;
+
 public class CartDTO {
 	
-	private int 	cart_no;		// 카트번호
-	private String	member_email;	// 회원이메일(ID)
-	private String 	member_name;	// 회원이름
-	private int		menu_no;		// 메뉴번호
-	private String 	menu_name;		// 메뉴이름
-	private int 	menu_price;		// 메뉴가격
-	private int 	amount;			// 수량
-	private int 	total_price;	// 가격합계
-	private String  pay_complete;
+	private int 		cart_no;		// 카트번호
+	private String		member_email;	// 회원이메일(ID)
+	private String 		member_name;	// 회원이름
+	private int			menu_no;		// 메뉴번호
+	private String 		menu_name;		// 메뉴이름
+	private int 		menu_price;		// 메뉴가격
+	private int 		amount;			// 수량
+	private int 		total_price;	// 가격합계
+	private String  	pay_complete;	// 주문완료
+	private String		order_no;		// 주문번호(중복으로 같은 넘버의 레코드들을 꺼내와야함)
 	
 	public int getCart_no() {
 		return cart_no;
@@ -66,11 +70,18 @@ public class CartDTO {
 	public void setPay_complete(String pay_complete) {
 		this.pay_complete = pay_complete;
 	}
+	public String getOrder_no() {
+		return order_no;
+	}
+	public void setOrder_no(String order_no) {
+		this.order_no = order_no;
+	}
+	
 	@Override
 	public String toString() {
 		return "CartDTO [cart_no=" + cart_no + ", member_email=" + member_email + ", member_name=" + member_name
 				+ ", menu_no=" + menu_no + ", menu_name=" + menu_name + ", menu_price=" + menu_price + ", amount="
-				+ amount + ", total_price=" + total_price + ", pay_complete=" + pay_complete + "]";
+				+ amount + ", total_price=" + total_price + ", pay_complete=" + pay_complete + ", order_no=" + order_no + "]";
 	}
 	
 }

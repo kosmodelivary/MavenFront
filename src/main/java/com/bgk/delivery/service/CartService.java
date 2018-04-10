@@ -11,15 +11,15 @@ public interface CartService {
 	// 3. 장바구니 삭제
 	public void delete(int cartNo);
 	// 4. 장바구니 수정
-	public void modifyCart(CartDTO dto);
+	public int modifyCart(CartDTO dto);
 	// 5. 장바구니 금액 합계
 	public int sumMoney(String memberEmail);
 	// 6. 장바구니 상품 확인
 	public int countCart(int menuNo, String memberEmail);
 	// 7. 장바구니 상품 수량 변경
-	public void updateCart(CartDTO dto);
+	public int updateCart(CartDTO dto);
 	// temp. 장바구니 최종 결제 완료
-	public void completeOrder(CartDTO dto);
+	public int completeOrder(CartDTO dto);
 	
 
 	/*	
