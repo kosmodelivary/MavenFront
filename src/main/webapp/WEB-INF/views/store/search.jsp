@@ -1,6 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+
 <!DOCTYPE html>
 <!-- lnb -->
 <aside id="lnb">
@@ -103,7 +106,7 @@
 							<!-- 매장주소 -->
 							<td>${item.addr }</td>
 							<!-- 최소주문가격 -->
-							<td>${item.minordermoney }</td>
+							<td><fmt:formatNumber value="${item.minordermoney}" pattern="#,###"/>원</td>
 							<td>
 								<!-- 개/폐점 시간 -->
 								<p>주중 : ${item.weekdayon }:00~${item.weekdayoff }:00</p>
@@ -229,7 +232,7 @@
 			 	"searchWord" : $('#searchWord').val()
 			 	},
 			success:function(data,target){
-					searchCallback(data,$('#storeListBody')),					
+					searchCallback(data,$('#storeListBody'));
 					console.log("2");
 					},
 			error:function(request,status,error){
@@ -243,16 +246,20 @@
 		$(target).html("");
 		var tableString = "";
 		$.each(data, function(i, record) {
-			tableString += "<tr>"+
-						"<td>" + record.name + "</td>" +
-						"<td>" + record.addr + "</td>" +
-						"<td>" + record.minordermoney + "</td>" +
-						"<td>"+
-							"<p>주중 : " + record.weekdayon + ":" + record.weekdayoff + "</p>" +
-							"<p>주말 : " + record.weekendon + ":" + record.weekendoff + "</p>" +
-							"<p class='t_blue'>개점</p></td>" +
-						"<td><a class=\"button h25 btn_white w60\" href=\"<c:url value='/store/Detail.whpr?no="+record.no+"'/>\">상세보기</a></td>"+
-						"</tr>";
+			if (record.name != undefined) {
+				tableString += "<tr>"+
+				"<td>" + record.name + "</td>" +
+				"<td>" + record.addr + "</td>" +
+				"<td>" + record.minordermoney.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "원</td>" +
+				"<td>"+
+					"<p>주중 : " + record.weekdayon + ":00~" + record.weekdayoff + ":00</p>" +
+					"<p>주말 : " + record.weekendon + ":00~" + record.weekendoff + ":00</p>" +
+					"<p class='t_blue'>개점</p></td>" +
+				"<td><a class=\"button h25 btn_white w60\" href=\"<c:url value='/store/Detail.whpr?no="+record.no+"'/>\">상세보기</a></td>"+
+				"</tr>";
+			} else {
+				$('.list_paging').html(record.pagingString);
+			}
 		});
 		$(target).append(tableString);
 	};

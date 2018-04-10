@@ -111,14 +111,14 @@ public class StoreController {
 		
 		if(map.get("aSi") != null && map.get("searchWord") == "") {
 			map.replace("aGu", "");
-			return pagingList(map, nowPage, req);
+			return pagingList(map, nowPage, req, model);
 		}
 		if(map.get("aSi") != null && map.get("aGu") != null) {
-			return pagingList(map, nowPage, req);
+			return pagingList(map, nowPage, req, model);
 		}
 		if(map.get("searchType").toString().equalsIgnoreCase("name") 
 				&& map.get("searchWord") != null) {
-			return pagingList(map, nowPage, req);
+			return pagingList(map, nowPage, req, model);
 		}
 		return null;
 	}
@@ -172,7 +172,7 @@ public class StoreController {
 		return JSONArray.toJSONString(collections);
 	}
 	
-	public String pagingList(Map map, int nowPage, HttpServletRequest req)
+	public String pagingList(Map map, int nowPage, HttpServletRequest req, Model model)
 	{
 		int totalRecordCount = service.getTotalRecCount(map);
 		System.out.println("총 레코드수 : "+totalRecordCount);
@@ -208,6 +208,11 @@ public class StoreController {
 			store.add(record);
 		}
 		
+		Map pagingMap = new HashMap();
+		pagingMap.put("pagingString", pagingString);
+		store.add(pagingMap);
+		
+		System.out.println(JSONArray.toJSONString(store));
 		return JSONArray.toJSONString(store);
 	}
 }

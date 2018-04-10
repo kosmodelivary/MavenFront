@@ -19,17 +19,21 @@
 		<result property="store_minordermoney" column="store_minordermoney" />
 	</resultMap>
  
-	<select id="storeSelectList" resultMap="StoreDtoResult">
+	<!-- <select id="storeSelectList" resultMap="StoreDtoResult">  -->
+	<select id="storeSelectList" parameterType="java.util.Map" resultMap="StoreDtoResult">
 		SELECT * FROM 
 		(SELECT T.*, ROWNUM R FROM (SELECT * FROM store 
 		<choose>
-			<when test="aSi != null">
+			<!-- <when test="aSi != null">  -->
+			<when test="aSi != null and !aSi.equals('')">
 				WHERE store_addr LIKE '%' || #{aSi} || '%' 
-				<if test="aGu != null">
+				<!-- <if test="aGu != null">  -->
+				<if test="aGu != null and !aGu.equals('')">
 					 AND store_addr LIKE '%' || #{aGu} || '%' 
 				</if>
 			</when>
-			<when test="searchWord != null">
+			<!-- <when test="searchWord != null">  -->
+			<when test="searchWord != null and !searchWord.equals('')">
 				WHERE store_name LIKE '%' || #{searchWord} || '%'
 			</when>
 		</choose>
@@ -44,13 +48,13 @@
 	<select id="storeTotalCount" resultType="Integer">
 		SELECT COUNT(*) FROM store 
 		<choose>
-			<when test="aSi != null">
+			<when test="aSi != null and !aSi.equals('')">
 				WHERE store_addr LIKE '%' || #{aSi} || '%' 
-				<if test="aGu != null">
+				<if test="aGu != null and !aGu.equals('')">
 					 AND store_addr LIKE '%' || #{aGu} || '%' 
 				</if>
 			</when>
-			<when test="searchWord != null">
+			<when test="searchWord != null and !searchWord.equals('')">
 				WHERE store_name LIKE '%' || #{searchWord} || '%'
 			</when>
 		</choose>
