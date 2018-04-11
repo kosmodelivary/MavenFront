@@ -92,8 +92,11 @@ public class MemberController {
 		if(session.getAttribute("dto") != null) {
 			String member_email = ((MemberDTO) session.getAttribute("dto")).getMember_email();
 			
-			List<CartDTO> orderComplete = service.listCart(member_email); // 주문 정보
-			int sumMoney = service.sumMoney(member_email); // 주문 금액 호출
+//			List<CartDTO> orderComplete = service.listCart(member_email); // 주문 정보
+//			int sumMoney = service.sumMoney(member_email); // 주문 금액 호출
+			List<CartDTO> orderComplete = service.listCompleteOrder(member_email); // 주문 정보
+			int sumMoney = service.sumCompleteOrder(member_email); // 주문 금액 호출
+			
 			for(CartDTO cd : orderComplete) {
 				if(cd.getOrder_no() != null) {
 					System.out.println(cd.getMember_email());

@@ -69,4 +69,14 @@ public class CartDAO implements CartService {
 		return sqlMapper.update("completeOrder", dto);
 	}
 
+	@Override
+	public List<CartDTO> listCompleteOrder(String memberEmail) {
+		return sqlMapper.selectList("listCompleteOrder", memberEmail);
+	}
+
+	@Override
+	public int sumCompleteOrder(String memberEmail) {
+		return sqlMapper.selectOne("sumCompleteOrder", memberEmail);
+	}
+
 }

@@ -33,13 +33,15 @@
 		p.menu_no, p.menu_name, p.menu_price, amount,
 		p.menu_price*amount, pay_complete, order_no
 		FROM cart c JOIN menu p ON c.menu_no = p.menu_no
-		WHERE member_email = #{member_email}
+		WHERE member_email = #{member_email} and order_no is null
+		<!-- WHERE member_email = #{member_email}  -->
 	</select>
 	<!-- 3. 장바구니 전체 금액 -->
 	<select id="sumMoney" resultType="int">
 		SELECT NVL(SUM(menu_price * amount), 0) money
 		FROM cart c JOIN menu p ON c.menu_no = p.menu_no
-		WHERE member_email = #{member_email}
+		WHERE member_email = #{member_email} and order_no is null
+		<!-- WHERE member_email = #{member_email}  -->
 	</select>
 	<!-- 4. 장바구니 수량 수정 -->
 	<update id="modifyCart">
@@ -69,10 +71,29 @@
         WHERE member_email = #{member_email} 
         AND menu_no = #{menu_no}
     </update>
-    <!-- temp. 장바구니 최종 결제 -->
+
+    <!-- temp 1. 장바구니 최종 결제 -->
     <update id="completeOrder" parameterType="CartDTO">
     	UPDATE cart
     	set pay_complete = #{pay_complete}, order_no = #{order_no} 
     	WHERE member_email = #{member_email} AND menu_no = #{menu_no}
     </update>
+    <!-- temp 2. 주문 완료 목록 -->
+	<select id="listCompleteOrder" resultType="CartDTO">
+		SELECT
+		cart_no, member_email,
+		p.menu_no, p.menu_name, p.menu_price, amount,
+		p.menu_price*amount, pay_complete, order_no
+		FROM cart c JOIN menu p ON c.menu_no = p.menu_no
+		WHERE member_email = #{member_email} and order_no is not null
+		<!-- WHERE member_email = #{member_email}  -->
+	</select>
+	<!-- temp 3. 주문 완료 금액 -->
+	<select id="sumCompleteOrder" resultType="int">
+		SELECT NVL(SUM(menu_price * amount), 0) money
+		FROM cart c JOIN menu p ON c.menu_no = p.menu_no
+		WHERE member_email = #{member_email} and order_no is not null
+		<!-- WHERE member_email = #{member_email}  -->
+	</select>
+    
 </mapper>

@@ -161,6 +161,8 @@ public class CartController {
             dto.setOrder_no(req.getParameter("order_no"));
             service.completeOrder(dto);
         }
+
+        // 매장 체크 안하면 오류 발생
 		session.setAttribute("store_no", req.getParameter("store_no").toString());
         //return null;
 		return "redirect:/mypage/mypage.whpr";

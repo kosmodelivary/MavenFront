@@ -55,4 +55,14 @@ public class CartServiceImpl implements CartService{
 		return cartdao.completeOrder(dto);
 	}
 
+	@Override
+	public List<CartDTO> listCompleteOrder(String memberEmail) {
+		return cartdao.listCompleteOrder(memberEmail);
+	}
+
+	@Override
+	public int sumCompleteOrder(String memberEmail) {
+		return cartdao.sumCompleteOrder(memberEmail);
+	}
+
 }

@@ -18,8 +18,14 @@ public interface CartService {
 	public int countCart(int menuNo, String memberEmail);
 	// 7. 장바구니 상품 수량 변경
 	public int updateCart(CartDTO dto);
-	// temp. 장바구니 최종 결제 완료
+
+	// temp 1. 장바구니 최종 결제 완료
 	public int completeOrder(CartDTO dto);
+	// temp 2. 장바구니 목록
+	public List<CartDTO> listCompleteOrder(String memberEmail);
+	// temp 3. 장바구니 목록
+	public int sumCompleteOrder(String memberEmail);
+	
 	
 
 	/*	
