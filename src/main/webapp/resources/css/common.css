@@ -487,7 +487,7 @@ i.icon{display:inline-block;width:20px;height:20px;vertical-align:middle;backgro
 .pop_cont .tabmenu > li.on > a{color:#005dab;background:#fff;border:1px solid #005dab;border-bottom:1px solid #fff}
 
 /*테이블*/
-.table{border-top:2px solid #8b532e;border-collapse:collapse;}
+.table{border-top:0px solid #8b532e;border-collapse:collapse;}
 .table th, .table td{padding:15px 10px;text-align:center;}
 .table th{background:#8b532e;color:#fff;}
 .table td{border-bottom:1px solid #cccccc; font-size:12px;}

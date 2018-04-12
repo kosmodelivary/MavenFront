@@ -1,16 +1,23 @@
 package com.bgk.delivery.web;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Vector;
 
 import javax.annotation.Resource;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -33,6 +40,8 @@ public class MemberController {
 	
 	@Resource(name = "storeService")
 	private StoreServiceImpl st_service;
+	
+	private String sendOrderNo;
 	
 	//회원가입 및 로그인 페이지 연결
 	@RequestMapping("/member/searchIdPassword.whpr")
@@ -88,27 +97,20 @@ public class MemberController {
 	
 	@RequestMapping("/mypage/mypage.whpr")
 	public String mypage(HttpSession session, Model model) throws Exception{
+		
 		// session의 id
 		if(session.getAttribute("dto") != null) {
 			String member_email = ((MemberDTO) session.getAttribute("dto")).getMember_email();
 			
-//			List<CartDTO> orderComplete = service.listCart(member_email); // 주문 정보
-//			int sumMoney = service.sumMoney(member_email); // 주문 금액 호출
 			List<CartDTO> orderComplete = service.listCompleteOrder(member_email); // 주문 정보
 			int sumMoney = service.sumCompleteOrder(member_email); // 주문 금액 호출
-			
+			model.addAttribute("sumMoney", sumMoney);
+			model.addAttribute("orderComplete", orderComplete); // 주문완료 정보를 model에 저장
 			for(CartDTO cd : orderComplete) {
-				if(cd.getOrder_no() != null) {
-					System.out.println(cd.getMember_email());
-					System.out.println(cd.getOrder_no());
-					model.addAttribute("sumMoney", sumMoney);
-					model.addAttribute("orderComplete", orderComplete); // 주문완료 정보를 model에 저장
-					//StoreDto sd = st_service.selectOne(session.getAttribute("store_no").toString());
-					//map.put("storeInfo", sd);
-				}
+				sendOrderNo = cd.getOrder_no();
 			}
+			System.out.println("mypage.whpr에서 sendOrderNo : "+sendOrderNo);
 		}
-	
 		return "mypage/mypage.tile";
 	}
 	
@@ -221,5 +223,65 @@ public class MemberController {
 	public String withdrawsuccess(HttpSession session) throws Exception{
 		session.invalidate();
 		return "mypage/withdrawsuccess.tile";
+	}
+	
+	@RequestMapping(value="/mypage/orderDetail.whpr",produces="text/html; charset=UTF-8")
+	public String orderDetail(@RequestParam Map map, Model model)
+	throws Exception
+	{
+		List<CartDTO> orderInfo = service.orderList(map.get("order_no").toString());
+		StoreDto sd = null;
+		MemberDTO md = null;
+		String store_no = null, member_email = null;
+		for(CartDTO cd : orderInfo) {
+			store_no = cd.getStore_no();
+			member_email = cd.getMember_email();
+			System.out.println("for문 안 "+member_email);
+		}
+		System.out.println("for문 밖 "+member_email);
+		int sumMoney = service.sumCompleteOrder(member_email); // 주문 금액 호출
+		sd = st_service.selectOne(store_no);
+		md = memService.memOne(member_email);
+		model.addAttribute("orderInfo", orderInfo);
+		model.addAttribute("storeInfo", sd);
+		model.addAttribute("memberInfo", md);
+		model.addAttribute("sumMoney", sumMoney);
+		
+		return "mypage/orderDetail.tile";
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="/mypage/rtSend.whpr",produces="text/html; charset=UTF-8")
+	public String rtSend(HttpServletRequest req, HttpServletResponse resp) throws Exception
+	{
+		req.setCharacterEncoding("UTF-8");
+		resp.setCharacterEncoding("UTF-8");
+		
+		String callback = req.getParameter("callback");
+		
+		List<CartDTO> orderComplete = service.rtOrderList("접수"); // 주문 정보
+		List<Map> order = new Vector<Map>();
+		String member_email = null;
+		for(CartDTO cd : orderComplete) {
+			sendOrderNo = cd.getOrder_no();
+			Map record = new HashMap();
+			record.put("cart_no", cd.getCart_no());
+			record.put("member_email", cd.getMember_email());
+			member_email = cd.getMember_email();
+			record.put("menu_no", cd.getMenu_no());
+			record.put("pay_complete", cd.getPay_complete());
+			record.put("order_no", cd.getOrder_no());
+			record.put("store_no", cd.getStore_no());
+			record.put("status", cd.getStatus());
+			record.put("order_memo", cd.getOrder_memo());
+			record.put("order_addr", cd.getOrder_addr());
+			order.add(record);
+		}
+		
+		System.out.println("rtSend.whpr에서 sendOrderNo : "+sendOrderNo);
+		System.out.println("백엔드로 뿌려줄 jsonp 객체 : "+JSONArray.toJSONString(order));
+		
+		
+		return callback+"("+JSONArray.toJSONString(order)+")";
 	}
 }

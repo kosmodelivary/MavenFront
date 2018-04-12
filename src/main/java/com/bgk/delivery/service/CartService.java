@@ -25,7 +25,10 @@ public interface CartService {
 	public List<CartDTO> listCompleteOrder(String memberEmail);
 	// temp 3. 장바구니 목록
 	public int sumCompleteOrder(String memberEmail);
-	
+	// temp 4. 주문완료된 레코드 가져오기
+	public List<CartDTO> orderList(String order_no);
+	// temp 5. 회원과 무관하게 주문완료 및 접수된 주문정보 가져오기
+	public List<CartDTO> rtOrderList(String status);
 	
 
 	/*	

@@ -14,7 +14,7 @@
 </script>
 
 <!-- contents -->
-<section id="contents">
+<section id="contents"><!-- post 방식으로 바꿀것. -->
 	<form name="orderForm" id="orderForm" action="<c:url value='/cart/payment.whpr'/>">
 		<ul id="location">
 			<li><a class="home" href="/">HOME</a></li>
@@ -123,7 +123,7 @@
 					</div>
 				</li>
 
-				<li><textarea class="textarea" name="orderMemo" maxlength="120"
+				<li><textarea class="textarea" name="order_memo" maxlength="120"
 						placeholder="배달시 참고사항 입력" title="배달시 참고사항 입력"></textarea></li>
 				<li>* <font color="red">제품구성 변경은 메뉴 선택시에만 가능합니다.</font></li>
 				<li>* <font color="red">예약주문은 콜센터(1599-0505)에서만 가능합니다.</font></li>
@@ -137,11 +137,11 @@
 			</h2>
 			<div>
 				<div class="inp_wid wid4">
-					<input type="text" id="nonMemberAddr" class="input wid3" placeholder="주소" title="기본주소" disabled="disabled"/>
+					<input type="text" name="defaultAddr" id="nonMemberAddr" class="input wid3" placeholder="주소" title="기본주소" readonly="readonly"/>
 					<input type="button" class="pop_open button btn_gray" onclick="sample6_execDaumPostcode()" value="주소 찾기"><br>
 				</div>
 				<div class="inp_wid wid4 mt10">
-					<input type="text" id="nonMemberAddrDetail" class="input wid3" placeholder="상세주소" title="상세주소 입력" required/>
+					<input type="text" name="detailAddr" id="nonMemberAddrDetail" class="input wid3" placeholder="상세주소" title="상세주소 입력" required/>
 				</div>
 				<div id="map" style="width:300px;height:300px;margin-top:10px;display:none"></div>
 			</div>
@@ -209,7 +209,10 @@
 				</label>
 			</div>
 			<div class="price_info">
-				<strong>배달매장</strong><span>구로점</span> <strong>배달예상시간</strong><span>45~60분</span>
+				<strong>배달매장</strong>
+						<span></span>
+				<strong>배달예상시간</strong>
+					<span>45~60분</span>
 				<p class="f_right all_price">
 					<span class="bold">총 상품금액</span> 
 					<strong><fmt:formatNumber pattern="###,###,###" value="${map.sumMoney}" />원</strong>
@@ -228,6 +231,7 @@
 <script type="text/javascript" src="http://dapi.kakao.com/v2/maps/sdk.js?appkey=7d0762c91ed93f00cf6d928deec8e3f5&libraries=services"></script>
 <script>
 	function kakao(addr,name){
+		
 		document.getElementById('loca').style.display = 'block';
 		//주소-좌표 변환 객체 생성
 		var geocoder = new daum.maps.services.Geocoder();
@@ -371,7 +375,7 @@
 							recstr += "</td>"+"<td>"+data.store_tel+"</td>";
 							recstr += "<td scope='col'>"+data.store_minordermoney+"</td>"
 							recstr += "<td>주중:"+data.store_weekdayon+":00~"+data.store_weekdayoff+":00 주말:"+data.store_weekendon+":00~"+data.store_weekendoff+":00</td>";
-							recstr += "<td><label class='radio only'><input name='store_no' value='"+data.store_no+"' type='radio' onclick='kakao(\""+data.store_addr+"\")'/><span class='lbl'>선택</span></label></td></tr>";
+							recstr += "<td><label class='radio only'><input name='store_no' value='"+data.store_no+"' type='radio' onclick='kakao(\""+data.store_addr+","+data.store_name+"\")'/><span class='lbl'>선택</span></label></td></tr>";
 						}
 						else {
 							recstr += "<tr><td colspan='6'>"+data.pagingstr+"</td></tr>";

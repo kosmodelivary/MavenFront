@@ -47,6 +47,7 @@ public class CartController {
 		dto.setMember_email(member_email);
 
 		// 장바구니에 기존 상품이 있는지 검사
+		
 		int count = service.countCart(dto.getMenu_no(), member_email);
 		if (count == 0) {
 			// 없으면 insert
@@ -59,6 +60,7 @@ public class CartController {
 		}
 		System.out.println(String.format("count : %s, getMember_email : %s, getMenu_no : %s, getAmount : %s", 
 				count , dto.getMember_email(), dto.getMenu_no(), dto.getAmount()));
+		
 		return "redirect:/cart/cartList.whpr";
 	}
 
@@ -159,12 +161,13 @@ public class CartController {
             dto.setMenu_no(menu_no[i]);
             dto.setPay_complete(req.getParameter("payFlag").toString());
             dto.setOrder_no(req.getParameter("order_no"));
+            dto.setStore_no(req.getParameter("store_no"));
+            dto.setStatus("접수");
+            dto.setOrder_memo(req.getParameter("order_memo"));
+            dto.setOrder_addr(req.getParameter("defaultAddr").trim()+" "+req.getParameter("detailAddr").trim());
             service.completeOrder(dto);
         }
 
-        // 매장 체크 안하면 오류 발생
-		session.setAttribute("store_no", req.getParameter("store_no").toString());
-        //return null;
 		return "redirect:/mypage/mypage.whpr";
 	}
 	

@@ -150,6 +150,7 @@ public class StoreController {
 		if(list.size() != 0) {
 			for(StoreDto dto:list) {
 				Map record = new HashMap();
+				record.put("store_no",dto.getNo());
 				record.put("store_name",dto.getName());
 				record.put("store_addr", dto.getAddr());
 				record.put("store_tel", dto.getTel());

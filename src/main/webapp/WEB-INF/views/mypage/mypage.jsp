@@ -2,6 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ include file="/WEB-INF/views/mypage/isMember.jsp" %>
 <!DOCTYPE html>
 <!-- lnb -->
@@ -34,7 +35,7 @@
 	</h2>
 	<div id="myOrderList">
 		<table class="table order_list">
-			<caption>주문내역 - 주문일자, 주문번호, 주문상품, 결제금액, 주문매장, 재주문등 확인</caption>
+			<caption>주문내역 주문번호, 주문상품, 결제금액, 주문매장, 재주문등 확인</caption>
 			<colgroup>
 				<col style="width: 15%" />
 				<col style="width: 13%" />
@@ -42,7 +43,6 @@
 				<col style="width: 15%" />
 				<col style="width: 15%" />
 				<col style="width: 13%" />
-				<!-- <col style="width:13%" /> -->
 			</colgroup>
 			<thead>
 				<tr>
@@ -54,35 +54,49 @@
 					<th scope="col">상태</th>
 				</tr>
 			</thead>
-			<tbody>
+			<tbody id="order_detail">
 				<c:if test="${empty orderComplete }" var="flag"><!--  empty storeInfo -->
 					<tr>
 						<td colspan="7">내 주문내역이 없습니다.</td>
 					</tr>
 				</c:if>
 				<c:if test="${not flag }">
-					<c:forEach items="${orderComplete }" var="item">
-						<tr>
-							<td>
-								${item.order_no }
-							</td>
-							<td>
-								${item.order_no }
-							</td>
-							<td>
-								${item.menu_name }
-							</td>
-							<td>
-								${item.total_price }
-							</td>
-							<td>
-								공백
-							</td>
-							<td>
-								공백
-							</td>
-						</tr>
+					<c:forEach items="${orderComplete }" var="item" varStatus="loop">
+						<fmt:parseDate pattern="yyyyMMddHHmm" var="fmt_date" value="${fn:substring(item.order_no,0,12) }"/>
+						<fmt:formatDate pattern="yyyy-MM-dd HH:mm" var="order_date" value="${fmt_date }"/>
+						<c:set var="order_no" value="${item.order_no }"/>
+						<c:set var="store_name" value="${item.store_name }"/>
+						<c:set var="store_tel" value="${item.store_tel }"/>
+						<c:set var="status" value="${item.status }"/>
+						<c:if test="${loop.count >= 1}">
+							<c:set var="menu_name" value="${item.menu_name } 외 ${loop.count-1 }개"/>
+							<c:set var="order_price" value="${order_price + item.total_price }"/>
+						</c:if>
 					</c:forEach>
+					<tr>
+						<td>
+							${order_date }
+						</td>
+						<td>
+							<span class="t_blue"><a href="javascript:orderDetail('${order_no}','${order_date }');"
+							 onclick="callServer('${order_no}')">${order_no }</a></span>
+						</td>
+						<td>
+							${menu_name }
+						</td>
+						<td>
+							<fmt:formatNumber pattern="###,###,###" value="${order_price }"/>원
+						</td>
+						<td>
+							<ul>
+								<li>${store_name }</li>
+								<li>${store_tel }</li>
+							</ul>
+						</td>
+						<td>
+							<span class="t_red">${status }</span>
+						</td>
+					</tr>
 				</c:if>
 			</tbody>
 		</table>
@@ -90,7 +104,14 @@
 	</div>
 </section>
 <!-- //contents -->
-
+<script type="text/javascript">
+	function orderDetail(order_no,order_date){
+		console.log('order_no : '+order_no+', order_date : '+order_date);
+		sessionStorage.setItem('order_no', order_no);
+		sessionStorage.setItem('order_date', order_date);
+		location.href="<c:url value='/mypage/orderDetail.whpr?order_no="+order_no+"&order_date="+order_date+"'/>";
+	};
+</script>
 <!-- <script type="text/javascript">
 	// page parameter
 	var PageParam = {};
