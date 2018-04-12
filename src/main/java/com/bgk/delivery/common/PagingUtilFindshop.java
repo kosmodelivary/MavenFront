@@ -15,7 +15,7 @@ public class PagingUtilFindshop {
                 
 			//pagingStr+="<a href='"+page+"nowPage=1&find="+find+"'>◀◀</a>&nbsp;<a href='"+page+"nowPage="+(intTemp -blockPage)+"&find="+find+"'>◀</a>";
 			
-			pagingStr+="<a href='javascript:void(0);' onclick=\"findshop('"+find+"',1)\">◀◀</a>&nbsp;<a href='javascript:void(0);' onclick=\"findshop('"+find+"',"+(intTemp - 1)+")\">◀</a>";
+			pagingStr+="<a href='javascript:void(0);' onclick=\"findshop('"+find+"',1)\">&lt;처음&gt;</a>&nbsp;&nbsp;<a href='javascript:void(0);' onclick=\"findshop('"+find+"',"+(intTemp - 1)+")\">&lt;이전&gt;</a>&nbsp;&nbsp;";
 		}
 		
 		//페이지 표시 제어를 위한 변수
@@ -26,12 +26,12 @@ public class PagingUtilFindshop {
 		while(blockCount <= blockPage && intTemp <= totalPage){  // 페이지 오버 를 체크
 				//현재 페이지를 의미함
 			if(intTemp == nowPage){  
-				pagingStr+="<span style='Color:red'>"+intTemp+"</span>&nbsp;";
+				pagingStr+="<span style='Color:red'>"+intTemp+"</span>&nbsp;&nbsp;";
 			}
 		     else {
 		    	 //pagingStr+="<a href='"+page+"nowPage="+intTemp+"&find="+find+"'>"+intTemp+"</a>&nbsp;";
 		    	 
-		    	 pagingStr+="<a href='javascript:void(0);' onclick=\"findshop('"+find+"',"+intTemp+")\">"+intTemp+"</a>&nbsp;";
+		    	 pagingStr+="<a href='javascript:void(0);' onclick=\"findshop('"+find+"',"+intTemp+")\">"+intTemp+"</a>&nbsp;&nbsp;";
 		     }
 		       
 			intTemp = intTemp + 1;
@@ -45,7 +45,7 @@ public class PagingUtilFindshop {
 
 			//pagingStr+="<a href='"+page+"nowPage="+intTemp+"&find="+find+"'>▶</a>&nbsp;<a href='"+page+"nowPage="+totalPage+"&find="+find+"'>▶▶</a>"; 
 
-			pagingStr+="<a href='javascript:void(0);' onclick=\"findshop('"+find+"',"+intTemp+")\">▶</a>&nbsp;<a href='javascript:void(0);' onclick=\"findshop('"+find+"',"+totalPage+")\">▶▶</a>";
+			pagingStr+="<a href='javascript:void(0);' onclick=\"findshop('"+find+"',"+intTemp+")\">&lt;다음&gt;</a>&nbsp;&nbsp;<a href='javascript:void(0);' onclick=\"findshop('"+find+"',"+totalPage+")\">&lt;끝&gt;</a>";
 		}
 		
 		return pagingStr;

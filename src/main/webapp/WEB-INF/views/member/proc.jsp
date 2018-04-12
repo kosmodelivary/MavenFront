@@ -32,13 +32,13 @@
 </c:choose>
 <script>
 	<c:choose>
-		<c:when test="${suc_fail == 1 }">
-			alert("${SUC_MSG}");
-			location.href="<c:url value='${SUC_URL}'/>";
-		</c:when>
 		<c:when test="${suc_fail == 0 }">
 			alert("${FAIL_MSG}");
 			history.back();
 		</c:when>
+		<c:otherwise>
+			alert("${SUC_MSG}");
+			location.href="<c:url value='${SUC_URL}'/>";
+		</c:otherwise>
 	</c:choose>
 </script>

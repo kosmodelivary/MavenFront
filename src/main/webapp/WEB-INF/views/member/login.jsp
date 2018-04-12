@@ -36,7 +36,7 @@
 						<input type="email" id="email" name="member_email" class="input" placeholder="이메일 주소 입력" title="이메일주소 입력" maxlength="50" required/>
 					</li>
 					<li>
-						<input type="password" id="password" name="member_password" class="input" placeholder="비밀번호 입력(8~20 영문, 숫자)" title="비밀번호 입력" maxlength="20" required/>
+						<input autocomplete="off" type="password" id="password" name="member_password" class="input" placeholder="비밀번호 입력(8~20 영문, 숫자)" title="비밀번호 입력" maxlength="20" required/>
 					</li>
 					<li>
 						<label style="color: red; font-weight: bold;">${loginErr }</label>
@@ -52,57 +52,7 @@
 			</form>
 		</div>
 		<div class="login_right">
-			<h2 class="cont_tit tit2">비회원주문</h2>
-			<p class="radio_box">
-				<label class="radio">
-					<input type="radio" class="rdoOpt" name="rdoOpt" value="nonmember1" checked="checked" /> <span class="lbl">비회원주문</span>
-				</label>
-					<label class="radio"><input type="radio" class="rdoOpt" name="rdoOpt" value="nonmember2" /> <span class="lbl">비회원주문조회</span>
-				</label>
-			</p>
-			<div id="nonmember1">
-				<div class="txt">
-					<p>회원가입 없이 비회원으로 주문이 가능합니다.</p>
-					<p>비회원 주문 시 간단한 휴대폰 인증 후 고객님의 배송지 확인 후 회원과 동일한 서비스를 이용하실 수 있습니다.</p>
-				</div>
-				<p class="t_right">
-					<a href="<c:url value='/order/nonMemberOrder.whpr'/>" class="button h40 w130">비회원주문</a>
-				</p>
-			</div>
-			<!-- 동의 후 조회: 기본숨김 -->
-			<div id="nonmember2" class="hide">
-				<div class="nonmember">
-					<select id="searchOpt" class="select" title="조회방법 선택">
-						<option value="number">주문번호</option>
-						<option value="phone">휴대폰번호</option>
-					</select>
-					<form id="nonMemberForm" name="nonMemberForm">
-						<ul class="login_list">
-							<!-- 주문번호 -->
-							<li id="number" class="cont">
-								<input type="text" name="orderNumber" id="orderNumber" class="input" maxlength="23" placeholder="- 제외한 주문번호 입력" title="비회원 주문번호 입력"/>
-							</li>
-							<!-- 휴대폰번호: 기본숨김 -->
-							<li id="phone" class="inp_wid wid3 hide cont">
-								<select id="phoneValid" class="select" title="휴대폰 앞자리 선택">
-										<option value="010">010</option>
-										<option value="011">011</option>
-										<option value="016">016</option>
-										<option value="017">017</option>
-										<option value="018">018</option>
-										<option value="019">019</option>
-								</select>
-								<input type="tel" class="input" id="phone2" placeholder="" title="휴대폰 앞자리 입력" maxlength="4" />
-								<input type="tel" class="input" id="phone3" placeholder="" title="휴대폰 뒷자리 입력" maxlength="4" />
-							</li>
-							<li>
-								<input type="password" name="orderPassword" id="orderPassword" class="input" maxlength="6" placeholder="주문비밀번호 입력" title="주문비밀번호 입력" />
-							</li>
-							<li class="t_right"><a href="javascript:void(0);" class="button h40 w130" id="nonMemberOrderLookup">비회원조회</a></li>
-						</ul>
-					</form>
-				</div>
-			</div>
+			<img src="<c:url value='/resources/images/main/burger.jpg'/>" alt="버거킹 브랜드"/>
 		</div>
 	</div>
 	

@@ -56,7 +56,7 @@
 			<ul class="swiper-wrapper">
 				<li class="swiper-slide" style="background-image: url(files/main/0102_1_1600x400_B.jpg);">
 					<div class="inner">
-						<a href="javascript:void(0);" class="bannerLink" data-link="menu/All.html">
+						<a href="javascript:void(0);" class="bannerLink" data-link="<c:url value='/menu/All.whpr'/>">
 						<img class="w_img" src="files/main/0102_1_1600x400_P.png" alt="0102_1_1600x400_P.png" />
 						<img class="m_img" src="files/main/0102_M_640x440.jpg" alt="0102_M_640x440.jpg" />
 						</a>
@@ -64,7 +64,7 @@
 				</li>
 				<li class="swiper-slide" style="background-image: url(files/main/LTO_1_1600x400_B.jpg);">
 					<div class="inner">
-						<a href="javascript:void(0);" class="bannerLink" data-link="menu/All.html">
+						<a href="javascript:void(0);" class="bannerLink" data-link="<c:url value='/menu/All.whpr'/>">
 						<img class="w_img" src="files/main/LTO_1_1600x400_P.png" alt="LTO_1_1600x400_P.png" />
 						<img class="m_img" src="files/main/LTO_1_640x440.jpg" alt="LTO_1_640x440.jpg" />
 						</a>
@@ -72,7 +72,7 @@
 				</li>
 				<li class="swiper-slide" style="background-image: url(files/main/LTO_2_1600x400_B.jpg);">
 					<div class="inner">
-						<a href="javascript:void(0);" class="bannerLink" data-link="menu/All.html">
+						<a href="javascript:void(0);" class="bannerLink" data-link="<c:url value='/menu/All.whpr'/>">
 						<img class="w_img" src="files/main/LTO_2_1600x400_p.png" alt="LTO_2_1600x400_p.png" />
 						<img class="m_img" src="files/main/LTO_2640x440.jpg" alt="LTO_2640x440.jpg" />
 						</a>
@@ -80,7 +80,7 @@
 				</li>
 				<li class="swiper-slide" style="background-image: url(files/main/LTO1_1600x400_b.jpg);">
 					<div class="inner">
-						<a href="javascript:void(0);" class="bannerLink" data-link="menu/SpecialOffer.html">
+						<a href="javascript:void(0);" class="bannerLink" data-link="<c:url value='/menu/All.whpr'/>">
 						<img class="w_img" src="files/main/LTO1_1047x400_p.png" alt="LTO1_1047x400_p.png" />
 						<img class="m_img" src="files/main/LTO_m_640x440.jpg" alt="LTO_m_640x440.jpg" />
 						</a>
@@ -89,7 +89,7 @@
 				<li class="swiper-slide"
 					style="background-image: url(files/main/LTO2_1600x400_b.jpg);">
 					<div class="inner">
-						<a href="javascript:void(0);" class="bannerLink" data-link="menu/SpecialOffer.html">
+						<a href="javascript:void(0);" class="bannerLink" data-link="<c:url value='/menu/All.whpr'/>">
 						<img class="w_img" src="files/main/LTO2_p.png" alt="LTO2_p.png" />
 						<img class="m_img" src="files/main/LTO_m2_640x440.jpg" alt="LTO_m2_640x440.jpg" />
 						</a>
@@ -98,7 +98,7 @@
 				<li class="swiper-slide"
 					style="background-image: url(files/main/main_bn_08_bg.jpg);">
 					<div class="inner">
-						<a href="javascript:void(0);" class="bannerLink" data-link="customer/noticeList.html">
+						<a href="javascript:void(0);" class="bannerLink" data-link="<c:url value='/customer/noticeList.whpr'/>">
 						<img class="w_img" src="files/main/main_bn_contents_08.png" alt="main_bn_contents_08.png" />
 						<img class="m_img" src="files/main/m_main_bn_08.jpg" alt="m_main_bn_08.jpg" />
 						</a>
@@ -211,7 +211,7 @@
 				</p>
 				<p class="img">
 					<img class="w_img" src="resources/images/main/main_call.png" alt="집에서 만나는 버거킹 1599-0505" />
-					<a href="#" class="m_img"><img src="/resources/images/main/main_call.png" alt="집에서 만나는 버거킹 1599-0505" /></a>
+					<a href="#" class="m_img"><img src="resources/images/main/main_call.png" alt="집에서 만나는 버거킹 1599-0505" /></a>
 				</p>
 			</div>
 		</div>

@@ -213,7 +213,10 @@ public class MemberController {
 	//회원탈퇴
 	@RequestMapping("/mypage/withdraw.whpr")
 	public String withdraw(MemberDTO dto,Model model) throws Exception{
-		int affected = memService.memDelete(dto);
+		int affected = 0;
+		if(memService.isMember(dto)!=null) {
+			affected = memService.memDelete(dto);
+		}
 		model.addAttribute("suc_fail",affected);
 		model.addAttribute("mmb", "with");
 		return "member/proc";

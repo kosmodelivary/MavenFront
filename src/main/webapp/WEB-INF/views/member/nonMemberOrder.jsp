@@ -58,7 +58,8 @@
 		<div class="form_list">
 			<h2 class="cont_tit tit3">배달매장</h2>
 			<div>
-				<p class="mb10" style="text-align:right;">
+			<input type="button" class="pop_open button btn_gray" value="예상 배달 경로 보기" id="search">
+				<p class="mb10" style="text-align:right;float:right;">
 					<strong class="t_black">배달매장 직접 검색</strong>
 					<input type="text" class="input wid3" placeholder="매장명 혹은 주소 입력" id="find">
 					<input type="button" class="pop_open button btn_gray" onclick="findshop(document.getElementById('find').value,1)" value="검색">
@@ -89,7 +90,7 @@
 				</table>
 				
 				<div>
-					<div id="ma" style="overflow:visible;width:100%;height:300px;display:none;"></div>
+					<div id="loca" style="overflow:visible;width:100%;height:300px;display:none;"></div>
 				</div>
 				
 				<p class="button_area btn2 mt30">
@@ -105,10 +106,64 @@
 
 </section>
 <!-- //contents -->
+<style>
+.node {
+    position: absolute;
+    background-image: url('<c:url value="/resources/images/common/map_pin_02.png"/>');
+    cursor: pointer;
+    width: 52px;
+    height: 67px;
+    margin: -30px 0;
+}
+
+.tooltip {
+    background-color: #fff;
+    position: absolute;
+    border: 1px solid #333;
+    font-size: 15px;
+    font-weight: bold;
+    padding: 3px 5px 0;
+    left: 60px;
+    top: 24px;
+    border-radius: 5px;
+    white-space: nowrap;
+    display: none;
+}
+
+.tracker {
+    position: absolute;
+    margin: -35px 0 0 -30px;
+    display: none;
+    cursor: pointer;
+    z-index: 3;
+}
+
+.icon {
+    position: absolute;
+    left: 11px;
+    top: 17px;
+    width: 39px;
+    height: 33px;
+    background-image: url('<c:url value="/resources/images/product/store.png"/>');
+}
+
+.balloon {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    background-image: url('<c:url value="/resources/images/product/balloon.png"/>');
+    -ms-transform-origin: 50% 34px;
+    -webkit-transform-origin: 50% 34px;
+    transform-origin: 50% 34px;
+}
+</style>
+<script src="https://ssl.daumcdn.net/dmaps/map_js_init/postcode.v2.js"></script>
 <script type="text/javascript" src="http://dapi.kakao.com/v2/maps/sdk.js?appkey=7d0762c91ed93f00cf6d928deec8e3f5&libraries=services"></script>
 <script>
 	function kakao(addr,name){
-		document.getElementById('ma').style.display = 'block';
+		$(".balloon").trigger("click");
+		
+		document.getElementById('loca').style.display = 'block';
 		//주소-좌표 변환 객체 생성
 		var geocoder = new daum.maps.services.Geocoder();
 		
@@ -124,11 +179,10 @@
 		});
 	
 	//매장 좌표 지도 표시
-
 		var daumMap = function() {
-			$('#ma').width('100%');
-			$('#ma').height('300px');
-			var mapContainer = document.getElementById('ma'), // 지도를 표시할 div 
+			$('#loca').width('100%');
+			$('#loca').height('300px');
+			var mapContainer = document.getElementById('loca'), // 지도를 표시할 div 
 		    mapOption = {
 		        center: new daum.maps.LatLng(37.5725668, 126.9804712), // 초기 지도 중심좌표(버거킹 종로구청점)
 		        level: 2, // 지도의 확대 레벨
@@ -144,42 +198,312 @@
 			// 지도의 우측에 확대 축소 컨트롤을 추가한다
 			map.addControl(zoomControl, daum.maps.ControlPosition.RIGHT);
 			
-			
 			// 매장 지도 표시
 			viewStore = function(coords, title) {
 				
-				// 마커 이미지의 주소
-				var markerImageUrl = '<c:url value="/resources/images/common/map_pin_02.png"/>', 
-				    markerImageSize = new daum.maps.Size(46, 55), // 마커 이미지의 크기
-				    markerImageOptions = { 
-				        offset : new daum.maps.Point(23, 55)// 마커 좌표에 일치시킬 이미지 안의 좌표
-				    };
-				
-				// 마커 이미지를 생성한다
-				var markerImage = new daum.maps.MarkerImage(markerImageUrl, markerImageSize, markerImageOptions);
-				
-				// 지도에 마커를 생성하고 표시한다
-				var marker = new daum.maps.Marker({
-				    position: coords, // 마커의 좌표
-				    image : markerImage, // 마커의 이미지
-				    map: map, // 마커를 표시할 지도 객체
-				    title: title
-				});
-				
 				// 매장좌표로 지도 이동
 				map.setCenter(coords);
+				
+				// 툴팁을 노출하는 마커를 생성합니다.
+				var marker1 = new TooltipMarker(coords, title);
+				
+				marker1.setMap(map);
+
+				// MarkerTracker를 생성합니다.
+				var markerTracker1 = new MarkerTracker(map, marker1);
+
+				// marker의 추적을 시작합니다.
+				markerTracker1.run();
 			}
-			
 			return {
 				viewStore : viewStore
 			}
 		}
 		var mapFunc = daumMap();
-	}
-</script>
+		
+		function TooltipMarker(position, tooltipText) {
+		    this.position = position;
+		    var node = this.node = document.createElement('div');
+		    node.className = 'node';
 
-<script src="https://ssl.daumcdn.net/dmaps/map_js_init/postcode.v2.js"></script>
-<script>
+		    var tooltip = document.createElement('div');
+		    tooltip.className = 'tooltip',
+
+		    tooltip.appendChild(document.createTextNode(tooltipText));
+		    node.appendChild(tooltip);
+		    
+		    // 툴팁 엘리먼트에 마우스 인터렉션에 따라 보임/숨김 기능을 하도록 이벤트를 등록합니다.
+		    node.onmouseover = function() {
+		        tooltip.style.display = 'block';
+		    };
+		    node.onmouseout = function() {
+		        tooltip.style.display = 'none';
+		    };
+		}
+
+		// AbstractOverlay 상속. 프로토타입 체인을 연결합니다.
+		TooltipMarker.prototype = new daum.maps.AbstractOverlay;
+
+		// AbstractOverlay의 필수 구현 메소드.
+		// setMap(map)을 호출했을 경우에 수행됩니다.
+		// AbstractOverlay의 getPanels() 메소드로 MapPanel 객체를 가져오고
+		// 거기에서 오버레이 레이어를 얻어 생성자에서 만든 엘리먼트를 자식 노드로 넣어줍니다.
+		TooltipMarker.prototype.onAdd = function() {
+		    var panel = this.getPanels().overlayLayer;
+		    panel.appendChild(this.node);
+		};
+
+		// AbstractOverlay의 필수 구현 메소드.
+		// setMap(null)을 호출했을 경우에 수행됩니다.
+		// 생성자에서 만든 엘리먼트를 오버레이 레이어에서 제거합니다.
+		TooltipMarker.prototype.onRemove = function() {
+		    this.node.parentNode.removeChild(this.node);
+		};
+
+		// AbstractOverlay의 필수 구현 메소드.
+		// 지도의 속성 값들이 변화할 때마다 호출됩니다. (zoom, center, mapType)
+		// 엘리먼트의 위치를 재조정 해 주어야 합니다.
+		TooltipMarker.prototype.draw = function() {
+		    // 화면 좌표와 지도의 좌표를 매핑시켜주는 projection객체
+		    var projection = this.getProjection();
+		    
+		    // overlayLayer는 지도와 함께 움직이는 layer이므로
+		    // 지도 내부의 위치를 반영해주는 pointFromCoords를 사용합니다.
+		    var point = projection.pointFromCoords(this.position);
+
+		    // 내부 엘리먼트의 크기를 얻어서
+		    var width = this.node.offsetWidth;
+		    var height = this.node.offsetHeight;
+
+		    // 해당 위치의 정중앙에 위치하도록 top, left를 지정합니다.
+		    this.node.style.left = (point.x - width/2) + "px";
+		    this.node.style.top = (point.y - height/2) + "px";
+		};
+
+		// 좌표를 반환하는 메소드
+		TooltipMarker.prototype.getPosition = function() {
+		    return this.position;
+		};
+
+		/**
+		 * 지도 영역 외부에 존재하는 마커를 추적하는 기능을 가진 객체입니다.
+		 * 클리핑 알고리즘을 사용하여 tracker의 좌표를 구하고 있습니다.
+		 */
+		function MarkerTracker(map, target) {
+		    // 클리핑을 위한 outcode
+		    var OUTCODE = {
+		        INSIDE: 0, // 0b0000
+		        TOP: 8, //0b1000
+		        RIGHT: 2, // 0b0010
+		        BOTTOM: 4, // 0b0100
+		        LEFT: 1 // 0b0001
+		    };
+		    
+		    // viewport 영역을 구하기 위한 buffer값
+		    // target의 크기가 60x60 이므로 
+		    // 여기서는 지도 bounds에서 상하좌우 30px의 여분을 가진 bounds를 구하기 위해 사용합니다.
+		    var BOUNDS_BUFFER = 30;
+		    
+		    // 클리핑 알고리즘으로 tracker의 좌표를 구하기 위한 buffer값
+		    // 지도 bounds를 기준으로 상하좌우 buffer값 만큼 축소한 내부 사각형을 구하게 됩니다.
+		    // 그리고 그 사각형으로 target위치와 지도 중심 사이의 선을 클리핑 합니다.
+		    // 여기서는 tracker의 크기를 고려하여 40px로 잡습니다.
+		    var CLIP_BUFFER = 40;
+
+		    // trakcer 엘리먼트
+		    var tracker = document.createElement('div');
+		    tracker.className = 'tracker';
+
+		    // 내부 아이콘
+		    var icon = document.createElement('div');
+		    icon.className = 'icon';
+
+		    // 외부에 있는 target의 위치에 따라 회전하는 말풍선 모양의 엘리먼트
+		    var balloon = document.createElement('div');
+		    balloon.className = 'balloon';
+
+		    tracker.appendChild(balloon);
+		    tracker.appendChild(icon);
+
+		    map.getNode().appendChild(tracker);
+
+		    // traker를 클릭하면 target의 위치를 지도 중심으로 지정합니다.
+		    tracker.onclick = function() {
+		        map.setCenter(target.getPosition());
+		        setVisible(false);
+		    };
+
+		    // target의 위치를 추적하는 함수
+		    function tracking() {
+		        var proj = map.getProjection();
+		        
+		        // 지도의 영역을 구합니다.
+		        var bounds = map.getBounds();
+		        
+		        // 지도의 영역을 기준으로 확장된 영역을 구합니다.
+		        var extBounds = extendBounds(bounds, proj);
+
+		        // target이 확장된 영역에 속하는지 판단하고
+		        if (extBounds.contain(target.getPosition())) {
+		            // 속하면 tracker를 숨깁니다.
+		            setVisible(false);
+		        } else {
+		            // target이 영역 밖에 있으면 계산을 시작합니다.
+		            
+		            // TooltipMarker의 위치
+		            var pos = proj.containerPointFromCoords(target.getPosition());
+		            
+		            // 지도 중심의 위치
+		            var center = proj.containerPointFromCoords(map.getCenter());
+
+		            // 현재 보이는 지도의 영역의 남서쪽 화면 좌표
+		            var sw = proj.containerPointFromCoords(bounds.getSouthWest());
+		            
+		            // 현재 보이는 지도의 영역의 북동쪽 화면 좌표
+		            var ne = proj.containerPointFromCoords(bounds.getNorthEast());
+		            
+		            // 클리핑할 가상의 내부 영역을 만듭니다.
+		            var top = ne.y + CLIP_BUFFER;
+		            var right = ne.x - CLIP_BUFFER;
+		            var bottom = sw.y - CLIP_BUFFER;
+		            var left = sw.x + CLIP_BUFFER;
+
+		            // 계산된 모든 좌표를 클리핑 로직에 넣어 좌표를 얻습니다.
+		            var clipPosition = getClipPosition(top, right, bottom, left, center, pos);
+		            
+		            // 클리핑된 좌표를 tracker의 위치로 사용합니다.
+		            tracker.style.top = clipPosition.y + 'px';
+		            tracker.style.left = clipPosition.x + 'px';
+
+		            // 말풍선의 회전각을 얻습니다.
+		            var angle = getAngle(center, pos);
+		            
+		            // 회전각을 CSS transform을 사용하여 지정합니다.
+		            // 브라우저 종류에따라 표현되지 않을 수도 있습니다.
+		            // http://caniuse.com/#feat=transforms2d
+		            balloon.style.cssText +=
+		                '-ms-transform: rotate(' + angle + 'deg);' +
+		                '-webkit-transform: rotate(' + angle + 'deg);' +
+		                'transform: rotate(' + angle + 'deg);';
+
+		            // target이 영역 밖에 있을 경우 tracker를 노출합니다.
+		            setVisible(true);
+		        }
+		    }
+
+		    // 상하좌우로 BOUNDS_BUFFER(30px)만큼 bounds를 확장 하는 함수
+		    function extendBounds(bounds, proj) {
+		        // 주어진 bounds는 지도 좌표 정보로 표현되어 있습니다.
+		        // 이것을 BOUNDS_BUFFER 픽셀 만큼 확장하기 위해서는
+		        // 픽셀 단위인 화면 좌표로 변환해야 합니다.
+		        var sw = proj.pointFromCoords(bounds.getSouthWest());
+		        var ne = proj.pointFromCoords(bounds.getNorthEast());
+
+		        // 확장을 위해 각 좌표에 BOUNDS_BUFFER가 가진 수치만큼 더하거나 빼줍니다.
+		        sw.x -= BOUNDS_BUFFER;
+		        sw.y += BOUNDS_BUFFER;
+
+		        ne.x += BOUNDS_BUFFER;
+		        ne.y -= BOUNDS_BUFFER;
+
+		        // 그리고나서 다시 지도 좌표로 변환한 extBounds를 리턴합니다.
+		        // extBounds는 기존의 bounds에서 상하좌우 30px만큼 확장된 영역 객체입니다.  
+		        return new daum.maps.LatLngBounds(
+		                        proj.coordsFromPoint(sw),proj.coordsFromPoint(ne));
+		    }
+
+		    // Cohen–Sutherland clipping algorithm
+		    // 자세한 내용은 아래 위키에서...
+		    // https://en.wikipedia.org/wiki/Cohen%E2%80%93Sutherland_algorithm
+		    function getClipPosition(top, right, bottom, left, inner, outer) {
+		        function calcOutcode(x, y) {
+		            var outcode = OUTCODE.INSIDE;
+
+		            if (x < left) {
+		                outcode |= OUTCODE.LEFT;
+		            } else if (x > right) {
+		                outcode |= OUTCODE.RIGHT;
+		            }
+
+		            if (y < top) {
+		                outcode |= OUTCODE.TOP;
+		            } else if (y > bottom) {
+		                outcode |= OUTCODE.BOTTOM;
+		            }
+
+		            return outcode;
+		        }
+
+		        var ix = inner.x;
+		        var iy = inner.y;
+		        var ox = outer.x;
+		        var oy = outer.y;
+
+		        var code = calcOutcode(ox, oy);
+
+		        while(true) {
+		            if (!code) {
+		                break;
+		            }
+
+		            if (code & OUTCODE.TOP) {
+		                ox = ox + (ix - ox) / (iy - oy) * (top - oy);
+		                oy = top;
+		            } else if (code & OUTCODE.RIGHT) {
+		                oy = oy + (iy - oy) / (ix - ox) * (right - ox);        
+		                ox = right;
+		            } else if (code & OUTCODE.BOTTOM) {
+		                ox = ox + (ix - ox) / (iy - oy) * (bottom - oy);
+		                oy = bottom;
+		            } else if (code & OUTCODE.LEFT) {
+		                oy = oy + (iy - oy) / (ix - ox) * (left - ox);     
+		                ox = left;
+		            }
+
+		            code = calcOutcode(ox, oy);
+		        }
+
+		        return {x: ox, y: oy};
+		    }
+
+		    // 말풍선의 회전각을 구하기 위한 함수
+		    // 말풍선의 anchor가 TooltipMarker가 있는 방향을 바라보도록 회전시킬 각을 구합니다.
+		    function getAngle(center, target) {
+		        var dx = target.x - center.x;
+		        var dy = center.y - target.y ;
+		        var deg = Math.atan2( dy , dx ) * 180 / Math.PI; 
+
+		        return ((-deg + 360) % 360 | 0) + 90;
+		    }
+		    
+		    // tracker의 보임/숨김을 지정하는 함수
+		    function setVisible(visible) {
+		        tracker.style.display = visible ? 'block' : 'none';
+		    }
+		    
+		    // Map 객체의 'zoom_start' 이벤트 핸들러
+		    function hideTracker() {
+		        setVisible(false);
+		    }
+		    
+		    // target의 추적을 실행합니다.
+		    this.run = function() {
+		        daum.maps.event.addListener(map, 'zoom_start', hideTracker);
+		        daum.maps.event.addListener(map, 'zoom_changed', tracking);
+		        daum.maps.event.addListener(map, 'center_changed', tracking);
+		        tracking();
+		    };
+		    
+		    // target의 추적을 중지합니다.
+		    this.stop = function() {
+		        daum.maps.event.removeListener(map, 'zoom_start', hideTracker);
+		        daum.maps.event.removeListener(map, 'zoom_changed', tracking);
+		        daum.maps.event.removeListener(map, 'center_changed', tracking);
+		        setVisible(false);
+		    };
+		}
+	}
+
     function sample6_execDaumPostcode() {
         new daum.Postcode({
             oncomplete: function(data) {
@@ -220,7 +544,7 @@
                 
                 document.getElementById('find').value = data.sigungu;
                 
-                document.getElementById('ma').style.display = 'none';
+                document.getElementById('loca').style.display = 'none';
                 
                 findshop(data.sigungu,1);
             }
@@ -250,7 +574,7 @@
 							recstr += "</td><td>"+data.store_tel+"</td>";
 							recstr += "<td scope='col'>"+data.store_minordermoney+"</td>"
 							recstr += "<td>주중:"+data.store_weekdayon+":00~"+data.store_weekdayoff+":00 주말:"+data.store_weekendon+":00~"+data.store_weekendoff+":00</td>";
-							recstr += "<td><label class='radio only'><input name='radio' value='1' type='radio' onclick='kakao(\""+data.store_addr+"\",\""+data.store_name+"\")'/><span class='lbl'>선택</span></label></td></tr>";
+							recstr += "<td><label class='radio only'><input name='store_no' value='"+data.store_no+"' type='radio' onclick='kakao(\""+data.store_addr+"\",\""+data.store_name+"\")'/><span class='lbl'>선택</span></label></td></tr>";
 						}
 						else {
 							recstr += "<tr><td colspan='6'>"+data.pagingstr+"</td></tr>";
@@ -259,7 +583,7 @@
 				}
 				else {
 					recstr = "<tr><td colspan='6'>선택된 매장정보가 없습니다.</td></tr>";
-					document.getElementById('ma').style.display = 'none';
+					document.getElementById('loca').style.display = 'none';
 				}
 				$("#storeInfo").html(recstr);
 			},
@@ -270,527 +594,6 @@
     }
 </script>
 
-
-<!-- 주소검색 팝업 -->
-<div id="popZipcode" class="pop_bg">
-	<article class="pop_wrap">
-		<!-- pop_head -->
-		<header class="pop_head">
-			<h1>주소입력</h1>
-		</header>
-		<!-- //pop_head -->
-		<!-- pop_cont -->
-		<section class="pop_cont zipcode_cont">
-			<div>
-				<form id="zipcodeForm" name="zipcodeForm">
-					<input type="hidden" name="addrTypeCd" />
-					<input type="hidden" name="custSi" id="custSi" />
-					<input type="hidden" name="custGu" />
-					<input type="hidden" name="custDong" /> 
-					<input type="hidden" name="custRi" /> 
-					<input type="hidden" name="custGilDong" /> 
-					<input type="hidden" name="custGilGil" /> 
-					<input type="hidden" name="custAddrFull" /> 
-					<input type="hidden" name="custDongGilDesc" /> 
-					<input type="hidden" name="custDongBunji" /> 
-					<input type="hidden" name="custGilBunji" />
-					<input type="hidden" name="custBuilding" /> 
-					<input type="hidden" name="custX" /> 
-					<input type="hidden" name="custY" /> 
-					<input type="hidden" name="convertAddr"/>
-
-					<p class="mb10"></p>
-
-					<ul class="tabmenu ui-tabmenu zipcodeTab">
-						<li><a href="#zipcode1">지번주소</a></li>
-						<li><a href="#zipcode2">도로명주소</a></li>
-					</ul>
-					<!-- 탭내용1 -->
-					<div id="zipcode1" class="tab_cont">
-						<p class="mb10">
-							<input id="inputDong" type="text" autocomplete="off" class="input wid1 inputEnter" placeholder="동 입력" title="동 입력" />
-							<button type="button" class="kainess_search_Btn button btn_gray" onclick="PopupFunction.searchAddress('01')">동 검색</button>
-						</p>
-						<div class="mb10">
-							<input id="inputJibun" type="text" autocomplete="off" class="input wid2 inputEnter" placeholder="지번 또는 건물명 입력" title="지번 또는 건물명 입력"/>
-							<button type="button" class="button btn_gray" onclick="PopupFunction.searchAddress('02')">지번검색</button>
-							<button type="button" class="button btn_gray" onclick="PopupFunction.searchAddress('03')">건물명검색</button>
-						</div>
-					</div>
-					<!-- //탭내용1 -->
-					<!-- 탭내용2 -->
-					<div id="zipcode2" class="tab_cont">
-						<p class="mb10">
-							<input id="inputRoadName" type="text" autocomplete="off" class="input wid1 inputEnter" placeholder="도로명 입력" title="도로명 입력" />
-							<button type="button" class="button btn_gray" onclick="PopupFunction.searchAddress('04')">도로명검색</button>
-						</p>
-						<p class="mb10">
-							<input id="inputRoadNum" type="text" autocomplete="off" class="input wid1 inputEnter" placeholder="건물번호 입력" title="건물번호 입력" />
-							<button type="button" class="button btn_gray" onclick="PopupFunction.searchAddress('05')">건물번호검색</button>
-						</p>
-					</div>
-					<!-- //탭내용2 -->
-					<!-- 검색내용 -->
-					<div class="mb10 zipcode_list">
-						<ul id="zipcodeList">
-							<!-- <li><a href="#">서울특별시 서대문구 창천동 (신촌동) <span class="t_red">[선택]</span></a></li> -->
-						</ul>
-					</div>
-					<!-- //검색내용 -->
-					<p class="mb10">
-						<input type="text" id="custAddrDetail" name="custAddrDetail" autocomplete="off" class="input w_100" placeholder="상세주소 입력" title="동 호수 등 상세주소 입력" maxlength="50"/>
-					</p>
-					<p class="button_area btn2 mt10">
-						<a href="javascript:PopupFunction.addrConfirm();" class="button btn_org w120">확인</a> 
-						<a href="#" class="pop_close button w120btn_ gray ">취소</a>
-					</p>
-				</form>
-			</div>
-		</section>
-		<!-- pop_foot -->
-		<footer class="pop_foot">
-			<a href="#" class="pop_close addr_pop_close">팝업 닫기</a>
-		</footer>
-	</article>
-	<!-- 팝업 스크립트 -->
-	<script type="text/javascript">
-		//<![CDATA[
-		//popup parameter
-		var PopupParam = {
-			page : 'nonMember',
-			storeAble : "N"
-		};
-
-		//popup function
-		var PopupFunction = (function(pf) {
-
-			pf.init = function() {
-			};
-
-			//주소 검색 API 변수 설정
-			pf.searchAddress = function(flag) {
-
-				//파라미터 초기화
-				PopupParam.storeAble = 'N';
-
-				//[지번주소] 동 검색
-				if (flag == "01") {
-					if ($('#inputDong').val() == '') {
-						alertTip('#inputDong', '동을 입력해 주세요.');
-						return;
-					}
-					PopupParam.url = "/getAddrSearch_Dong_Name2_db.do";
-					PopupParam.name = $('#inputDong').val();
-				}
-
-				//[지번주소] 지번 검색
-				else if (flag == "02") {
-
-					if ($('input[name=custSi]').val() == '') {
-						alertTip('#inputDong', '동을 입력해 검색해 주세요.');
-						return;
-					}
-
-					if ($('#inputJibun').val() == '') {
-						alertTip('#inputJibun', '지번 또는 건물명을 입력해 주세요.');
-						return;
-					}
-					PopupParam.url = "/getAddrJibun3_db.do";
-					PopupParam.bunji = $('#inputJibun').val();
-				}
-
-				//[지번주소] 건물명 검색
-				else if (flag == "03") {
-
-					if ($('input[name=custSi]').val() == '') {
-						alertTip('#inputDong', '동을 입력해 검색해 주세요.');
-						return;
-					}
-
-					if ($('#inputJibun').val() == '') {
-						alertTip('#inputJibun', '지번 또는 건물명을 입력해 주세요.');
-						return;
-					}
-					PopupParam.url = "/poiSearch2.do";
-					PopupParam.name = $('#inputJibun').val();
-					PopupParam.listCount = "9999";
-					PopupParam.pageNum = 0;
-					PopupParam.dongcode = PopupParam.code;
-					PopupParam.sido = $('input[name=custSi]').val();
-					PopupParam.sigungu = $('input[name=custGu]').val();
-					PopupParam.dong = $('input[name=custDong]').val();
-				}
-
-				//[도로명주소] 도로명 검색
-				else if (flag == "04") {
-					if ($('#inputRoadName').val() == '') {
-						alertTip('#inputRoadName', '도로명을 입력해 주세요.');
-						return;
-					}
-					PopupParam.url = "/getRoadname2_db.do";
-					PopupParam.name = $('#inputRoadName').val();
-				}
-
-				//[도로명주소] 건물번호 검색
-				else if (flag == "05") {
-
-					if ($('input[name=custSi]').val() == '') {
-						alertTip('#inputRoadName', '도로명을 입력해 검색해 주세요.');
-						return;
-					}
-
-					if ($('#inputRoadNum').val() == '') {
-						alertTip('#inputRoadNum', '건물번호를 입력해 주세요.');
-						return;
-					}
-					PopupParam.url = "/getRoadaddrSearchList2_db.do";
-					PopupParam.roadnum = $('#inputRoadNum').val();
-				}
-
-				//[도로명주소] -> [지번주소] 변환
-				else if (flag == "06") {
-					PopupParam.url = "/addr_ch_tr.do";
-				}
-
-				//주소 검색 API 호출
-				this.callGisApi(flag);
-			};
-
-			//주소 검색 API 호출
-			pf.callGisApi = function(flag) {
-
-				cntt.ajax
-						.post(
-								'/API/callGisApi',
-								PopupParam,
-								function(response) {
-
-									var listTemp = '<li><a href="javascript:PopupFunction.{=SCRIPT}">{=TEXT}<span class="t_red">[선택]</span></a></li>';
-									var listHtml = '';
-									var script = '';
-									var text = '';
-
-									for ( var i in response) {
-										var data = response[i];
-
-										//[지번주소] 동 검색
-										if (flag == "01") {
-											script = "selectFirst('01','"
-													+ data.code + "','"
-													+ data.sido + "','"
-													+ data.gugun + "','"
-													+ data.dong + "','"
-													+ data.ri + "','"
-													+ data.fullname + "')";
-											text = data.fullname;
-										}
-
-										//[도로명주소] 도로명 검색
-										else if (flag == "04") {
-											script = "selectFirst('04','"
-													+ data.roadcode + "','"
-													+ data.sido + "','"
-													+ data.gugun + "','"
-													+ data.dong + "','"
-													+ data.roadname + "','"
-													+ data.roadaddr + "')";
-											text = data.roadaddr;
-										}
-
-										//[지번주소] 지번 검색
-										else if (flag == "02") {
-											text = data.bunji;
-
-											if (data.san == "1"
-													|| data.san == "산")
-												text = "산" + text;
-
-											if (data.ho != "" && data.ho != "0")
-												text += "-" + data.ho;
-
-											script = "selectSecond('02','"
-													+ text + "','" + data.cx
-													+ "','" + data.cy + "')";
-										}
-
-										//[지번주소] 건물명 검색
-										else if (flag == "03") {
-											script = "selectSecond('03','"
-													+ data.place_name + "','"
-													+ data.point_x + "','"
-													+ data.point_y + "')";
-											text = data.place_name;
-										}
-
-										//[도로명주소] 건물번호 검색
-										else if (flag == "05") {
-											text = data.mn;
-
-											if (data.under == "1")
-												text = "지하" + text;
-											else if (data.under == "2")
-												text = "공중" + text;
-											else if (data.under != "0")
-												text = data.under + text;
-
-											if (data.sn != "" && data.sn != "0")
-												text += "-" + data.sn;
-
-											script = "selectSecond('05','"
-													+ text + "','"
-													+ data.point_x + "','"
-													+ data.point_y + "')";
-										}
-
-										//[도로명주소] -> [지번주소] 변환
-										else if (flag == "06") {
-											$('input[name=convertAddr]').val(
-													response[0].address);
-										}
-
-										listHtml += listTemp.replace(
-												/{=SCRIPT}/g, script).replace(
-												/{=TEXT}/g, text);
-									}
-
-									//검색 내용 리스트 표시
-									$('#zipcodeList').html(listHtml);
-								});
-			};
-
-			//동,도로명 선택
-			pf.selectFirst = function(flag, code, sido, gugun, dong, val1, val2) {
-
-				$('input[name=custSi]').val(sido);
-				$('input[name=custGu]').val(gugun);
-				$('input[name=custAddrFull]').val(val2);
-
-				//동
-				if (flag == "01") {
-					$('input[name=custDong]').val(dong);
-					$('input[name=custRi]').val(val1);
-					$('input[name=addrTypeCd]').val('01');
-					$('#inputDong').val(val2);
-				}
-				//도로명
-				else if (flag == "04") {
-					$('input[name=custDong]').val(val1);
-					$('input[name=custGilDong]').val(dong);
-					$('input[name=custGilGil]').val(val1);
-					$('input[name=addrTypeCd]').val("02");
-					$('#inputRoadName').val(val2);
-				}
-				$('#zipcodeList').html(null);
-
-				//지번, 건물번호 검색 시 사용
-				PopupParam.code = code;
-			};
-
-			//지번,건물명,도로번호 선택
-			pf.selectSecond = function(flag, val1, x, y) {
-
-				//form value 설정(주소등록 시 사용)
-				$('input[name=custX]').val(x);
-				$('input[name=custY]').val(y);
-				$('input[name=custDongGilDesc]').val(val1);
-
-				//건물번호
-				if (flag == "05") {
-					$('input[name=custGilBunji]').val(val1);
-					PopupParam.addr = $('input[name=custAddrFull]').val() + ' '
-							+ val1; //주소 변환시 사용
-					this.searchAddress("06"); //[도로명] -> [지번주소] 변환
-					$('#inputRoadNum').val(val1);
-				}
-				//지번, 건물명
-				else {
-					$('input[name=custDongBunji]').val(val1);
-					$('#inputJibun').val(val1);
-				}
-				$('#zipcodeList').html(null);
-
-				//좌표로 배달가능매장 검색
-				this.searchCoordStore(x, y);
-			};
-
-			//좌표로 배달가능매장 검색
-			pf.searchCoordStore = function(x, y) {
-				cntt.ajax
-						.post(
-								'/order/searchCoordStore',
-								{
-									cx : x,
-									cy : y
-								},
-								function(response) {
-
-									if (response == null) {
-										$('#zipcodeList')
-												.html(
-														'<li class="t_red"><a>죄송합니다.<br/>검색하신 주소는 현재 배달 가능지역이 아닙니다.<br/>빠른 시일 내에 선택하신 주소에서도 버거킹 딜리버리<br/>서비스를 이용하실 수 있도록 노력하겠습니다.</a></li>');
-									} else {
-										PopupParam.storeAble = "Y";
-										PopupParam.abranchName = response.abranchName;
-										PopupParam.aphone = response.aphone;
-										PopupParam.minOrderAmt = response.minOrderAmt;
-										PopupParam.time = '주중 : '
-												+ response.aweekStarttime + '~'
-												+ response.aweekEndtime
-												+ '<br/>주말 : '
-												+ response.aendStarttime + '~'
-												+ response.aendEndtime;
-
-										$('#zipcodeList').html(
-												'<li><a>배달 가능 매장이 검색 되었습니다.<br/>매장명은 '
-														+ response.abranchName
-														+ ' 입니다.</a></li>');
-									}
-								});
-			};
-
-			//주소팝업 확인버튼
-			pf.addrConfirm = function() {
-				if (PopupParam.storeAble != "Y") {
-					popAlert("등록 불가능한 배달주소입니다. 다시 검색해주시기 바랍니다.");
-				} else {
-					// 회원주소 등록
-					if (PopupParam.page == 'member') {
-						cntt.ajax.post('/order/addDelivery', $('#zipcodeForm')
-								.serializeObject(), function(response) {
-							// 등록 성공
-							if (response) {
-								popAlert('배달주소가 등록되었습니다.');
-								$('.addr_pop_close').click(); //주소검색 팝업 닫기
-								$('#deliveryList')
-										.getLoad('/order/memberOrder'); //배달주소영역 갱신
-							}
-						});
-					}
-					// 비회원 배달가능 매장 표시
-					else {
-
-						if ($('#custAddrDetail').val() == ''
-								|| $('#custAddrDetail').val().trim().length == 0) {
-							popAlert("상세주소를 입력 해주세요.");
-						} else {
-							$('#nonMemberAddr').val(
-									$('input[name=custAddrFull]').val());
-							$('#nonMemberAddrDetail').val(
-									$('#custAddrDetail').val());
-							// --- 재기동 없이 반영하기 위한 임시 처리
-							var custDongGilDesc = $('input[name=custDongGilDesc]');
-							custDongGilDesc.val(custDongGilDesc.val() + ' '
-									+ $('#custAddrDetail').val());
-							// ---
-							$('#nonMemberDelivery')
-									.html(
-											'<tr>'
-													+ '<td class="t_center">'
-													+ PopupParam.abranchName
-													+ '</td>'
-													+ '<td class="t_center">'
-													+ PopupParam.aphone
-													+ '</td>'
-													+ '<td class="t_center">'
-													+ PopupFunction
-															.money(PopupParam.minOrderAmt)
-													+ '원' + '</td>' + '<td>'
-													+ PopupParam.time + '</td>'
-													+ '</tr>');
-							$('.addr_pop_close').click(); //주소검색 팝업 닫기
-						}
-					}
-				}
-			};
-
-			//금액 콤마(,) 표시
-			pf.money = function(money) {
-				return money.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-			};
-
-			return pf;
-
-		}(window.pf || {}));
-
-		$(function() {
-
-			// Enter Key 입력시 검색버튼 클릭 
-			$(".inputEnter").keyup(function(e) {
-				if (e.keyCode == 13)
-					$(this).next().click();
-			});
-
-			//탭 클릭시 form 초기화
-			$('.zipcodeTab').click(function(e) {
-				$("#zipcodeForm")[0].reset();
-
-				$('input[name=custSi]').val("");
-				$('input[name=custGu]').val("");
-				$('input[name=custAddrFull]').val("");
-
-				$('#zipcodeList').empty();
-
-				PopupParam.storeAble = 'N';
-			});
-
-		});
-		function comma(money) {
-			return money.money();
-		}
-		//]]>
-	</script>
-</div>
-<!-- //주소검색 팝업 -->
-
-<script type="text/javascript">
-	//<![CDATA[
-
-	//나이스 윈도우 이름
-	window.name = "Parent_window";
-
-	//page parameter
-	var PageParam = {};
-
-	//page function
-	var PageFunction = (function(pf) {
-
-		pf.init = function() {
-			
-		}
-
-		//다음 버튼
-		pf.goNextOrderStep = function() {
-			if (PopupParam.storeAble != 'Y') {
-				popAlert("등록 불가능한 배달주소입니다. 다시 검색해주시기 바랍니다.");
-			} else if (!$('#nonMemberAgree').is(':checked')) {
-				popAlert("개인정보 이용 약관에 동의해주시기 바랍니다.");
-			} else {
-				//배달주소 정보 업데이트
-				cntt.ajax.post('/order/updateDeliveryInfo', $('#zipcodeForm')
-						.serializeObject(), function(response) {
-					if (response) {
-						location.href = "/order/goNextOrderStep";
-					}
-				});
-			}
-		};
-
-		return pf;
-
-	}(window.pf || {}));
-
-	// 이벤트
-	(function() {
-
-		//로그인페이지 이동
-		$('.moveLogin').click(function() {
-			location.href = "/member/login";
-		});
-
-	}());
-
-	//]]>
-</script>
 <script>
 	$(function(){
 		$("#container").addClass("full");
