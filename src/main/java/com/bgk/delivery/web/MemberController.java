@@ -278,28 +278,42 @@ public class MemberController {
 		String callback = req.getParameter("callback");
 		
 		List<CartDTO> orderComplete = service.rtOrderList("접수"); // 주문 정보
-		List<Map> order = new Vector<Map>();
+		List<Map> rtOrderList = new Vector<Map>();
 		String member_email = null;
 		for(CartDTO cd : orderComplete) {
 			sendOrderNo = cd.getOrder_no();
 			Map record = new HashMap();
-			record.put("cart_no", cd.getCart_no());
-			record.put("member_email", cd.getMember_email());
-			member_email = cd.getMember_email();
-			record.put("menu_no", cd.getMenu_no());
-			record.put("pay_complete", cd.getPay_complete());
 			record.put("order_no", cd.getOrder_no());
-			record.put("store_no", cd.getStore_no());
+			String menu_name = "";
+			if(cd.getMenu_name().contains(",")) {
+				String [] temp = cd.getMenu_name().split(",");
+				for(int i = 0 ; i < temp.length ; i++) {
+					if(i == 0) {menu_name = temp[i];}
+					if(i == temp.length-1) {menu_name += "(외 "+i+"개)";}
+				}
+				record.put("menu_name",menu_name);
+			}
+			else {record.put("menu_name",menu_name);}
+			record.put("order_price", cd.getOrder_price());
+			if(!cd.getPay_complete().isEmpty()) {
+				if(cd.getPay_complete().equalsIgnoreCase("onCredit")) {
+					cd.setPay_complete("카드-온라인 결제완료");
+				}
+				else if(cd.getPay_complete().equalsIgnoreCase("deliCredit")) {
+					cd.setPay_complete("카드-배달원에게 결제");
+				}
+				else {
+					cd.setPay_complete("현금-배달원에게 결제");
+				}
+			}
+			record.put("store_name", cd.getStore_name());
+			record.put("store_tel", cd.getStore_tel());
+			record.put("pay_complete", cd.getPay_complete());
 			record.put("status", cd.getStatus());
 			record.put("order_memo", cd.getOrder_memo());
 			record.put("order_addr", cd.getOrder_addr());
-			order.add(record);
+			rtOrderList.add(record);
 		}
-		
-		System.out.println("rtSend.whpr에서 sendOrderNo : "+sendOrderNo);
-		System.out.println("백엔드로 뿌려줄 jsonp 객체 : "+JSONArray.toJSONString(order));
-		
-		
-		return callback+"("+JSONArray.toJSONString(order)+")";
+		return callback+"("+JSONArray.toJSONString(rtOrderList)+")";
 	}
 }
