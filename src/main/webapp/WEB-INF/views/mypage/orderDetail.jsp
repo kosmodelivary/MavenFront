@@ -6,6 +6,17 @@
 <%@include file="/WEB-INF/views/mypage/isMember.jsp" %>
 <!DOCTYPE html>
 <!-- lnb -->
+<script>
+	var order_no = sessionStorage.getItem("order_no");
+	var order_date = sessionStorage.getItem("order_date");
+	$(document).ready(function() {
+		if(order_no != null && order_date != null){
+			var inner = '<span id="ordered">주문번호 <span class="t_red">'+order_no+'</span>로 '+order_date+' 에 주문한 내역입니다.</span>';
+			$('#ordered').append(inner);
+		}	
+	});
+	
+</script>
 <aside id="lnb">
 	<h1>
 		<img src="<c:url value='/resources/images/common/tit_mypage.png'/>" alt="마이페이지" />
@@ -31,7 +42,8 @@
 		<h1>내 주문내역</h1>
 	</div>
 	<hr/>
-		주문번호 <span class="t_red">${param.order_no }</span>로 ${param.order_date } 에 주문한 내역입니다.
+		<!-- param으로 넘겨서 가져온 주문번호와 주문일 -->
+		<span id="ordered"></span>
 	<hr/>
 	<div id="myOrderList">
 		<table class="table order_list">

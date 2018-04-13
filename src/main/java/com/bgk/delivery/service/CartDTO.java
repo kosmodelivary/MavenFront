@@ -1,8 +1,5 @@
 package com.bgk.delivery.service;
 
-import java.sql.Date;
-import java.sql.Timestamp;
-
 public class CartDTO {
 	
 	private int 		cart_no;		// 카트번호(pk)
@@ -24,6 +21,8 @@ public class CartDTO {
 	private String		store_name;
 	private String		store_tel;
 	
+	// ===== 임시 칼럼 =====
+	private int			order_price;
 	
 	public int getCart_no() {
 		return cart_no;
@@ -120,6 +119,12 @@ public class CartDTO {
 	}
 	public void setOrder_addr(String order_addr) {
 		this.order_addr = order_addr;
+	}
+	public int getOrder_price() {
+		return order_price;
+	}
+	public void setOrder_price(int order_price) {
+		this.order_price = order_price;
 	}
 
 	@Override

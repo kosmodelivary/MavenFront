@@ -64,39 +64,32 @@
 					<c:forEach items="${orderComplete }" var="item" varStatus="loop">
 						<fmt:parseDate pattern="yyyyMMddHHmm" var="fmt_date" value="${fn:substring(item.order_no,0,12) }"/>
 						<fmt:formatDate pattern="yyyy-MM-dd HH:mm" var="order_date" value="${fmt_date }"/>
-						<c:set var="order_no" value="${item.order_no }"/>
-						<c:set var="store_name" value="${item.store_name }"/>
-						<c:set var="store_tel" value="${item.store_tel }"/>
-						<c:set var="status" value="${item.status }"/>
-						<c:if test="${loop.count >= 1}">
-							<c:set var="menu_name" value="${item.menu_name } 외 ${loop.count-1 }개"/>
-							<c:set var="order_price" value="${order_price + item.total_price }"/>
-						</c:if>
+							<tr>
+								<td><!-- 주문일 -->
+									${order_date }
+								</td>
+								<td><!-- 주문번호 칼럼(연월일 시분초 미리초(1/1000초)) 형식으로 들어감
+										  payment.jsp페이지에서 모든 메뉴에 일괄적용되기 때문에 미리초단위로 달라지지 않음. 
+										  -->
+									<span class="t_blue"><a href="javascript:orderDetail('${item.order_no}','${order_date }');">${item.order_no }</a></span>
+								</td>
+								<td><!-- 메뉴명 -->
+									${item.menu_name }
+								</td>
+								<td><!-- 주문 총액 -->
+									<fmt:formatNumber pattern="###,###,###" value="${item.order_price }"/>원
+								</td>
+								<td>
+									<ul><!-- 매장명, 매장전화 -->
+										<li>${item.store_name }</li>
+										<li>${item.store_tel }</li>
+									</ul>
+								</td>
+								<td><!-- 상태 -->
+									<span class="t_red">${item.status }</span>
+								</td>
+							</tr>
 					</c:forEach>
-					<tr>
-						<td>
-							${order_date }
-						</td>
-						<td>
-							<span class="t_blue"><a href="javascript:orderDetail('${order_no}','${order_date }');"
-							 onclick="callServer('${order_no}')">${order_no }</a></span>
-						</td>
-						<td>
-							${menu_name }
-						</td>
-						<td>
-							<fmt:formatNumber pattern="###,###,###" value="${order_price }"/>원
-						</td>
-						<td>
-							<ul>
-								<li>${store_name }</li>
-								<li>${store_tel }</li>
-							</ul>
-						</td>
-						<td>
-							<span class="t_red">${status }</span>
-						</td>
-					</tr>
 				</c:if>
 			</tbody>
 		</table>
@@ -105,6 +98,7 @@
 </section>
 <!-- //contents -->
 <script type="text/javascript">
+	// 주문번호 클릭했을 때 실행되는 함수들
 	function orderDetail(order_no,order_date){
 		console.log('order_no : '+order_no+', order_date : '+order_date);
 		sessionStorage.setItem('order_no', order_no);

@@ -104,12 +104,29 @@ public class MemberController {
 			
 			List<CartDTO> orderComplete = service.listCompleteOrder(member_email); // 주문 정보
 			int sumMoney = service.sumCompleteOrder(member_email); // 주문 금액 호출
-			model.addAttribute("sumMoney", sumMoney);
-			model.addAttribute("orderComplete", orderComplete); // 주문완료 정보를 model에 저장
+			List<CartDTO> newComplete = new Vector<CartDTO>();
 			for(CartDTO cd : orderComplete) {
-				sendOrderNo = cd.getOrder_no();
+				CartDTO record = new CartDTO();
+				record.setOrder_no(cd.getOrder_no());
+				String menu_name = "";
+				if(cd.getMenu_name().contains(",")) {
+					String [] temp = cd.getMenu_name().split(",");
+					for(int i = 0 ; i < temp.length ; i++) {
+						if(i == 0) {menu_name = temp[i];}
+						if(i == temp.length-1) {menu_name += "(외 "+i+"개)";}
+					}
+					record.setMenu_name(menu_name);
+				}
+				else {record.setMenu_name(cd.getMenu_name());}
+				record.setOrder_price(cd.getOrder_price());
+				record.setPay_complete(cd.getPay_complete());
+				record.setStore_name(cd.getStore_name());
+				record.setStore_tel(cd.getStore_tel());
+				record.setStatus(cd.getStatus());
+				newComplete.add(record);
 			}
-			System.out.println("mypage.whpr에서 sendOrderNo : "+sendOrderNo);
+			model.addAttribute("orderComplete", newComplete); // 주문완료 정보를 model에 저장
+			
 		}
 		return "mypage/mypage.tile";
 	}
@@ -239,9 +256,7 @@ public class MemberController {
 		for(CartDTO cd : orderInfo) {
 			store_no = cd.getStore_no();
 			member_email = cd.getMember_email();
-			System.out.println("for문 안 "+member_email);
 		}
-		System.out.println("for문 밖 "+member_email);
 		int sumMoney = service.sumCompleteOrder(member_email); // 주문 금액 호출
 		sd = st_service.selectOne(store_no);
 		md = memService.memOne(member_email);
