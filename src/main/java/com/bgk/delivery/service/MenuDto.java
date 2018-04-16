@@ -16,6 +16,7 @@ public class MenuDto {
 	private String 	menu_fat;
 	private Date   	menu_enddate;
 	private String 	menu_file_extension;
+	private int  	sellCount;
 	
 	public String getMenu_no() {
 		return menu_no;
@@ -52,6 +53,12 @@ public class MenuDto {
 	}
 	public String getMenu_file_extension() {
 		return menu_file_extension;
+	}
+	public int getSellCount() {
+		return sellCount;
+	}
+	public void setSellCount(int sellCount) {
+		this.sellCount = sellCount;
 	}
 	
 	

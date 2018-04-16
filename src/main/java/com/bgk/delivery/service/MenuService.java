@@ -10,4 +10,5 @@ public interface MenuService {
 	public List<MenuDto> selectList(Map map);
 	public MenuDto selectOne(String menu_no);
 	public int getTotalCount(Map map);
+	public int p_SellCount(int menu_no);
 }

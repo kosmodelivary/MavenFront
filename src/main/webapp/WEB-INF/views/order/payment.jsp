@@ -59,7 +59,8 @@
 						</td>
 						<td class="t_right">
 							<input type="hidden" name="price" value="${items.menu_price*items.amount}"/>
-							${items.menu_price*items.amount}</td>
+							<fmt:formatNumber pattern="###,###,###">${items.menu_price*items.amount}
+							</fmt:formatNumber></td>
 					</tr>
 				</c:forEach>
 				<!-- <tr>

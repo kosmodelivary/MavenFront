@@ -42,4 +42,8 @@
 		SELECT COUNT(*) FROM menu 
 	</select>
 	
+	<update id="menuSellCount" parameterType="int">
+		UPDATE menu SET sellCount = sellCount + 1 WHERE menu_no = #{menu_no}
+	</update>
+	
 </mapper>

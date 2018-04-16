@@ -21,6 +21,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.bgk.delivery.impl.CartServiceImpl;
 import com.bgk.delivery.impl.MemberServiceImpl;
+import com.bgk.delivery.impl.MenuServiceImpl;
 import com.bgk.delivery.service.CartDTO;
 import com.bgk.delivery.service.MemberDTO;
 
@@ -29,8 +30,12 @@ public class CartController {
 
 	@Resource(name = "cartService")
 	private CartServiceImpl service;
+	
 	@Resource(name = "memberService")
 	private MemberServiceImpl memService;
+	
+	@Resource(name = "menuService")
+	private MenuServiceImpl menuService;
 
 	String member_email;
 	
@@ -107,6 +112,7 @@ public class CartController {
 							   @RequestParam int[] menu_no, 
 							   HttpSession session, HttpServletRequest req,
 							   ModelAndView mav) {
+		System.out.println(amount.length);
         // session의 id
 		member_email = ((MemberDTO) session.getAttribute("dto")).getMember_email();
 
@@ -159,12 +165,14 @@ public class CartController {
             CartDTO dto = new CartDTO();
             dto.setMember_email(member_email);
             dto.setMenu_no(menu_no[i]);
+            menuService.p_SellCount(menu_no[i]);
             dto.setPay_complete(req.getParameter("payFlag").toString());
             dto.setOrder_no(req.getParameter("order_no"));
             dto.setStore_no(req.getParameter("store_no"));
             dto.setStatus("접수");
             dto.setOrder_memo(req.getParameter("order_memo"));
             dto.setOrder_addr(req.getParameter("defaultAddr").trim()+" "+req.getParameter("detailAddr").trim());
+            
             service.completeOrder(dto);
         }
 

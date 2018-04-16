@@ -31,5 +31,10 @@ public class MenuServiceImpl implements MenuService{
 	public int getTotalCount(Map map) {
 		return menuDao.getTotalCount(map);
 	}
+
+	@Override
+	public int p_SellCount(int menu_no) {
+		return menuDao.p_SellCount(menu_no);
+	}
 	
 }

@@ -30,11 +30,24 @@
 							$(this).is(':checked'))
 				});
 	});
+	
+	var validate = function(){
+		if($('#form').serialize().length == 0){
+			popAlert('제품이 담겨있지 않습니다.<br/>3초후 메뉴화면으로 이동합니다.');
+			window.setTimeout(function() {
+				location.href="<c:url value='/menu/All.whpr'/>"
+			}, 3000);
+		}
+		else {
+			$('#form').attr('action','<c:url value="/cart/cartUpdateAndPayment.whpr"/>');
+			$('#form').submit();
+		}
+	};
 </script>
 <!-- contents -->
 <section id="contents">
 	<ul id="location">
-		<li><a class="home" href="/html/">HOME</a></li>
+		<li><a class="home" href="<c:url value='/home.whpr'/>">HOME</a></li>
 		<li><strong>장바구니</strong></li>
 	</ul>
 	<div id="cont_tit">
@@ -56,8 +69,7 @@
 		<li>매장별 주문금액이 상이하니, 반드시 최소금액을 확인하기 바랍니다.</li>
 	</ul>
 	<div id="cartInfo">
-		<form name="form" id="form" method="post" action="<c:url value='/cart/cartUpdateAndPayment.whpr'/>">
-
+		<form name="form" id="form" method="post" action="javascript:validate();">
 			<table class="table cart_tbl">
 				<caption>장바구니 리스트 - 상품명, 수량, 상품가격, 총 상품금액을 확인</caption>
 

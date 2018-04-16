@@ -32,4 +32,9 @@ public class MenuDao implements MenuService{
 		return sqlMapper.selectOne("menuTotalCount", map);
 	}
 
+	@Override
+	public int p_SellCount(int menu_no) {
+		return sqlMapper.update("menuSellCount", menu_no);
+	}
+
 }

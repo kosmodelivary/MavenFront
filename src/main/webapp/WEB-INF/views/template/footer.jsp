@@ -43,9 +43,11 @@
 					<div class="pt10 pb10 t_center">
 						<p class="f14" id="alert_msg"></p>
 					</div>
-					<p class="button_area mt10">
-						<a href="#" class="pop_close button btn_org w120">확인</a>
-					</p>
+					<div class="pt10 pb10 t_center">
+						<p class="button_area mt10">
+							<a id="alert_dest" href="#" class="pop_close button btn_org w120">확인</a>
+						</p>
+					</div>
 				</div>
 			</section>
 			<footer class="pop_foot">

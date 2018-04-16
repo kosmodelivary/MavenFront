@@ -104,12 +104,6 @@ public class MenuController {
 			throws Exception
 	{
 		MenuDto md = service.selectOne(map.get("menu_no").toString());
-//		System.out.println(map.get("menu_no").toString());
-//		System.out.println(md);
-		
-//		param.put("oneMenu", md);
-		
-//		return "redirect:/menu/detail.whpr";
 		List<Map> oneMenu = new Vector<Map>();
 		Map record = new HashMap();
 		record.put("menu_no", md.getMenu_no());
@@ -128,54 +122,4 @@ public class MenuController {
 		
 		return JSONArray.toJSONString(oneMenu);
 	}
-	
-	@RequestMapping("/menu/detail.whpr")
-	public String detail(HttpServletRequest req, HttpServletResponse resp) throws Exception{
-		System.out.println(req.getAttribute("oneMenu"));
-		
-		return null;
-	}
-	
-	
-//	@ResponseBody
-//	@RequestMapping(value= {"/menu/menuList.whpr"}, produces={"text/html; charset=UTF-8"})
-//	public String menuList(@RequestParam Map map)
-//	throws Exception
-//	{
-//		String category_name = map.get("category_name").toString();
-//		records = service.selectList(map);
-//		if(category_name.equalsIgnoreCase("set")) {
-//			return categoryList(records);
-//		}
-//		else if(category_name.equalsIgnoreCase("burger")) {
-//			return categoryList(records);
-//		}
-//		else if(category_name.equalsIgnoreCase("side")) {
-//			return categoryList(records);
-//		}
-//		else {//drink
-//			return categoryList(records);
-//		}
-//	}
-//	
-//	public String categoryList(List<MenuDto> records) {
-//		List<Map> menu = new Vector<Map>();
-//		for(MenuDto md : records) {
-//			Map record = new HashMap();
-//			record.put("no", md.getMenu_no());
-//			record.put("category_name", md.getCategory_name());
-//			record.put("menu_name", md.getMenu_name());
-//			record.put("menu_price", md.getMenu_price());
-//			record.put("menu_weight", md.getMenu_weight());
-//			record.put("menu_calrorie", md.getMenu_calrorie());
-//			record.put("menu_protein", md.getMenu_protein());
-//			record.put("menu_sodium", md.getMenu_sodium());
-//			record.put("menu_sugars", md.getMenu_sugars());
-//			record.put("menu_fat", md.getMenu_fat());
-//			record.put("menu_enddate", md.getMenu_enddate().toString());
-//			record.put("menu_file_extension", md.getMenu_file_extension());
-//			menu.add(record);
-//		}
-//		return JSONArray.toJSONString(menu);
-//	}
 }
