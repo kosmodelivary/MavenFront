@@ -22,7 +22,6 @@
 			<li><a href="<c:url value='/member/login.whpr'/>">로그인</a></li>
 			<li><a href="<c:url value='/member/joinAgree.whpr'/>">회원가입</a></li>
 			<li><a href="<c:url value='/member/searchIdPassword.whpr'/>">아이디/비밀번호 찾기</a></li>
-			<li><a href="<c:url value='/order/nonMemberOrder.whpr'/>">비회원주문</a></li>
 		</ul>
 	</nav>
 </aside>

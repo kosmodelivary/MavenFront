@@ -70,12 +70,6 @@ public class MemberController {
 		return "member/join.tile";
 	}
 	
-	@RequestMapping("/order/nonMemberOrder.whpr")
-	public String order() throws Exception{
-		
-		return "member/nonMemberOrder.tile";
-	}
-	
 	//마이페이지 페이지 연결
 	@RequestMapping("/mypage/memberUpdate.whpr")
 	public String memberUpdate() throws Exception{
