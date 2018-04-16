@@ -82,14 +82,14 @@
 						<tr>
 							<td>${item.menu_name }</td>
 							<td>${item.amount }</td>
-							<td>${item.menu_price }원</td>
+							<td><fmt:formatNumber pattern="###,###,###">${item.menu_price }</fmt:formatNumber>원</td>
 							<td>옵션</td>
-							<td class="t_right"><strong><span class="t_red f14">${item.total_price }원</span></strong></td>
+							<td class="t_right"><strong><span class="t_red f14"><fmt:formatNumber pattern="###,###,###">${item.total_price }</fmt:formatNumber>원</span></strong></td>
 						</tr>
 					</c:forEach>
 					<tr>
 						<td class="t_left"><h2 class="bold">총 상품금액</h2></td>
-						<td class="t_right" colspan="4"><h2><span class="t_red">${sumMoney }</span></h2></td>
+						<td class="t_right" colspan="4"><h2><span class="t_red"><fmt:formatNumber pattern="###,###,###">${sumMoney }</fmt:formatNumber>원</span></h2></td>
 					</tr>
 				</c:if>
 			</tbody>
@@ -127,7 +127,7 @@
 		</div>
 		<table class="table">
 			<tr>
-				<td><span class="f19">${order_addr }</span></td>
+				<td><span class="f20">${order_addr }</span></td>
 			</tr>
 		</table>
 		<br/>

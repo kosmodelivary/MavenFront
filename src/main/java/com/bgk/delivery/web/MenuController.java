@@ -122,4 +122,33 @@ public class MenuController {
 		
 		return JSONArray.toJSONString(oneMenu);
 	}
+	
+	@ResponseBody
+	@RequestMapping(value= {"/menu/getIndexMenu.whpr"}, produces={"text/html; charset=UTF-8"})
+	public String getIndexMenu(@RequestParam Map map,
+							   Map param) 
+			throws Exception
+	{
+		List<MenuDto> menuList = service.bestSeller();
+		List<Map> indexMenu = new Vector<Map>();
+		for(MenuDto md : menuList) {
+			Map record = new HashMap();
+			record.put("menu_no", md.getMenu_no());
+			record.put("category_name", md.getCategory_name());
+			record.put("menu_name", md.getMenu_name());
+			record.put("menu_price", md.getMenu_price());
+			record.put("menu_weight", md.getMenu_weight());
+			record.put("menu_calrorie", md.getMenu_calrorie());
+			record.put("menu_protein", md.getMenu_protein());
+			record.put("menu_sodium", md.getMenu_sodium());
+			record.put("menu_sugars", md.getMenu_sugars());
+			record.put("menu_fat", md.getMenu_fat());
+			record.put("menu_enddate", md.getMenu_enddate().toString());
+			record.put("menu_file_extension", md.getMenu_file_extension());
+			record.put("sellCount", md.getSellCount());
+			indexMenu.add(record);
+		}
+		
+		return JSONArray.toJSONString(indexMenu);
+	}
 }

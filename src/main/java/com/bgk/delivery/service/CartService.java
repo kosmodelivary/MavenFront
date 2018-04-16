@@ -1,6 +1,7 @@
 package com.bgk.delivery.service;
 
 import java.util.List;
+import java.util.Map;
 
 public interface CartService {
 
@@ -24,7 +25,7 @@ public interface CartService {
 	// temp 2. 장바구니 목록
 	public List<CartDTO> listCompleteOrder(String memberEmail);
 	// temp 3. 장바구니 목록
-	public int sumCompleteOrder(String memberEmail);
+	public int sumCompleteOrder(Map map);
 	// temp 4. 주문완료된 레코드 가져오기
 	public List<CartDTO> orderList(String order_no);
 	// temp 5. 회원과 무관하게 주문완료 및 접수된 주문정보 가져오기

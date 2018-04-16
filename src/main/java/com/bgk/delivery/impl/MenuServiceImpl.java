@@ -33,8 +33,13 @@ public class MenuServiceImpl implements MenuService{
 	}
 
 	@Override
-	public int p_SellCount(int menu_no) {
-		return menuDao.p_SellCount(menu_no);
+	public int p_SellCount(Map map) {
+		return menuDao.p_SellCount(map);
+	}
+
+	@Override
+	public List<MenuDto> bestSeller() {
+		return menuDao.bestSeller();
 	}
 	
 }

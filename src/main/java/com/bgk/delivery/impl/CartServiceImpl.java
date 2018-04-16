@@ -1,6 +1,7 @@
 package com.bgk.delivery.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -61,8 +62,8 @@ public class CartServiceImpl implements CartService{
 	}
 
 	@Override
-	public int sumCompleteOrder(String memberEmail) {
-		return cartdao.sumCompleteOrder(memberEmail);
+	public int sumCompleteOrder(Map map) {
+		return cartdao.sumCompleteOrder(map);
 	}
 
 	@Override

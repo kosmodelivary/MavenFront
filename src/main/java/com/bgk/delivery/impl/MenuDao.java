@@ -33,8 +33,15 @@ public class MenuDao implements MenuService{
 	}
 
 	@Override
-	public int p_SellCount(int menu_no) {
-		return sqlMapper.update("menuSellCount", menu_no);
+	public int p_SellCount(Map map) {
+		return sqlMapper.update("menuSellCount", map);
 	}
+
+	@Override
+	public List<MenuDto> bestSeller() {
+		return sqlMapper.selectList("bestSeller");
+	}
+	
+	
 
 }

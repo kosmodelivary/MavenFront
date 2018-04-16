@@ -86,7 +86,7 @@
     	UPDATE cart
     	set pay_complete = #{pay_complete}, order_no = #{order_no}, store_no = #{store_no}, 
     	status = #{status}, order_memo = #{order_memo}, order_addr = #{order_addr}
-    	WHERE member_email = #{member_email} AND menu_no = #{menu_no}
+    	WHERE member_email = #{member_email} AND menu_no = #{menu_no} AND order_no is null
     </update>
     <!-- temp 2. 주문 완료 목록 -->
 	<select id="listCompleteOrder" resultType="CartDTO">
@@ -96,14 +96,14 @@
 		FROM cart c JOIN menu m ON c.menu_no = m.menu_no JOIN store st ON c.store_no = st.store_no
 		WHERE member_email = #{member_email} AND order_no is not null
 		GROUP BY order_no, store_name, store_tel, pay_complete, status 
-		ORDER BY order_no
+		ORDER BY order_no desc
 		<!-- WHERE member_email = #{member_email}  -->
 	</select>
 	<!-- temp 3. 주문 완료 금액 -->
 	<select id="sumCompleteOrder" resultType="int">
 		SELECT NVL(SUM(menu_price * amount), 0) money
 		FROM cart c JOIN menu p ON c.menu_no = p.menu_no
-		WHERE member_email = #{member_email} and order_no is not null
+		WHERE member_email = #{member_email} and order_no = #{order_no}
 		<!-- WHERE member_email = #{member_email}  -->
 	</select>
 	<!-- 접속한 사용자의 주문내역 -->

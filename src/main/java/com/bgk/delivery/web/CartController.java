@@ -42,13 +42,11 @@ public class CartController {
 	// 1. 장바구니 추가
 	@RequestMapping("/cart/cartInsert.whpr")
 	public String insert(@ModelAttribute CartDTO dto, HttpSession session) {
-
-		member_email = ((MemberDTO) session.getAttribute("dto")).getMember_email();
-		System.out.println("memberEmail : " + member_email);
-
-		if (member_email == null) {
+		System.out.println(session.toString().length());
+		if(session.toString().length() <= 58) {
 			return "member/login.tile";
 		}
+		else member_email = ((MemberDTO) session.getAttribute("dto")).getMember_email();
 		dto.setMember_email(member_email);
 
 		// 장바구니에 기존 상품이 있는지 검사
@@ -165,7 +163,10 @@ public class CartController {
             CartDTO dto = new CartDTO();
             dto.setMember_email(member_email);
             dto.setMenu_no(menu_no[i]);
-            menuService.p_SellCount(menu_no[i]);
+            Map map = new HashMap();
+            map.put("menu_no", menu_no[i]);
+            map.put("amount", amount[i]);
+            menuService.p_SellCount(map);
             dto.setPay_complete(req.getParameter("payFlag").toString());
             dto.setOrder_no(req.getParameter("order_no"));
             dto.setStore_no(req.getParameter("store_no"));

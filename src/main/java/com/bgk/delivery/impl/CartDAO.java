@@ -75,8 +75,8 @@ public class CartDAO implements CartService {
 	}
 
 	@Override
-	public int sumCompleteOrder(String memberEmail) {
-		return sqlMapper.selectOne("sumCompleteOrder", memberEmail);
+	public int sumCompleteOrder(Map map) {
+		return sqlMapper.selectOne("sumCompleteOrder", map);
 	}
 	
 	@Override

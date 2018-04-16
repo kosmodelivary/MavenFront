@@ -97,7 +97,6 @@ public class MemberController {
 			String member_email = ((MemberDTO) session.getAttribute("dto")).getMember_email();
 			
 			List<CartDTO> orderComplete = service.listCompleteOrder(member_email); // 주문 정보
-			int sumMoney = service.sumCompleteOrder(member_email); // 주문 금액 호출
 			List<CartDTO> newComplete = new Vector<CartDTO>();
 			for(CartDTO cd : orderComplete) {
 				CartDTO record = new CartDTO();
@@ -250,8 +249,9 @@ public class MemberController {
 		for(CartDTO cd : orderInfo) {
 			store_no = cd.getStore_no();
 			member_email = cd.getMember_email();
+			map.put("member_email", member_email);
 		}
-		int sumMoney = service.sumCompleteOrder(member_email); // 주문 금액 호출
+		int sumMoney = service.sumCompleteOrder(map); // 주문 금액 호출
 		sd = st_service.selectOne(store_no);
 		md = memService.memOne(member_email);
 		model.addAttribute("orderInfo", orderInfo);

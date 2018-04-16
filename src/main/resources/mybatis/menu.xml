@@ -19,6 +19,7 @@
 		<result property="menu_fat" column="menu_fat" />
 		<result property="menu_enddate" column="menu_enddate" />
 		<result property="menu_file_extension" column="menu_file_extension" />
+		<result property="sellCount" column="sellCount" />
 	</resultMap>
  
 	<select id="menuSelectList" resultMap="MenuDtoResult">
@@ -34,6 +35,11 @@
 		</if>
 	</select>
 	
+	<select id="bestSeller" resultMap="MenuDtoResult">
+		SELECT * FROM (SELECT * FROM menu WHERE sellCount > 0 ORDER BY sellCount DESC)
+		WHERE ROWNUM <![CDATA[ <= ]]> 4 ORDER BY sellCount DESC
+	</select>
+	
 	<select id="menuSelectOne" parameterType="java.lang.String" resultMap="MenuDtoResult">
 		SELECT * FROM menu WHERE menu_no = #{menu_no}
 	</select>
@@ -42,8 +48,8 @@
 		SELECT COUNT(*) FROM menu 
 	</select>
 	
-	<update id="menuSellCount" parameterType="int">
-		UPDATE menu SET sellCount = sellCount + 1 WHERE menu_no = #{menu_no}
+	<update id="menuSellCount">
+		UPDATE menu SET sellCount = sellCount + #{amount} WHERE menu_no = #{menu_no}
 	</update>
 	
 </mapper>
