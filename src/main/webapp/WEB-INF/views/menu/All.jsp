@@ -46,6 +46,8 @@
 				location.href="<c:url value='/menu/"+flag+".whpr'/>";
 			}
 		};
+		
+		
 	</script>
 </aside>
 <!-- //lnb -->
@@ -161,7 +163,6 @@
 						console.log("error:"+error+"\n");								
 					   }
     		});
-	    	
 	    };
 	    function successAjax(data,target){
 	    	console.log("data : "+data+", 데이터 타입 : "+typeof data);
@@ -183,24 +184,17 @@
 					"</div></div>"+
 				"<div class=\"f_right\">"+
 					"<h1>"+val.menu_name+"</h1>"+
-						"<br /> <br /> 해당사항없음"+
+						"<br /> <br /> "+
 					"<div class=\"hidden pb10\">"+
 						"<span class=\"unit_price detail_product_text_price price\""+
 							"data-price=\""+val.menu_price+"\">"+val.menu_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g,
 							',')+"원</span>"+
 						"<div class=\"opt_spinner_wrap\">"+
-							"<strong>수량선택</strong> <span class=\"opt_spinner\"> <span"+
-								"class=\"opt_area\"> <span class=\"opt_txt opt_qty\">1</span>"+
-							"</span> <a href=\"javascript:PopupFunction.changeQty('P')\""+
-								"class=\"btn_opt opt_plus\"></a> <!-- 더하기 --> <a"+
-								"href=\"javascript:PopupFunction.changeQty('M')\""+
-								"class=\"btn_opt opt_minus\"></a> <!-- 빼기 -->"+
+							"<span class=\"opt_spinner\"> <span"+
+								" class=\"opt_area\">"+
 							"</span>"+
 						"</div>"+
 					"</div>"+
-					"<p class=\"opt_txt topping_options\">"+
-
-					"</p>"+
 					"<div class=\"mt20\">"+
 						"<table class=\"table2\">"+
 							"<caption>제품 성분 리스트</caption>"+
@@ -239,8 +233,7 @@
 							"title=\"새창열림\"><span>알러지 유발성분 확인</span></a>"+
 					"</p>"+
 					"<div class=\"button_area btn2 mt10\">"+
-						"<a class=\"button btn_org h40 w150\""+
-								"href=\"#\">주문하기</a> <a class=\"button h40 w150\""+
+						"<a class=\"button h40 w150\""+
 								"href=\"<c:url value='/cart/cartInsert.whpr?menu_no="+val.menu_no+"&amount=1'/>\">장바구니담기</a>"+
 					"</div>"+
 				"</div>"+
@@ -248,10 +241,11 @@
 				'</article>';
 				return string;
 	    }
+	    
 	</script>
+	
 	<!-- //자세히 보기 -->
 
 </section>
 <!-- //contents -->
-
 </html>

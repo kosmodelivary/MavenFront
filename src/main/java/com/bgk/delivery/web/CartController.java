@@ -42,11 +42,13 @@ public class CartController {
 	// 1. 장바구니 추가
 	@RequestMapping("/cart/cartInsert.whpr")
 	public String insert(@ModelAttribute CartDTO dto, HttpSession session) {
-		System.out.println(session.toString().length());
-		if(session.toString().length() <= 58) {
+		
+		member_email = ((MemberDTO) session.getAttribute("dto")).getMember_email();
+
+		if (member_email == null) {
 			return "member/login.tile";
 		}
-		else member_email = ((MemberDTO) session.getAttribute("dto")).getMember_email();
+		
 		dto.setMember_email(member_email);
 
 		// 장바구니에 기존 상품이 있는지 검사

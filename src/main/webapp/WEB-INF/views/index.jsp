@@ -48,6 +48,8 @@
 					console.log("error:"+error+"\n");								
 		   }
 		});
+		
+		
 	});
 	
 	function successAjax(data,target){
@@ -59,7 +61,8 @@
 						'<figure>'+
 							'<img src="http://restapi.fs.ncloud.com/bkproject/image/menu/'+val.menu_name+val.menu_file_extension+'" alt="'+val.menu_name+'" />'+
 							'<figcaption>'+
-								'<span class="tit">'+val.menu_name+'</span> <strong>'+val.menu_price+'</strong>'+
+								'<span class="tit">'+val.menu_name+'</span> <strong>'+val.menu_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g,
+								',')+'원</strong>'+
 							'</figcaption>'+
 						'</figure> <i></i>'+
 				'</a>'+
@@ -68,7 +71,7 @@
 					'<a class="btn_view openDetailPopup" href="javascript:menu_view('+val.menu_no+')"><span>상세보기</span></a>'+
 				'</div></li>';
 		});
-		$(target).html(str);
+		$(target).append(str);
 	};
 </script>
 <!--[if lt IE 9]>
@@ -159,11 +162,6 @@
 			<ul class="menu_list">
 				
 			</ul>
-			<script>
-				$(function(){
-					$('.menu_list').trigger("create");
-				});
-			</script>
 		</div>
 	</div>
 	<!-- 자세히 보기 -->
@@ -236,14 +234,14 @@
 						});
 					}; 
 					 */
-					pf.openDetailPopup = function(pCode) {
+					/* pf.openDetailPopup = function(pCode) {
 						$('#popMenuDetail').getLoad(
 								'/menu/getMenuDetail?pCode=' + pCode,
 								function() {
 									PopupFunction.init();
 									menuOpen();
 								});
-					};
+					}; */
 					// 배너 링크
 					pf.bannerLink = function() {
 						var bannerLink = $(this).data('link');
