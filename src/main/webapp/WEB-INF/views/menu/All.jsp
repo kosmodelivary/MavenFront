@@ -190,9 +190,6 @@
 							"data-price=\""+val.menu_price+"\">"+val.menu_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g,
 							',')+"원</span>"+
 						"<div class=\"opt_spinner_wrap\">"+
-							"<span class=\"opt_spinner\"> <span"+
-								" class=\"opt_area\">"+
-							"</span>"+
 						"</div>"+
 					"</div>"+
 					"<div class=\"mt20\">"+
@@ -232,10 +229,6 @@
 						"<a href=\"https://www.burgerking.co.kr/nutrition\" target=\"_blank\""+
 							"title=\"새창열림\"><span>알러지 유발성분 확인</span></a>"+
 					"</p>"+
-					"<div class=\"button_area btn2 mt10\">"+
-						"<a class=\"button h40 w150\""+
-								"href=\"<c:url value='/cart/cartInsert.whpr?menu_no="+val.menu_no+"&amount=1'/>\">장바구니담기</a>"+
-					"</div>"+
 				"</div>"+
 				"<a href=\"javascript:menu_close()\" class=\"btn_close menu_close\">닫기</a>"+
 				'</article>';
