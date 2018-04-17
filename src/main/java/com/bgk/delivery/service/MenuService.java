@@ -12,4 +12,5 @@ public interface MenuService {
 	public int getTotalCount(Map map);
 	public int p_SellCount(Map map);
 	public List<MenuDto> bestSeller();
+	public int top4SellCount();
 }

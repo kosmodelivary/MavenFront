@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.bgk.delivery.impl.CartServiceImpl;
 import com.bgk.delivery.impl.MemberServiceImpl;
+import com.bgk.delivery.impl.MenuServiceImpl;
 import com.bgk.delivery.impl.StoreServiceImpl;
 import com.bgk.delivery.service.CartDTO;
 import com.bgk.delivery.service.MemberDTO;
@@ -287,7 +288,10 @@ public class MemberController {
 				}
 				record.put("menu_name",menu_name);
 			}
-			else {record.put("menu_name",menu_name);}
+			else {
+				menu_name = cd.getMenu_name();
+				record.put("menu_name",menu_name);
+			}
 			record.put("order_price", cd.getOrder_price());
 			if(!cd.getPay_complete().isEmpty()) {
 				if(cd.getPay_complete().equalsIgnoreCase("onCredit")) {

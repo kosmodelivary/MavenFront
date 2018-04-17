@@ -41,6 +41,11 @@ public class MenuDao implements MenuService{
 	public List<MenuDto> bestSeller() {
 		return sqlMapper.selectList("bestSeller");
 	}
+
+	@Override
+	public int top4SellCount() {
+		return sqlMapper.selectOne("top4SellCount");
+	}
 	
 	
 

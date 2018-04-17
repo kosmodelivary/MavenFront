@@ -41,5 +41,10 @@ public class MenuServiceImpl implements MenuService{
 	public List<MenuDto> bestSeller() {
 		return menuDao.bestSeller();
 	}
+
+	@Override
+	public int top4SellCount() {
+		return menuDao.top4SellCount();
+	}
 	
 }

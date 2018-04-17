@@ -52,4 +52,10 @@
 		UPDATE menu SET sellCount = sellCount + #{amount} WHERE menu_no = #{menu_no}
 	</update>
 	
+	<select id="top4SellCount" resultType="Integer">
+		SELECT sum(sellCount) top4sellcount FROM 
+		(SELECT * FROM menu WHERE sellCount > 0 ORDER BY sellCount DESC) 
+		WHERE ROWNUM <![CDATA[ <= ]]> 4
+	</select>
+	
 </mapper>
