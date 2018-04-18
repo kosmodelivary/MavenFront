@@ -173,7 +173,7 @@
 			</div>
 			<p class="button_area btn2 mt50">
 				<button type="submit" id="btnUpdate" class="button btn_org h50 w200">다음</button>
-				<a href="javascript:keepshop();" class="button btn_gray h50 w200">계속쇼핑하기</a>
+				<a href="<c:url value='/menu/All.whpr' />" class="button btn_gray h50 w200">계속쇼핑하기</a>
 			</p>
 		</form>
 	</div>
